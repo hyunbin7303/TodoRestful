@@ -27,3 +27,18 @@
 
 
 
+
+
+### Self Note.
+#### *Need of API Gateway*
+* Traffic Routing
+* Expose Unified end point
+* API Composition
+* Caching.
+* Logging.
+Need to set up asap. Investigate Seq Log.
+
+* Authentication
+* Authorization
+* Service Discovery
+* Load balancing.
