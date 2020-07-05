@@ -16,14 +16,31 @@
 
 
 ## Table Schema
-| Tables   | DataType      |  Cool |
-|----------|:-------------:|------:|
-| col 1 is |  left-aligned | $1600 |
-| col 2 is |    centered   | $12   |
-| col 3 is | right-aligned | $1    |
 
 
-## API call documentation
+### Daily Task
+| Name    | DataType       |
+|----------|:-------------:|
+|    Id    |  left-aligned |
+|    Title      |    string |
+|    Description |   string |
+#### API Call
+### Workout
+| Name    | DataType       |
+|----------|:-------------:|
+|    Id    | string |
+|    Title      |    string |
+|    Description |   string |
+#### API Call
+
+### Study
+| Name    | DataType       |
+|----------|:-------------:|
+|    Id        |  string |
+|    Title      |    string |
+|    Description |   string |
+#### API Call
+
 
 
 
