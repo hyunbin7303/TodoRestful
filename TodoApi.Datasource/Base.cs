@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Datasource
+namespace TodoApi.Datasource
 {
     public abstract class Base
     {

@@ -4,7 +4,7 @@ using System.Text;
 using MongoDB.Driver;
 using MongoDB.Bson;
 
-namespace Datasource
+namespace TodoApi.Datasource
 {
     public class DataAccessorMongo : Base
     {
@@ -16,12 +16,13 @@ namespace Datasource
         public List<String> GetDatabase()
         {
             var password = Environment.GetEnvironmentVariable("MongoDB_Password");
-            var dbname = "sample+airbnb";
+            var dbname = "sample_airbnb";
             MongoClientSettings settings = new MongoClientSettings();
 
             var client = new MongoClient($"mongodb+srv://TodoUser:{password}@workout.oylnh.azure.mongodb.net/{dbname}?retryWrites=true&w=majority");
             var database = client.GetDatabase("test");
             var cursor = client.ListDatabases().ToList();
+            
 
             var collection = database.GetCollection<object>("listingsAndReviews");
             List<string> dbList = new List<string>();

@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace TodoApi
+namespace TodoApi.Web
 {
     public class Startup
     {
@@ -37,8 +37,11 @@ namespace TodoApi
             }
 
             app.UseHttpsRedirection();
+
             app.UseRouting();
+
             app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
