@@ -2,6 +2,10 @@
 
 ## Getting started
 
+### What is ToDo
+
+ToDo is a Restful webservice designed to assist users with building their own ToDo application. This service will provide various methods and request to accommodate general uses of a ToDo task list.  
+
 ### Setup
 ### MongoDB:
 - Add your IP Address to the Network Access
