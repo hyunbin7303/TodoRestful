@@ -14,8 +14,8 @@ Need to set up asap. Investigate Seq Log.
 ## Planning
 | Date | Description |
 | --- | --- |
-| First tesing | List all *new or modified* files |
-| Second tesing | List all *new or modified* files |
+| First testing | List all *new or modified* files |
+| Second testing | List all *new or modified* files |
 | 2020-08-01 | hahah |
 | `Result` | Show file differences that **haven't been** staged |
 
@@ -27,14 +27,27 @@ Need to set up asap. Investigate Seq Log.
 ### Daily Task
 | Name    | DataType       |
 |----------|:-------------:|
-|    Id    |  left-aligned |
+|    Id    |  left-aligned  |
 |    Title      |    string |
 |    Description |   string |
+|ItemId         string      |
+|Due       |      Date      |
+|  Phone  |   Integer      |
 #### API Call
+
+### Home
+| Name    | DataType       |
+|----------|:-------------:|
+|    Id        |  string   |
+|    Title     |    string |
+|    Description |  string |
+|ItemId     |  string   |
+#### API Call
+
 ### Workout
 | Name    | DataType       |
 |----------|:-------------:|
-|    Id    | string |
+|    Id    |   string     |
 |    Title      |    string |
 |    Description |   string |
 #### API Call
@@ -46,9 +59,6 @@ Need to set up asap. Investigate Seq Log.
 |    Title      |    string |
 |    Description |   string |
 #### API Call
-
-
-
 
 
 
