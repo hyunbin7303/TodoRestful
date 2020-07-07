@@ -1,3 +1,16 @@
+# ToDo ReadMe
+
+## Getting started
+
+### Setup
+### MongoDB:
+- Add your IP Address to the Network Access
+  * Log into account, click Network Access on left navigation
+  * Click 'ADD IP ADDRESS'
+  
+### Visual Studio Sln:
+- Add MongoDB password to the Environment variable
+  * Use label 'MongoDB_Password'
 
 ## Todo list
  * [x] Create Application -
@@ -18,7 +31,6 @@ Need to set up asap. Investigate Seq Log.
 | Second testing | List all *new or modified* files |
 | 2020-08-01 | hahah |
 | `Result` | Show file differences that **haven't been** staged |
-
 
 
 ## Table Schema
@@ -59,10 +71,6 @@ Need to set up asap. Investigate Seq Log.
 |    Title      |    string |
 |    Description |   string |
 #### API Call
-
-
-
-
 
 **Title**
 ----
@@ -126,12 +134,24 @@ Need to set up asap. Investigate Seq Log.
 
   <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
 ----
-# Setup
-## MongoDB:
-- Add your IP Address to the Network Access
-  * Log into account, click Network Access on left navigation
-  * Click 'ADD IP ADDRESS'
-  
-## Visual Studio Sln:
-- Add MongoDB password to the Environment variable
-  * Use label 'MongoDB_Password'
+
+## Features
+
+This project provides API endpoints to operate CRUD functionality to manage a personal To Do list:
+* Add daily tasks with due date
+* Add contact information and reminder for important phone calls 
+* Keep track of items you want to purchase
+* Maintain a daily or weekly routine by recording your workout session
+* Make a list of groceries to help you save time at the store, save a list for next time
+
+## Contributing
+
+This has been initiaited by a group of 3 developers. Your feedback in appreciated and encourage in how to improve. This service is limited to the available endpoints that we were able to think of and build. We welcome ideas to provide more options and features. 
+
+## Related projects
+
+
+
+## Licensing
+
+No license required. Pay requirement of $1M USD to K-Park Foundation
