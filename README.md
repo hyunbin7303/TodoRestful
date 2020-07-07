@@ -70,7 +70,12 @@ Need to set up asap. Investigate Seq Log.
 
 * **URL**
 
-  <_The URL Structure (path only, no root url)_>
+### Home
+  * api/Home/{id}
+  * api/Home/{home}
+
+### Daily Task
+  * api/DailyTask/{id}
 
 * **Method:**
   
@@ -129,4 +134,4 @@ Need to set up asap. Investigate Seq Log.
   
 ## Visual Studio Sln:
 - Add MongoDB password to the Environment variable
-* Use label 'MongoDB_Password'
+  * Use label 'MongoDB_Password'
