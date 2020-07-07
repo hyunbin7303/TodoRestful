@@ -120,3 +120,16 @@ Need to set up asap. Investigate Seq Log.
 * **Notes:**
 
   <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
+----
+
+
+#Setup#
+----
+##MongoDB:##
+- Add your IP Address to the Network Access
+  > Log into account, click Network Access on left navigation
+  > Click 'ADD IP ADDRESS'
+  
+##Visual Studio Sln:##
+- Add MongoDB password to the Environment variable
+  > Use label 'MongoDB_Password'
