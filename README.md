@@ -30,7 +30,7 @@ Need to set up asap. Investigate Seq Log.
 |    Id    |  left-aligned  |
 |    Title      |    string |
 |    Description |   string |
-|ItemId         string      |
+|ItemId    |     string      |
 |Due       |      Date      |
 |  Phone  |   Integer      |
 #### API Call
@@ -70,11 +70,11 @@ Need to set up asap. Investigate Seq Log.
 
 * **URL**
 
-#### Home
+### Home
   * api/Home/{id}
   * api/Home/{home}
 
-#### Daily Task
+### Daily Task
   * api/DailyTask/{id}
 
 * **Method:**
