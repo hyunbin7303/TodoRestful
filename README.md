@@ -123,13 +123,13 @@ Need to set up asap. Investigate Seq Log.
 ----
 
 
-#Setup#
+# Setup
 ----
-##MongoDB:##
+##MongoDB:
 - Add your IP Address to the Network Access
-  > Log into account, click Network Access on left navigation
-  > Click 'ADD IP ADDRESS'
+  * Log into account, click Network Access on left navigation
+  * Click 'ADD IP ADDRESS'
   
-##Visual Studio Sln:##
+##Visual Studio Sln:
 - Add MongoDB password to the Environment variable
-  > Use label 'MongoDB_Password'
+ *Use label 'MongoDB_Password'
