@@ -17,13 +17,13 @@ This project provides API endpoints to operate CRUD functionality to manage a pe
 * Make a list of groceries to help you save time at the store, save a list for next time
 
 # Table of Contents: 
-Optionally, include a table of contents in order to allow other people to quickly navigate especially long or detailed READMEs.
+> Optionally, include a table of contents in order to allow other people to quickly navigate especially long or detailed READMEs.
 
 # Installation: 
 > Installation is the next section in an effective README. Tell other users how to install your project locally. Optionally, include a gif to make the process even more clear for other people.
 
 # Usage: 
-The next section is usage, in which you instruct other people on how to use your project after they’ve installed it. This would also be a good place to include screenshots of your project in action.
+> The next section is usage, in which you instruct other people on how to use your project after they’ve installed it. This would also be a good place to include screenshots of your project in action.
 
 ### MongoDB:
 - Add your IP Address to the Network Access
@@ -51,12 +51,12 @@ This has been initiaited by a group of 3 developers. Your feedback in appreciate
 Need to set up asap. Investigate Seq Log.
 
 # Credits: 
-Include a section for credits in order to highlight and link to the authors of your project.
+> Include a section for credits in order to highlight and link to the authors of your project.
 
 # License: 
-Finally, include a section for the license of your project. For more information on choosing a license, check out GitHub’s licensing guide!
+> Finally, include a section for the license of your project. For more information on choosing a license, check out GitHub’s licensing guide!
 
-Your README should contain only the necessary information for developers to get started using and contributing to your project. Longer documentation is best suited for wikis, outlined below.
+> Your README should contain only the necessary information for developers to get started using and contributing to your project. Longer documentation is best suited for wikis, outlined below.
 
 
 
