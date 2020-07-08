@@ -1,9 +1,11 @@
 # Project name: 
 > Your project’s name is the first thing people will see upon scrolling down to your README, and is included upon creation of your README file.
 
+## Todo Restul Api
+
 # Description: 
 > A description of your project follows. A good description is clear, short, and to the point. Describe the importance of your project, and what it does.
-ToDo is a Restful webservice designed to assist users with building their own ToDo application. This service will provide various methods and request to accommodate general uses of a ToDo task list.  
+Todo is a Restful webservice designed to assist users with building their own Todo application. This service will provide various methods and available calls to accommodate general uses of a Todo task list.  
 
 ## Features
 This project provides API endpoints to operate CRUD functionality to manage a personal To Do list:
