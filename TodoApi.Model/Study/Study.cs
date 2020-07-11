@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+
 namespace TodoApi.Model.Study
 {
     public class Study
@@ -13,5 +15,6 @@ namespace TodoApi.Model.Study
         public DateTime? AmountOfTime { get; set; }
         public string Location { get; set; }
         public StudyCategory Studycategory { get; set; }
+        public IList<StudyTask> studyTasks { get; set; }
     }
 }
