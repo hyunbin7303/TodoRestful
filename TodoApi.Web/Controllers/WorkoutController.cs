@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TodoApi.Datasource;
+using TodoApi.Model.Workout;
 
 namespace TodoApi.Controllers
 {
@@ -12,10 +13,16 @@ namespace TodoApi.Controllers
     [ApiController]
     public class WorkoutController : ControllerBase
     {
+        private readonly IMongoRepository<Workout> _workoutRepository;
+        public WorkoutController(IMongoRepository<Workout> workoutRepository)
+        {
+            _workoutRepository = workoutRepository;
+        }
         // GET: api/Workout
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Workout> Get()
         {
+            _workoutRepository.FindById("");
             return new string[] { "value1", "value2" };
         }
 

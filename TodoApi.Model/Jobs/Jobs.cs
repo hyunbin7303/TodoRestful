@@ -13,7 +13,7 @@ namespace TodoApi.Model.Jobs
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public DateTime? ExpectedEndTime { get; set; }
-        public JobType JobType { get; set; }
+        //public JobType JobType { get; set; }
     }
     public enum JobType
     {

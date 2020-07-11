@@ -30,5 +30,18 @@ namespace TodoApi.Datasource
 
             return dbList;
         }
+        public IMongoClient GetClient(string connString, string dbName)
+        {
+            var password = Environment.GetEnvironmentVariable("MongoDB_Password");
+            return new MongoClient($"mongodb+srv://TodoUser:{password}@todo.oylnh.azure.mongodb.net/{dbName}?retryWrites=true&w=majority");
+        }
+        public IMongoDatabase GetDatabase(IMongoClient client)
+        {
+            return client.GetDatabase("Workout");
+        }
+        public IMongoCollection<T> MongoCollection<T>(IMongoDatabase mDb, string collectionName)
+        {
+            return mDb.GetCollection<T>(collectionName);
+        }
     }
 }
