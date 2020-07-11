@@ -20,8 +20,9 @@ namespace TodoApi.Controllers
         }
         // GET: api/Workout
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Workout> Get()
         {
+            _workoutRepository.FindById("");
             return new string[] { "value1", "value2" };
         }
 
@@ -39,8 +40,6 @@ namespace TodoApi.Controllers
             return $"{name}";
 
         }
-
-
 
         // POST: api/Workout
         [HttpPost]

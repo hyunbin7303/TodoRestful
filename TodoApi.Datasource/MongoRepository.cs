@@ -116,5 +116,10 @@ namespace TodoApi.Datasource
         {
             throw new NotImplementedException();
         }
+
+        public Task<IList<TDocument>> FindAll()
+        {
+            return null;
+        }
     }
 }
