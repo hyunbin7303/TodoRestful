@@ -15,4 +15,11 @@ namespace TodoApi.Model.Jobs
         public DateTime? ExpectedEndTime { get; set; }
         public JobType JobType { get; set; }
     }
+    public enum JobType
+    {
+        Company,
+        Personal,
+        Family,
+        Others
+    }
 }
