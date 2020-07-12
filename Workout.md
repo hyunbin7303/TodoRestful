@@ -5,19 +5,16 @@
   <_Additional information about your API call. Try to use verbs that match both request type (fetching vs modifying) and plurality (one vs multiple)._>
 
 * **URL**
-
-### Home
-  * api/Home/{id}
-  * api/Home/{home}
-
-### Daily Task
-  * api/DailyTask/{id}
+### Workout endpoints for GET method
+  * api/Workout
+  * api/Workout/{userid}
+  * api/Workout/{userid}/{since}
+  * api/Workout/{userid}/{since}/{until}
+  * api/Workout/{userid}/{specific}
 
 * **Method:**
   
-  <_The request type_>
-
-  `GET` | `POST` | `DELETE` | `PUT`
+  `GET`
   
 *  **URL Params**
 
@@ -25,7 +22,7 @@
 
    **Required:**
  
-   `id=[integer]`
+   `userid=[string]`
 
    **Optional:**
  
@@ -60,4 +57,7 @@
 
 * **Notes:**
 
-  <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
+  Currently this is in development process.
+  
+  
+  ### Workout endpoints for POST method
