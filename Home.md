@@ -15,24 +15,18 @@ Get grocery list
   
 *  **URL Params**
 
-List<Grocery> id
+`List<Grocery> id`
 
    **Required:**
  
-id = integer
-
-   **Optional:**
- 
-   `photo_id=[alphanumeric]`
+`id = integer`
 
 * **Data Params**
 
-  <_If making a post request, what should the body payload look like? URL Params rules apply here too._>
+`N/A` 
 
 * **Success Response:**
   
-  <_What should the status code be on success and is there any returned data? This is useful when people need to to know what their callbacks should expect!_>
-
   * **Code:** 200 <br />
     **Content:** `{ id : 12 }`
  
@@ -56,13 +50,19 @@ id = integer
 
   <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
 
--------
+-------------------
+**Title**
+----
+
+Get items for the house
+
+* **URL**
+
+/api/Hom/{List<Items> id}
 
 * **Method:**
   
-  <_The request type_>
-
-  `GET` | `POST` | `DELETE` | `PUT`
+  `GET`
   
 *  **URL Params**
 
@@ -109,6 +109,13 @@ id = integer
 
 --------------------------
 
+**Title**
+----
+
+
+* **URL**
+
+  
 * **Method:**
   
   <_The request type_>
