@@ -19,7 +19,7 @@ Get grocery list
 
    **Required:**
  
-  `id = integer`
+   `id = integer`
 
 * **Data Params**
 
