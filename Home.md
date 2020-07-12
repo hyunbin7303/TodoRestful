@@ -15,11 +15,11 @@ Get grocery list
   
 *  **URL Params**
 
-  - `List<Grocery> id`
+  `List<Grocery> id`
 
    **Required:**
  
-   - `id = integer`
+    `id = integer`
 
 * **Data Params**
 
