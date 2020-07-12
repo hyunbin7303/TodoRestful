@@ -1,33 +1,23 @@
 # Home 
 
-# Get Grocery List 
+## Get Grocery List 
 
 Create an Account for the authenticated User if an Account for that User does
 not already exist. Each User can only have one Account.
 
 **URL** : `/api/Home/{groceryListId}`
 
-**Method** : `POST`
+**Method** : `GET`
 
-**Auth required** : YES
+**Auth required** : NO
 
 **Permissions required** : None
 
 **Data constraints**
 
-Provide name of Account to be created.
-
 ```json
 {
     "name": "[unicode 64 chars max]"
-}
-```
-
-**Data example** All fields must be sent.
-
-```json
-{
-    "name": "Build something project dot com"
 }
 ```
 
