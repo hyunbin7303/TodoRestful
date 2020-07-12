@@ -1,54 +1,77 @@
-## API Call for Home
+# Home 
 
-**Title**
-----
+# Get Grocery List 
 
-Get grocery list
+Create an Account for the authenticated User if an Account for that User does
+not already exist. Each User can only have one Account.
 
-* **URL**
+**URL** : `/api/Home/{groceryListId}`
 
-  /api/Home/{List<Grocery> id}
+**Method** : `POST`
 
-* **Method:**
-  
-  `GET`
-  
-* **URL Params**
+**Auth required** : YES
 
-  `List<Grocery> id`
+**Permissions required** : None
 
-* **Required:**
- 
-  `id = integer`
+**Data constraints**
 
-* **Data Params**
+Provide name of Account to be created.
 
-  `N/A` 
+```json
+{
+    "name": "[unicode 64 chars max]"
+}
+```
 
-* **Success Response:**
-  
-  * **Code:** 200 <br />
-    **Content:** `{ id : 12 }`
- 
-* **Error Response:**
+**Data example** All fields must be sent.
 
-  <_Most endpoints will have many ways they can fail. From unauthorized access, to wrongful parameters etc. All of those should be liste d here. It might seem repetitive, but it helps prevent assumptions from being made where they should be._>
+```json
+{
+    "name": "Build something project dot com"
+}
+```
 
-  * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** `{ error : "Log in" }`
+## Success Response
 
-  OR
+**Condition** : If everything is OK and an Account didn't exist for this User.
 
-  * **Code:** 422 UNPROCESSABLE ENTRY <br />
-    **Content:** `{ error : "Email Invalid" }`
+**Code** : `201 CREATED`
 
-* **Sample Call:**
+**Content example**
 
-  <_Just a sample call to your endpoint in a runnable format ($.ajax call or a curl request) - this makes life easier and more predictable._> 
+```json
+{
+    "id": 123,
+    "name": "Build something project dot com",
+    "url": "http://testserver/api/accounts/123/"
+}
+```
 
-* **Notes:**
+## Error Responses
 
-  <_This is where all uncertainties, commentary, discussion etc. can go. I recommend timestamping and identifying oneself when leaving comments here._> 
+**Condition** : If Account already exists for User.
+
+**Code** : `303 SEE OTHER`
+
+**Headers** : `Location: http://testserver/api/accounts/123/`
+
+**Content** : `{}`
+
+### Or
+
+**Condition** : If fields are missed.
+
+**Code** : `400 BAD REQUEST`
+
+**Content example**
+
+```json
+{
+    "name": [
+        "This field is required."
+    ]
+}
+```
 
 -------------------
 **Title**
