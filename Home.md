@@ -2,22 +2,24 @@
 
 **Title**
 ----
-  <_Additional information about your API call. Try to use verbs that match both request type (fetching vs modifying) and plurality (one vs multiple)._>
+
+Get grocery list
 
 * **URL**
 
-### Home
+/api/Home/{List<Grocery> id}
+
 * **Method:**
   
   `GET`
   
 *  **URL Params**
 
-   <_If URL params exist, specify them in accordance with name mentioned in URL section. Separate into optional and required. Document data constraints._> 
+List<Grocery> id
 
    **Required:**
  
-   `id=[integer]`
+id = integer
 
    **Optional:**
  
