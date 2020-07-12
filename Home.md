@@ -7,7 +7,7 @@ Get grocery list
 
 * **URL**
 
-/api/Home/{List<Grocery> id}
+  /api/Home/{List<Grocery> id}
 
 * **Method:**
   
@@ -15,15 +15,15 @@ Get grocery list
   
 *  **URL Params**
 
-`List<Grocery> id`
+  `List<Grocery> id`
 
    **Required:**
  
-`id = integer`
+  `id = integer`
 
 * **Data Params**
 
-`N/A` 
+  `N/A` 
 
 * **Success Response:**
   
@@ -54,11 +54,11 @@ Get grocery list
 **Title**
 ----
 
-Get items for the house
+  Get items for the house
 
 * **URL**
 
-/api/Hom/{List<Items> id}
+  /api/Hom/{List<Items> id}
 
 * **Method:**
   
