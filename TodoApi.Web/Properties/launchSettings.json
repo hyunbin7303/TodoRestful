@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      "launchUrl": "workout",
       "environmentVariables": {
         "MongoDB_Password": "fz1iaM7jAxywarNV",
         "ASPNETCORE_ENVIRONMENT": "Development"

@@ -9,6 +9,7 @@ using TodoApi.Model.Workout;
 
 namespace TodoApi.Controllers
 {
+    //https://thecodebuzz.com/mongodb-repository-implementation-unit-testing-net-core-example/
     [Route("api/[controller]")]
     [ApiController]
     public class WorkoutController : ControllerBase
@@ -23,7 +24,7 @@ namespace TodoApi.Controllers
         public IEnumerable<Workout> Get()
         {
             _workoutRepository.FindById("");
-            return new string[] { "value1", "value2" };
+            return null;
         }
 
         // GET: api/Workout/5
@@ -31,7 +32,6 @@ namespace TodoApi.Controllers
         public string Get(int id)
         {
             DataAccessorMongo mongo = new DataAccessorMongo("");
-
             mongo.GetDatabase();
             string name = "";
             JsonResult json = new JsonResult(mongo.GetDatabase());

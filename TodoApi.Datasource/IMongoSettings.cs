@@ -6,7 +6,7 @@ namespace TodoApi.Datasource
 {
     public interface IMongoSettings
     {
-        string DBname { get; set; }
-        string ConnectionString { get; set; }
+        string DatabaseName { get; set; }
+        string Connection { get; set; }
     }
 }

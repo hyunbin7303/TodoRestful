@@ -15,7 +15,7 @@ namespace TodoApi.Datasource
 
         public MongoRepository(IMongoSettings settings)
         {
-            var db = new MongoClient(settings.ConnectionString).GetDatabase(settings.DBname);
+            var db = new MongoClient(settings.Connection).GetDatabase(settings.DatabaseName);
             _collection = db.GetCollection<TDocument>(GetCollectionName(typeof(TDocument)));
         }
         private protected string GetCollectionName(Type documentType)
