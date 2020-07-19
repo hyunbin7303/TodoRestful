@@ -1,4 +1,5 @@
-﻿using MongoDB.Driver;
+﻿using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,6 @@ namespace TodoApi.Datasource
     public class MongoRepository<TDocument> : IMongoRepository<TDocument> where TDocument : IDocument
     {
         private readonly IMongoCollection<TDocument> _collection;
-
         public MongoRepository(IMongoSettings settings)
         {
             var db = new MongoClient(settings.Connection).GetDatabase(settings.DatabaseName);
@@ -25,13 +25,15 @@ namespace TodoApi.Datasource
                     true)
                 .FirstOrDefault())?.CollectionName;
         }
-        public IQueryable<TDocument> AsQueryable()
+        public virtual IQueryable<TDocument> AsQueryable()
         {
-            throw new NotImplementedException();
+            return _collection.AsQueryable();
         }
-        public void DeleteById(string id)
+        public virtual void DeleteById(string id)
         {
-            throw new NotImplementedException();
+            var objId = new ObjectId(id);
+            var filter = Builders<TDocument>.Filter.Eq(d => d.Id, objId);
+            _collection.FindOneAndDelete(filter);
         }
 
         public Task DeleteByIdAsync(string id)
@@ -69,9 +71,14 @@ namespace TodoApi.Datasource
         }
         public TDocument FindById(string id)
         {
+            var objectId = new ObjectId(id);
+            var filter = Builders<TDocument>.Filter.Eq(d => d.Id, objectId);
+            return _collection.Find(filter).SingleOrDefault();
+        }
+        public TDocument FindByUserId(string userId)
+        {
             throw new NotImplementedException();
         }
-
         public Task<TDocument> FindByIdAsync(string id)
         {
             throw new NotImplementedException();
@@ -97,14 +104,13 @@ namespace TodoApi.Datasource
             throw new NotImplementedException();
         }
 
-        public void InsertOne(TDocument document)
+        public virtual void InsertOne(TDocument document)
         {
-            throw new NotImplementedException();
+            _collection.InsertOne(document);
         }
-
-        public Task InsertOneAsync(TDocument document)
+        public virtual Task InsertOneAsync(TDocument document)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => _collection.InsertOneAsync(document));
         }
 
         public void ReplaceOne(TDocument document)
@@ -121,5 +127,7 @@ namespace TodoApi.Datasource
         {
             return null;
         }
+
+
     }
 }

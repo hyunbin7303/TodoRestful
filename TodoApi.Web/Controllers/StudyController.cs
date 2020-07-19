@@ -12,11 +12,9 @@ namespace TodoApi.Web.Controllers
     [ApiController]
     public class StudyController : ControllerBase
     {
-
         [HttpGet]
         public IEnumerable<Study> Get()
         {
-
             return null;
         }
         [HttpGet]

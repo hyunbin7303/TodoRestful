@@ -14,7 +14,7 @@
       "launchBrowser": true,
       "launchUrl": "workout",
       "environmentVariables": {
-        "MongoDB_Password": "fz1iaM7jAxywarNV",
+        "MongoDB_Password": "lAoyG54cyz6FS9DK",
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },

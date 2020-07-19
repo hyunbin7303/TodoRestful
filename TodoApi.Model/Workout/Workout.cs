@@ -14,12 +14,9 @@ namespace TodoApi.Model.Workout
         public string Description { get; set; }
         public string Goal { get; set; }
         public bool IsClass { get; set; }
-        
         public TypeOfWorkout workoutType { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime  { get; set; }
-        public DateTime? ExpectedAmountOfWork { get; set; }
-        
-        
+        public TimeSpan ExpectedAmountOfWork { get; set; }
     }
 }
