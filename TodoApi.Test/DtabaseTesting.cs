@@ -14,8 +14,6 @@ namespace TodoApi.Test
         public void DatabaseConnectionTesting()
         {
             DataAccessorMongo mongo = new DataAccessorMongo("");
-            var check = mongo.DatabaseConnectionTesting();
-            Assert.IsTrue(check);       
         }
         
     }

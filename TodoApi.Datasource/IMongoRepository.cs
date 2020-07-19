@@ -24,6 +24,7 @@ namespace TodoApi.Datasource
 
         Task<IList<TDocument>> FindAll();
         TDocument FindById(string id);
+        TDocument FindByUserId(string userId);
         Task<TDocument> FindByIdAsync(string id);
         void InsertOne(TDocument document);
         Task InsertOneAsync(TDocument document);

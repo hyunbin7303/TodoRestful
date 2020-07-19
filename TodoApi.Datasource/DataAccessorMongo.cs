@@ -19,7 +19,7 @@ namespace TodoApi.Datasource
             var dbname = "sample_airbnb";
             MongoClientSettings settings = new MongoClientSettings();
 
-            var client = new MongoClient($"mongodb+srv://TodoUser:{password}@workout.oylnh.azure.mongodb.net/{dbname}?retryWrites=true&w=majority");
+            var client = new MongoClient($"mongodb+srv://TodoUser:{password}@workout.oylnh.azure.mongodb.net/{dbname}?retryWrites=true&w=majority&connect=replicaSet");
             var database = client.GetDatabase("test");
             var cursor = client.ListDatabases().ToList();
             
@@ -37,7 +37,7 @@ namespace TodoApi.Datasource
         }
         public IMongoDatabase GetDatabase(IMongoClient client)
         {
-            return client.GetDatabase("Workout");
+            return client.GetDatabase("Todo");
         }
         public IMongoCollection<T> MongoCollection<T>(IMongoDatabase mDb, string collectionName)
         {

@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using TodoApi.Datasource;
 
 namespace TodoApi.Web
@@ -26,7 +27,11 @@ namespace TodoApi.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped(typeof(MongoRepository<>), typeof(MongoRepository<>));
+            var section = Configuration.GetSection("MongoDbSettings");
+            services.Configure<MongoDbSettings>(section);
+            services.AddSingleton<IMongoSettings>(serviceProvider =>
+                serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
+            services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
             services.AddControllers();
         }
 
