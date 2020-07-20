@@ -60,4 +60,27 @@
   Currently this is in development process.
   
   
-  ### Workout endpoints for POST method
+### Workout endpoints for POST method
+
+* **Method:**
+  `POST`
+  *  **URL Params**
+
+  * api/Workout/{userid}
+  
+     **Required:**
+ 
+   `userid=[string]`
+   
+   * **Success Response:**
+  When Workout document is successfully created in cloud database, it returns 201 code (Created) with user information and document Id. 
+ 
+  * **Code:** 201 <br />
+    **Content:** `{ id : 12 }`
+    
+    * **Error Response:**
+
+  <_Most endpoints will have many ways they can fail. From unauthorized access, to wrongful parameters etc. All of those should be liste d here. It might seem repetitive, but it helps prevent assumptions from being made where they should be._>
+
+  * **Code:** 401 UNAUTHORIZED <br />
+    **Content:** `{ error : "Log in" }`
