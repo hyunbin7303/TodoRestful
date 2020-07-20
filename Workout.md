@@ -84,3 +84,7 @@
 
   * **Code:** 401 UNAUTHORIZED <br />
     **Content:** `{ error : "Log in" }`
+    
+    
+    ### Workout endpoints for PUT method
+  * api/Workout/{userid}/{WorkoutId}
