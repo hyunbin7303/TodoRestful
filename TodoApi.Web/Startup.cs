@@ -12,6 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TodoApi.Datasource;
+using TodoApi.Model.Chores;
+using TodoApi.Model.DailyTask;
 
 namespace TodoApi.Web
 {
@@ -32,6 +34,8 @@ namespace TodoApi.Web
             services.AddSingleton<IMongoSettings>(serviceProvider =>
                 serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
             services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
+            services.AddTransient<IMongoRepository<Chores>, MongoRepository<Chores>>();
+            services.AddTransient<IMongoRepository<DailyTask>, MongoRepository<DailyTask>>();
             services.AddControllers();
         }
 

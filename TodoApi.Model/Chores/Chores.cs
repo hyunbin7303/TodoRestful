@@ -1,8 +1,10 @@
 ﻿using System;
+using TodoApi.Datasource;
 
 namespace TodoApi.Model.Chores
 {
-    public class Chores
+    [BsonCollection("chores")]
+    public class Chores : Document
     {
         public string Id { get; set; }
         public string Title { get; set; }

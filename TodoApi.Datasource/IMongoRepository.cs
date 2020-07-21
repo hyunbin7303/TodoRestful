@@ -9,7 +9,6 @@ using System.Linq;
 
 namespace TodoApi.Datasource
 {
-
     //source from :https://gist.github.com/marekzyla/eb3ab2db6cf07dc723af49d2414c7554#file-imongorepository-cs
     public interface IMongoRepository<TDocument> where TDocument : IDocument
     {
