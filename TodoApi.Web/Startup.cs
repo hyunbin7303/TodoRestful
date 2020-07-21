@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using TodoApi.Datasource;
 using TodoApi.Model.Chores;
 using TodoApi.Model.DailyTask;
+using TodoApi.Model.Jobs;
 
 namespace TodoApi.Web
 {
@@ -36,6 +37,7 @@ namespace TodoApi.Web
             services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
             services.AddTransient<IMongoRepository<Chores>, MongoRepository<Chores>>();
             services.AddTransient<IMongoRepository<DailyTask>, MongoRepository<DailyTask>>();
+            services.AddTransient<IMongoRepository<Jobs>, MongoRepository<Jobs>>();
             services.AddControllers();
         }
 
