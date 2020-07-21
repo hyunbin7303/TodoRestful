@@ -63,7 +63,7 @@ namespace TodoApi.Datasource
 
         public IEnumerable<TDocument> FilterBy(Expression<Func<TDocument, bool>> filterExpression)
         {
-            throw new NotImplementedException();
+            return _collection.Find(filterExpression).ToEnumerable();
         }
         public IEnumerable<TProjected> FilterBy<TProjected>(Expression<Func<TDocument, bool>> filterExpression, Expression<Func<TDocument, TProjected>> projectionExpression)
         {
@@ -75,7 +75,12 @@ namespace TodoApi.Datasource
             var filter = Builders<TDocument>.Filter.Eq(d => d.Id, objectId);
             return _collection.Find(filter).SingleOrDefault();
         }
-        public TDocument FindByUserId(string userId)
+        public Task<IList<TDocument>> FindByUserId(string userId)
+        {
+            //var filter = Builders<TDocument>.Filter.Eq(d=>d.i)
+            throw new NotImplementedException();
+        }
+        public Task<IList<TDocument>> FindByUserIdandDate(string userId, string date)
         {
             throw new NotImplementedException();
         }
@@ -86,7 +91,7 @@ namespace TodoApi.Datasource
 
         public TDocument FindOne(Expression<Func<TDocument, bool>> filterExpression)
         {
-            throw new NotImplementedException();
+            return _collection.Find(filterExpression).FirstOrDefault();
         }
 
         public Task<TDocument> FindOneAsync(Expression<Func<TDocument, bool>> filterExpression)
@@ -127,6 +132,7 @@ namespace TodoApi.Datasource
         {
             return null;
         }
+
 
 
     }

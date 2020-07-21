@@ -13,7 +13,7 @@ namespace TodoApi.Model.Workout
         public string Title { get; set; }
         public string Description { get; set; }
         public string Goal { get; set; }
-        public bool IsClass { get; set; }
+        public WorkoutStatus Status { get; set; }
         public TypeOfWorkout workoutType { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime  { get; set; }

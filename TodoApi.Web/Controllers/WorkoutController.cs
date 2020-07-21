@@ -22,19 +22,28 @@ namespace TodoApi.Controllers
         }
         // GET: api/Workout
         [HttpGet]
-        public IEnumerable<Workout> Get()
-        {
-            var getWorkout = _workoutRepository.FindAll();
-            return null;
-        }
+        public IEnumerable<Workout> Get() => _workoutRepository.FindAll().Result;
 
         // GET: api/Workout/5
         [HttpGet("{id}", Name = "Get")]
-        public string Get(string id)
+        public IEnumerable<Workout> Get(string userId) => _workoutRepository.FindByUserId(userId).Result;
+
+        [HttpGet("{id}", Name = "GetOnDate")]
+        public IEnumerable<Workout> GetOnDate(string userId, string date)
         {
-            _workoutRepository.FindByUserId(id);
-            return "Success";
+            var workouts= _workoutRepository.FindByUserIdandDate(userId, date);
+            if(workouts !=null)
+            {
+
+                return workouts.Result;
+            }
+            else
+            {
+                // Should return with message.
+                return null;
+            }
         }
+
         // POST: api/Workout
         [HttpPost]
         public void Post(string userId)
@@ -43,7 +52,7 @@ namespace TodoApi.Controllers
             {
                 Id = ObjectId.GenerateNewId(),
                 UserId = userId,
-                IsClass = false,
+                Status = WorkoutStatus.Plan,
                 Description = "Testing purpose",
                 workoutType = TypeOfWorkout.Athletics,
                 ExpectedAmountOfWork = new TimeSpan(2, minutes: 14, 18),
@@ -51,16 +60,45 @@ namespace TodoApi.Controllers
             };
             _workoutRepository.InsertOne(workout);
         }
+
+        [HttpPost]
+        public IActionResult Post(Workout workout)
+        {
+            // Find specific user.
+            if(workout != null)
+            {
+                _workoutRepository.InsertOne(workout);
+                return Ok(workout);
+            }
+            else
+            {
+                return BadRequest();
+            }
+        }
+
+
         // PUT: api/Workout/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(string id, [FromBody] Workout value)
         {
+            _workoutRepository.ReplaceOne(value);
         }
+
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+
+        public void Delete(string id)
         {
+            _workoutRepository.DeleteById(id);
         }
+
+        [HttpGet("About")]
+        public ContentResult About()
+        {
+            return Content("An API listing Workouts of docs.asp.net.");
+        }
+
+
     }
 }
