@@ -9,5 +9,8 @@ namespace TodoApi.Datasource
     {
         public ObjectId Id { get; set; }
         public DateTime CreatedAt => Id.CreationTime;
+
+        public string UserId { get; set; }
+        public string Datetime { get; set; }
     }
 }

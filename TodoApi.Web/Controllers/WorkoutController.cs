@@ -10,7 +10,6 @@ using TodoApi.Model.Workout;
 
 namespace TodoApi.Controllers
 {
-    //https://thecodebuzz.com/mongodb-repository-implementation-unit-testing-net-core-example/
     [Route("api/[controller]")]
     [ApiController]
     public class WorkoutController : ControllerBase
@@ -31,6 +30,8 @@ namespace TodoApi.Controllers
         [HttpGet("{id}", Name = "GetOnDate")]
         public IEnumerable<Workout> GetOnDate(string userId, string date)
         {
+            //_workoutRepository.FilterBy()
+
             var workouts= _workoutRepository.FindByUserIdandDate(userId, date);
             if(workouts !=null)
             {

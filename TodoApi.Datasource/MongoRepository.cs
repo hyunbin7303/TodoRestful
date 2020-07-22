@@ -38,27 +38,32 @@ namespace TodoApi.Datasource
 
         public Task DeleteByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                var objectId = new ObjectId(id);
+                var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
+                _collection.FindOneAndDeleteAsync(filter);
+            });
         }
 
         public void DeleteMany(Expression<Func<TDocument, bool>> filterExpression)
         {
-            throw new NotImplementedException();
+            _collection.DeleteMany(filterExpression);
         }
 
         public Task DeleteManyAsync(Expression<Func<TDocument, bool>> filterExpression)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => _collection.FindOneAndDeleteAsync(filterExpression));
         }
 
         public void DeleteOne(Expression<Func<TDocument, bool>> filterExpression)
         {
-            throw new NotImplementedException();
+            _collection.FindOneAndDelete(filterExpression);
         }
 
         public Task DeleteOneAsync(Expression<Func<TDocument, bool>> filterExpression)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => _collection.FindOneAndDeleteAsync(filterExpression));
         }
 
         public IEnumerable<TDocument> FilterBy(Expression<Func<TDocument, bool>> filterExpression)
@@ -77,16 +82,31 @@ namespace TodoApi.Datasource
         }
         public Task<IList<TDocument>> FindByUserId(string userId)
         {
-            //var filter = Builders<TDocument>.Filter.Eq(d=>d.i)
-            throw new NotImplementedException();
+            var filter = Builders<TDocument>.Filter.All(d => d.UserId, userId);
+            if(filter!=null)
+            {
+               return Task.FromResult<IList<TDocument>>(_collection.Find(filter).ToList());
+            }
+            return null;
+
         }
         public Task<IList<TDocument>> FindByUserIdandDate(string userId, string date)
         {
-            throw new NotImplementedException();
+            var filter = Builders<TDocument>.Filter.All(d => d.UserId, userId) & Builders<TDocument>.Filter.All(d => d.Datetime, date);
+            if(filter!= null)
+            {
+                return Task.FromResult<IList<TDocument>>(_collection.Find(filter).ToList());
+            }
+            return null;
         }
         public Task<TDocument> FindByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            return Task.Run(() =>
+            {
+                var objectId = new ObjectId(id);
+                var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
+                return _collection.Find(filter).SingleOrDefaultAsync();
+            });
         }
 
         public TDocument FindOne(Expression<Func<TDocument, bool>> filterExpression)
@@ -96,19 +116,17 @@ namespace TodoApi.Datasource
 
         public Task<TDocument> FindOneAsync(Expression<Func<TDocument, bool>> filterExpression)
         {
-            throw new NotImplementedException();
+            return Task.Run(() => _collection.Find(filterExpression).FirstOrDefaultAsync());
         }
 
         public void InsertMany(ICollection<TDocument> documents)
         {
             throw new NotImplementedException();
         }
-
-        public Task InsertManyAsync(ICollection<TDocument> documents)
+        public virtual async Task InsertManyAsync(ICollection<TDocument> documents)
         {
-            throw new NotImplementedException();
+            await _collection.InsertManyAsync(documents);
         }
-
         public virtual void InsertOne(TDocument document)
         {
             _collection.InsertOne(document);
@@ -117,23 +135,20 @@ namespace TodoApi.Datasource
         {
             return Task.Run(() => _collection.InsertOneAsync(document));
         }
-
         public void ReplaceOne(TDocument document)
         {
-            throw new NotImplementedException();
+            var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, document.Id);
+            _collection.FindOneAndReplace(filter, document);
         }
-
-        public Task ReplaceOneAsync(TDocument document)
+        public virtual async Task ReplaceOneAsync(TDocument document)
         {
-            throw new NotImplementedException();
+            var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, document.Id);
+            await _collection.FindOneAndReplaceAsync(filter, document);
         }
-
         public Task<IList<TDocument>> FindAll()
         {
             return null;
         }
-
-
 
     }
 }
