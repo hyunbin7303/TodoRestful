@@ -23,13 +23,23 @@ namespace TodoApi.Web.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<DailyTask> GetDailyTask()
+        public IEnumerable<DailyTask> Get()
         {
             var dailyTasks = _repository.FindAll();
             return dailyTasks.Result;
         }
+        [HttpGet("{id}")]
+        public DailyTask Get(string id)
+        {
+            return _repository.FindById(id);
+        }
 
-
+        [HttpPost]
+        public void Post([FromBody]DailyTask task)
+        {
+            //validate chore
+            _repository.InsertOne(task);
+        }
 
 
     }

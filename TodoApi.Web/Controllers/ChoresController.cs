@@ -36,8 +36,7 @@ namespace TodoApi.Web.Controllers
         public void Post([FromBody]Chores chore)
         {
             //validate chore
-            var c = new Chores { Description = "Description test", Id = MongoDB.Bson.ObjectId.Empty, UserId = "User123", Title = "Title-Hello" };
-            _choresRepository.InsertOne(c);
+            _choresRepository.InsertOne(chore);
         }
     }
 }

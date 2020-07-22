@@ -9,7 +9,13 @@ namespace TodoApi.Model.DailyTask
     [BsonCollection("DailyTask")]
     public class DailyTask : Document
     {
-        public Chores.Chores chore { get; set; }
-        public Jobs.Jobs jobs { get; set; }
+        public List<string> ChoreId { get; set; }
+        public List<string> JobId { get; set; }
+        public List<string> StudyId { get; set; }
+        public List<string> ItemId { get; set; }
+        public List<string> WorkoutId { get; set; }
+        public DateTime? Today { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
     }
 }
