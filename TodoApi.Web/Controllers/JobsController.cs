@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
 using TodoApi.Datasource;
 using TodoApi.Model.Jobs;
 
@@ -21,34 +22,39 @@ namespace TodoApi.Web.Controllers
         }
         // GET: api/<JobsController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public Task<IList<Jobs>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return _jobRepository.FindAll();
         }
 
         // GET api/<JobsController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Task<IList<Jobs>> Get(string id)
         {
-            return "value";
+            return _jobRepository.FindByUserId(id);
         }
 
         // POST api/<JobsController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<Jobs> Post([FromBody] Jobs value)
         {
+            value.Id = ObjectId.GenerateNewId();
+            _jobRepository.InsertOne(value);
+            return value;
         }
 
         // PUT api/<JobsController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public ActionResult Put(int id, [FromBody] Jobs value)
         {
+            return NoContent();
         }
 
         // DELETE api/<JobsController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
+            return NoContent();
         }
     }
 }

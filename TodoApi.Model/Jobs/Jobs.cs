@@ -10,17 +10,20 @@ namespace TodoApi.Model.Jobs
     [BsonCollection("jobs")]
     public class Jobs : Document
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        //[BsonId]
+        //[BsonRepresentation(BsonType.ObjectId)]
+
+        //[DataMember]
+        public string UserId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Goal { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public DateTime? ExpectedEndTime { get; set; }
-        //public JobType JobType { get; set; }
+        public JobType JobType { get; set; }
     }
+
     public enum JobType
     {
         Company,
