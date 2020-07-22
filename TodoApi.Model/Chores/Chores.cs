@@ -5,8 +5,7 @@ namespace TodoApi.Model.Chores
 {
     [BsonCollection("chores")]
     public class Chores : Document
-    {
-        public string Id { get; set; }
+    {       
         public string Title { get; set; }
         public string Description { get; set; }
         public DateTime? StartTime { get; set; }

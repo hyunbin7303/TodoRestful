@@ -26,18 +26,18 @@ namespace TodoApi.Web.Controllers
             var getChores = _choresRepository.FindAll();
             return getChores.Result;
         }
-        [HttpGet]
+        [HttpGet("{id}")]
         public Chores Get(string id)
         {
             var getChores = _choresRepository.FindById(id);
             return getChores;
         }
         [HttpPost]
-        public void Post(Chores chore)
+        public void Post([FromBody]Chores chore)
         {
             //validate chore
-
-            _choresRepository.InsertOne(chore);
+            var c = new Chores { Description = "Description test", Id = MongoDB.Bson.ObjectId.Empty, UserId = "User123", Title = "Title-Hello" };
+            _choresRepository.InsertOne(c);
         }
     }
 }

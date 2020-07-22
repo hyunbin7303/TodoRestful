@@ -147,7 +147,7 @@ namespace TodoApi.Datasource
         }
         public Task<IList<TDocument>> FindAll()
         {
-            return null;
+            return Task.FromResult<IList<TDocument>>(_collection.Find(Builders<TDocument>.Filter.Empty).ToList(););
         }
 
     }
