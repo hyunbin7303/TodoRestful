@@ -14,7 +14,7 @@ namespace TodoApi.Model.Jobs
         //[BsonRepresentation(BsonType.ObjectId)]
 
         //[DataMember]
-        public string UserId { get; set; }
+  
         public string Title { get; set; }
         public string Description { get; set; }
         public string Goal { get; set; }
