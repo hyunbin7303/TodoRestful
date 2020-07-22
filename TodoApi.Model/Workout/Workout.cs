@@ -8,8 +8,6 @@ namespace TodoApi.Model.Workout
     [BsonCollection("workout")]
     public class Workout : Document
     {
-
-        public string UserId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string Goal { get; set; }
@@ -17,6 +15,6 @@ namespace TodoApi.Model.Workout
         public TypeOfWorkout workoutType { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime  { get; set; }
-        public TimeSpan ExpectedAmountOfWork { get; set; }
+        public TimeSpan? ExpectedAmountOfWork { get; set; }
     }
 }

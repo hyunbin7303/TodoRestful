@@ -46,21 +46,21 @@ namespace TodoApi.Controllers
         }
 
         // POST: api/Workout
-        [HttpPost]
-        public void Post(string userId)
-        {
-            Workout workout = new Workout
-            {
-                Id = ObjectId.GenerateNewId(),
-                UserId = userId,
-                Status = WorkoutStatus.Plan,
-                Description = "Testing purpose",
-                workoutType = TypeOfWorkout.Athletics,
-                ExpectedAmountOfWork = new TimeSpan(2, minutes: 14, 18),
-                StartTime = DateTime.Now
-            };
-            _workoutRepository.InsertOne(workout);
-        }
+        //[HttpPost]
+        //public void Post(string userId)
+        //{
+        //    Workout workout = new Workout
+        //    {
+        //        Id = ObjectId.GenerateNewId(),
+        //        UserId = userId,
+        //        Status = WorkoutStatus.Plan,
+        //        Description = "Testing purpose",
+        //        workoutType = TypeOfWorkout.Athletics,
+        //        ExpectedAmountOfWork = new TimeSpan(2, minutes: 14, 18),
+        //        StartTime = DateTime.Now
+        //    };
+        //    _workoutRepository.InsertOne(workout);
+        //}
 
         [HttpPost]
         public IActionResult Post(Workout workout)
