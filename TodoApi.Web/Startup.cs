@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -55,10 +56,35 @@ namespace TodoApi.Web
 
             app.UseAuthorization();
 
+            //https://docs.microsoft.com/en-us/aspnet/core/fundamentals/routing?view=aspnetcore-3.1
             app.UseEndpoints(endpoints =>
             {
+
+                endpoints.MapGet("/", async context => 
+                {
+                    await context.Response.WriteAsync("Hello World");
+                });
+                // Using metadata to configure the audit policy.
+                endpoints.MapGet("/sensitive", async context =>
+                {
+                    await context.Response.WriteAsync("sensitive data");
+                })
+                .WithMetadata(new AuditPolicyAttribute(needsAudit: true));
                 endpoints.MapControllers();
             });
         }
+
+        private interface IHttpRoute
+        {
+        }
+    }
+    public class AuditPolicyAttribute : Attribute
+    {
+        public AuditPolicyAttribute(bool needsAudit)
+        {
+            NeedsAudit = needsAudit;
+        }
+
+        public bool NeedsAudit { get; }
     }
 }
