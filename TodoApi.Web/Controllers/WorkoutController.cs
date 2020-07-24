@@ -29,9 +29,9 @@ namespace TodoApi.Controllers
         [HttpGet]
         public IEnumerable<Workout> Get(string userId) => _workoutRepository.FindByUserId(userId).Result;
 
-        // GET: api/Workout/5
-        [HttpGet("{UserId}")]
-        public ActionResult<Workout> GetLastDate(string UserId)
+
+        [HttpGet("{getlastdate}/{datetime}")]
+        public ActionResult<Workout> GetLastdate(DateTime datetime)
         {
             Expression<Func<Workout, bool>> test = t => t.Datetime.Contains("aaa");
             var check = _workoutRepository.FindOne(test);
