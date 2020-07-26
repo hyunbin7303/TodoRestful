@@ -82,7 +82,7 @@ namespace TodoApi.Datasource
         }
         public Task<IList<TDocument>> FindByUserId(string userId)
         {
-            var filter = Builders<TDocument>.Filter.All(d => d.UserId, userId);
+            var filter = Builders<TDocument>.Filter.Eq(d => d.UserId, userId);
             if(filter!=null)
             {
                return Task.FromResult<IList<TDocument>>(_collection.Find(filter).ToList());
