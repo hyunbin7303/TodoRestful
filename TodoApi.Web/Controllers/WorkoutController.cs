@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using TodoApi.Analytics.ExpressionHelper;
 using TodoApi.Datasource;
 using TodoApi.Model.Workout;
 
@@ -30,17 +31,50 @@ namespace TodoApi.Controllers
         public IEnumerable<Workout> Get(string userId) => _workoutRepository.FindByUserId(userId).Result;
 
 
-        [HttpGet("{getlastdate}/{datetime}")]
-        public ActionResult<Workout> GetLastdate(DateTime datetime)
+        [HttpGet("gettoday/{userId}")]
+        public ActionResult<Workout> GetToday(string userId)
         {
-            Expression<Func<Workout, bool>> test = t => t.Datetime.Contains("aaa");
-            var check = _workoutRepository.FindOne(test);
-            return Ok(check);
+            //Expression<Func<DateTime, bool>> TodayDate = x => x.Date.CompareTo
+            //var dateexpr = Expression.Constant( Convert.ToDateTime(filter.FilterValue).Date.AddDays(1),
+            //     typeof(DateTime)
+            //   );
+            return null;
+        }
+
+        //Working on this part.
+        //https://www.infoworld.com/article/3004496/how-to-work-with-actionresults-in-web-api.html
+        [HttpGet("getlastdate/{userId}/{datetime}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Workout> GetLastdate(string userId, DateTime datetime)
+        {
+            if(datetime!= null)
+            {
+                var setterNameProperty = ExpressionUtils.CreateSetter<Workout, string>("UserId");
+                var setterDatetimeProperty = ExpressionUtils.CreateSetter<Workout, DateTime>("datetime");
+
+                var Workout = new Workout();
+                setterNameProperty(Workout, userId);
+                setterDatetimeProperty(Workout, datetime);
+                Console.WriteLine("Name: {0}, DOB: {1}", Workout.UserId, Workout.Datetime);
+                Expression<Func<Workout, bool>> test = t => t.Datetime.Equals(new DateTime(2019, 5, 2));
+                var check = _workoutRepository.FindOne(test);
+                if(check ==null)
+                {
+                    return NotFound();
+                }
+                return Ok(check);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
 
+
         [HttpGet("{id}", Name = "GetOnDate")]
-        public IEnumerable<Workout> GetOnDate(string userId, string date)
+        public IEnumerable<Workout> GetOnDate(string userId, DateTime date)
         {
             //_workoutRepository.FilterBy()
 
@@ -57,7 +91,40 @@ namespace TodoApi.Controllers
             }
         }
 
+        [HttpGet]
+        public ActionResult<List<Workout>> Get([FromQuery] bool discontinuedOnly = false)
+        {
+            List<Workout> products = null;
+
+            if (discontinuedOnly)
+            {
+                //products = _workoutRepository.
+            }
+            else
+            {
+                products = _workoutRepository.FindAll().Result.ToList();
+            }
+
+            return products;
+        }
+
         [HttpPost]
+        [Consumes("application/json")]
+        public IActionResult CreateProduct(Workout product)
+        {
+            return null;
+        }
+        [HttpPost]
+        [Consumes("application/x-www-form-urlencoded")]
+        public IActionResult PostForm([FromForm] IEnumerable<int> values) =>
+    Ok(new { Consumes = "application/x-www-form-urlencoded", Values = values });
+
+
+
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Post(Workout workout)
         {
             // Find specific user.

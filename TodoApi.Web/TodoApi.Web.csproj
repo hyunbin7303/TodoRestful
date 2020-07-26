@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TodoApi.Analytics\TodoApi.Analytics.csproj" />
     <ProjectReference Include="..\TodoApi.Datasource\TodoApi.Datasource.csproj" />
     <ProjectReference Include="..\TodoApi.Model\TodoApi.Model.csproj" />
   </ItemGroup>

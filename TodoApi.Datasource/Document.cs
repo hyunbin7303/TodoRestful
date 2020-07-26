@@ -11,6 +11,6 @@ namespace TodoApi.Datasource
         public DateTime CreatedAt => Id.CreationTime;
 
         public string UserId { get; set; }
-        public string Datetime { get; set; }
+        public DateTime Datetime { get; set; }
     }
 }

@@ -90,9 +90,9 @@ namespace TodoApi.Datasource
             return null;
 
         }
-        public Task<IList<TDocument>> FindByUserIdandDate(string userId, string date)
+        public Task<IList<TDocument>> FindByUserIdandDate(string userId, DateTime date)
         {
-            var filter = Builders<TDocument>.Filter.All(d => d.UserId, userId) & Builders<TDocument>.Filter.All(d => d.Datetime, date);
+            var filter = Builders<TDocument>.Filter.All(d => d.UserId, userId) & Builders<TDocument>.Filter.All(d => d.Datetime.ToString(), date.ToString());
             if(filter!= null)
             {
                 return Task.FromResult<IList<TDocument>>(_collection.Find(filter).ToList());
