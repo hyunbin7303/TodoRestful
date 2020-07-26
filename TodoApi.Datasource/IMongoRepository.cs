@@ -20,7 +20,7 @@ namespace TodoApi.Datasource
             Expression<Func<TDocument, TProjected>> projectionExpression);
         TDocument FindOne(Expression<Func<TDocument, bool>> filterExpression);
         Task<TDocument> FindOneAsync(Expression<Func<TDocument, bool>> filterExpression);
-
+        Task<IList<TDocument>> Search(string keyword);
         Task<IList<TDocument>> FindAll();
         TDocument FindById(string id);
         Task<IList<TDocument>> FindByUserId(string userId);

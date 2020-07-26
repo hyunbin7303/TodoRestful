@@ -33,6 +33,11 @@ namespace TodoApi.Web.Controllers
         {
             return _jobRepository.FindByUserId(id);
         }
+        [HttpGet("search/{keyword}")]
+        public Task<IList<Jobs>> Search(string keyword)
+        {
+            return _jobRepository.Search(keyword);
+        }
 
         // POST api/<JobsController>
         [HttpPost]
