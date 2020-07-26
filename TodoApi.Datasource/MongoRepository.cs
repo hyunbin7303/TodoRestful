@@ -17,6 +17,10 @@ namespace TodoApi.Datasource
         {
             var db = new MongoClient(settings.Connection).GetDatabase(settings.DatabaseName);
             _collection = db.GetCollection<TDocument>(GetCollectionName(typeof(TDocument)));
+
+            // indexing specified field, in here index UserId field
+            //var indexModel = new CreateIndexModel<TDocument>(Builders<TDocument>.IndexKeys.Text(model => model.UserId));
+            //_collection.Indexes.CreateOne(indexModel);
         }
         private protected string GetCollectionName(Type documentType)
         {
@@ -148,6 +152,11 @@ namespace TodoApi.Datasource
         public Task<IList<TDocument>> FindAll()
         {
             return Task.FromResult<IList<TDocument>>(_collection.Find(Builders<TDocument>.Filter.Empty).ToList());
+        }
+        public Task<IList<TDocument>> Search(string keyword)
+        {
+            var filter = Builders<TDocument>.Filter.Text(keyword);
+            return Task.FromResult<IList<TDocument>>(_collection.Find(filter).ToList());
         }
 
     }
