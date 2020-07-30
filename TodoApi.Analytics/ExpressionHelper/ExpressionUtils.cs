@@ -45,5 +45,16 @@ namespace TodoApi.Analytics.ExpressionHelper
             var predicate = Expression.Lambda<Func<TElement, bool>>(body, p);
             return queryable.Where(predicate);
         }
+
+        // Should add filter for username...
+        public static Expression<Func<T,bool>> GetLastOne<T>(string userId, T getObj, DateTime? date)
+        {
+            ParameterExpression param = Expression.Parameter(typeof(T), "d");
+            var property = Expression.Property(param, "Datetime");
+            ConstantExpression DatetimeConstant = Expression.Constant(DateTime.Now, typeof(DateTime));
+            Expression finalExpression = Expression.LessThanOrEqual(property, DatetimeConstant);
+            var tree = Expression.Lambda<Func<T, bool>>(finalExpression, param);
+            return tree;
+        }
     }
 }

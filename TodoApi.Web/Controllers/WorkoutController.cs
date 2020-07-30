@@ -32,54 +32,52 @@ namespace TodoApi.Controllers
 
 
         [HttpGet("gettoday/{userId}")]
-        public ActionResult<Workout> GetToday(string userId)
-        {
-            //Expression<Func<DateTime, bool>> TodayDate = x => x.Date.CompareTo
-            //var dateexpr = Expression.Constant( Convert.ToDateTime(filter.FilterValue).Date.AddDays(1),
-            //     typeof(DateTime)
-            //   );
-            return null;
-        }
-
-        //Working on this part.
-        //https://www.infoworld.com/article/3004496/how-to-work-with-actionresults-in-web-api.html
-        [HttpGet("getlastdate/{userId}/{datetime}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<Workout> GetLastdate(string userId, DateTime datetime)
+        public ActionResult<Workout> GetToday(string userId)
         {
-            if(datetime!= null)
+            ConstantExpression dateExpr = Expression.Constant(DateTime.Today, typeof(DateTime));
+            ParameterExpression param = Expression.Parameter(typeof(Workout), "w");
+            var property = Expression.Property(param, "Datetime");
+            Expression finalExpression = Expression.Equal(property, dateExpr);
+            var tree = Expression.Lambda<Func<Workout, bool>>(finalExpression, param);
+            var check = _workoutRepository.FindOne(tree);
+            if (check != null)
             {
-                var setterNameProperty = ExpressionUtils.CreateSetter<Workout, string>("UserId");
-                var setterDatetimeProperty = ExpressionUtils.CreateSetter<Workout, DateTime>("datetime");
-
-                var Workout = new Workout();
-                setterNameProperty(Workout, userId);
-                setterDatetimeProperty(Workout, datetime);
-                Console.WriteLine("Name: {0}, DOB: {1}", Workout.UserId, Workout.Datetime);
-                Expression<Func<Workout, bool>> test = t => t.Datetime.Equals(new DateTime(2019, 5, 2));
-                var check = _workoutRepository.FindOne(test);
-                if(check ==null)
-                {
-                    return NotFound();
-                }
                 return Ok(check);
             }
             else
             {
-                return BadRequest();
+                return NotFound();
             }
+        }
+
+        //Working on this part.
+        //https://www.infoworld.com/article/3004496/how-to-work-with-actionresults-in-web-api.html
+        [HttpGet("GetLast/{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Workout> GetLast(string userId)
+        {
+            var tree = ExpressionUtils.GetLastOne<Workout>(userId, new Workout(), DateTime.Now);
+            var check = _workoutRepository.FindOne(tree);
+            if (check == null)
+            {
+                return NotFound();
+            }
+            return Ok(check);
         }
 
 
 
-        [HttpGet("{id}", Name = "GetOnDate")]
+        [HttpGet("GetOnDate/{userId}/{date}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IEnumerable<Workout> GetOnDate(string userId, DateTime date)
         {
             //_workoutRepository.FilterBy()
-
-            var workouts= _workoutRepository.FindByUserIdandDate(userId, date);
-            if(workouts !=null)
+            var workouts = _workoutRepository.FindByUserIdandDate(userId, date);
+            if (workouts != null)
             {
 
                 return workouts.Result;
@@ -108,18 +106,15 @@ namespace TodoApi.Controllers
             return products;
         }
 
-        [HttpPost]
-        [Consumes("application/json")]
-        public IActionResult CreateProduct(Workout product)
-        {
-            return null;
-        }
-        [HttpPost]
-        [Consumes("application/x-www-form-urlencoded")]
-        public IActionResult PostForm([FromForm] IEnumerable<int> values) =>
-    Ok(new { Consumes = "application/x-www-form-urlencoded", Values = values });
-
-
+        //[HttpPost]
+        //[Consumes("application/json")]
+        //public IActionResult CreateProduct(Workout product)
+        //{
+        //    return null;
+        //}
+        //[HttpPost]
+        //[Consumes("application/x-www-form-urlencoded")]
+        //public IActionResult PostForm([FromForm] IEnumerable<int> values) => Ok(new { Consumes = "application/x-www-form-urlencoded", Values = values });
 
 
         [HttpPost]
@@ -128,7 +123,7 @@ namespace TodoApi.Controllers
         public IActionResult Post(Workout workout)
         {
             // Find specific user.
-            if(workout != null)
+            if (workout != null)
             {
                 _workoutRepository.InsertOne(workout);
                 return Ok(workout);
@@ -145,7 +140,6 @@ namespace TodoApi.Controllers
         {
             _workoutRepository.ReplaceOne(value);
         }
-
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]

@@ -12,5 +12,9 @@ namespace TodoApi.Datasource
 
         public string UserId { get; set; }
         public DateTime Datetime { get; set; }
+        public Document()
+        {
+            this.Datetime = DateTime.Now;
+        }
     }
 }

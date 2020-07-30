@@ -1,6 +1,5 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TodoApi.Datasource;
 
@@ -18,5 +17,7 @@ namespace TodoApi.Model.Workout
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime  { get; set; }
         public TimeSpan? ExpectedAmountOfWork { get; set; }
+        public IList<WorkoutTask> workoutTask { get; set; }
+        
     }
 }
