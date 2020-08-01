@@ -27,7 +27,7 @@ namespace TodoApi.Controllers
 
         // GET: api/Workout/5
         //[HttpGet("{userId:string}", Name = "Get")]
-        [HttpGet]
+        [HttpGet("{userId}")]
         public IEnumerable<Workout> Get(string userId) => _workoutRepository.FindByUserId(userId).Result;
 
 
@@ -57,10 +57,10 @@ namespace TodoApi.Controllers
         [HttpGet("GetLast/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<Workout> GetLast(string userId)
+        public async Task<ActionResult<Workout>> GetLastAsync(string userId)
         {
             var tree = ExpressionUtils.GetLastOne<Workout>(userId, new Workout(), DateTime.Now);
-            var check = _workoutRepository.FindOne(tree);
+            var check = await _workoutRepository.FindOneAsync(tree);
             if (check == null)
             {
                 return NotFound();

@@ -36,9 +36,6 @@ namespace TodoApi.Web
             services.AddSingleton<IMongoSettings>(serviceProvider =>
                 serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
             services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
-            services.AddTransient<IMongoRepository<Chores>, MongoRepository<Chores>>();
-            services.AddTransient<IMongoRepository<DailyTask>, MongoRepository<DailyTask>>();
-            services.AddTransient<IMongoRepository<Jobs>, MongoRepository<Jobs>>();
             services.AddControllers();
         }
 
