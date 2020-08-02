@@ -9,6 +9,7 @@ using MongoDB.Bson;
 using TodoApi.Analytics.ExpressionHelper;
 using TodoApi.Datasource;
 using TodoApi.Model.Workout;
+using TodoApi.Model.Workout.Exceptions;
 
 namespace TodoApi.Controllers
 {
@@ -73,20 +74,22 @@ namespace TodoApi.Controllers
         [HttpGet("GetOnDate/{userId}/{date}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public IEnumerable<Workout> GetOnDate(string userId, DateTime date)
+        public ActionResult<List<Workout>> GetOnDate(string userId, DateTime date)
         {
-            //_workoutRepository.FilterBy()
-            var workouts = _workoutRepository.FindByUserIdandDate(userId, date);
-            if (workouts != null)
+            try
             {
+                var workouts = _workoutRepository.FindByUserIdandDate(userId, date);
+                return Ok(workouts);
+            }
+            catch(WorkoutValidationException workoutValidationEx) when (workoutValidationEx.InnerException is NotFoundUserException)
+            {
+                return NotFound(workoutValidationEx.InnerException.Message);
+            }
+            catch(WorkoutDIException diEx)
+            {
+                return Problem(diEx.Message);
+            }
 
-                return workouts.Result;
-            }
-            else
-            {
-                // Should return with message.
-                return null;
-            }
         }
 
         [HttpGet]
