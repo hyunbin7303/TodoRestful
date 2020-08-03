@@ -22,9 +22,9 @@ namespace TodoApi.Test
         }
 
         [Theory]
-        [InlineData("/api/Workout/")]
-        [InlineData("/api/Workout/kevin123")]
-        public async Task GetHttpRequest(string url)
+        [InlineData("/api/Workout/", "")]
+        [InlineData("/api/Workout/kevin123", "")]
+        public async Task GetHttpRequest(string url, string expectedStatus)
         {
             // arrange
             var client = _factory.CreateClient();
@@ -34,34 +34,12 @@ namespace TodoApi.Test
 
             response.EnsureSuccessStatusCode();
             Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
-        }
 
-
-
-        [Theory]
-        [InlineData("api/workout/", "WhatIsThis")]
-        [InlineData("/", "Up")]
-        [InlineData("/health", "Healthy")]
-        public async Task GetRoot_ReturnsSuccessAndStatusUp(string url, string expectedStatus)
-        {
-            // Arrange
-            var client = _factory.CreateClient();
-            // Act
-            var response = await client.GetAsync(url);
-            // Assert
-            response.EnsureSuccessStatusCode();
-            Assert.NotNull(response.Content);
-            var responseObject = JsonSerializer.Deserialize<ResponseType>(
-                await response.Content.ReadAsStringAsync(),
+            var responseObj = JsonSerializer.Deserialize<ResponseType>(
+                                await response.Content.ReadAsStringAsync(),
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-            Assert.Equal(expectedStatus, responseObject?.Status);
+            Assert.Equal(expectedStatus, responseObj?.Status);
         }
-
-        private class ResponseType
-        {
-            public string Status { get; set; }
-        }
-
 
         [Theory]
         [InlineData("/")]
@@ -78,6 +56,9 @@ namespace TodoApi.Test
                 response.Content.Headers.ContentType.ToString());
         }
 
-
+        private class ResponseType
+        {
+            public string Status { get; set; }
+        }
     }
 }

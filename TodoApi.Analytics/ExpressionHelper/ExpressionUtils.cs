@@ -29,7 +29,7 @@ namespace TodoApi.Analytics.ExpressionHelper
 
             return Expression.Lambda<Func<TEntity, TProperty>>(body, instance).Compile();
         }
-        public static IQueryable<TElement> IsDateBetween<TElement>(this IQueryable<TElement> queryable, 
+        public static IQueryable<TElement> IsDateBetween<TElement>(this IQueryable<TElement> queryable,
             Expression<Func<TElement, DateTime>> fromDate,
             Expression<Func<TElement, DateTime>> toDate, DateTime dateTime)
         {
@@ -38,7 +38,7 @@ namespace TodoApi.Analytics.ExpressionHelper
             Expression fromExpression = Expression.Property(memberEx, (fromDate.Body as MemberExpression).Member.Name);
             Expression toExpression = Expression.Property(memberEx, (toDate.Body as MemberExpression).Member.Name);
 
-            var after = Expression.LessThanOrEqual(fromExpression,Expression.Constant(dateTime, typeof(DateTime)));
+            var after = Expression.LessThanOrEqual(fromExpression, Expression.Constant(dateTime, typeof(DateTime)));
             var before = Expression.GreaterThanOrEqual(toExpression, Expression.Constant(dateTime, typeof(DateTime)));
 
             Expression body = Expression.And(after, before);
@@ -47,13 +47,36 @@ namespace TodoApi.Analytics.ExpressionHelper
         }
 
         // Should add filter for username...
-        public static Expression<Func<T,bool>> GetLastOne<T>(string userId, T getObj, DateTime? date)
+        public static Expression<Func<T, bool>> GetByDate<T>(string userId, DateTime? date)
         {
+
+            ParameterExpression paramUser = Expression.Parameter(typeof(T), "u");
+            var userProperty = Expression.Property(paramUser, "UserId");
+            ConstantExpression userConstant = Expression.Constant(userId, typeof(string));
+            Expression UserExpression = Expression.Equal(userProperty, userConstant);
+
             ParameterExpression param = Expression.Parameter(typeof(T), "d");
             var property = Expression.Property(param, "Datetime");
-            ConstantExpression DatetimeConstant = Expression.Constant(DateTime.Now, typeof(DateTime));
-            Expression finalExpression = Expression.LessThanOrEqual(property, DatetimeConstant);
-            var tree = Expression.Lambda<Func<T, bool>>(finalExpression, param);
+            ConstantExpression DatetimeConstant = Expression.Constant(date, typeof(DateTime));
+            //Expression finalExpression = Expression.LessThanOrEqual(property, DatetimeConstant);
+            Expression DateExpression = Expression.Equal(property, DatetimeConstant);
+
+
+            Expression body = Expression.And(UserExpression, DateExpression);
+            var tree = Expression.Lambda<Func<T, bool>>(body, param);
+            return tree;
+        }
+        public static Expression<Func<T, bool>> GetByDateTest<T>(string userId, DateTime? date)
+        {
+            Expression testExpr = Expression.MemberInit(
+                Expression.New(typeof(T)),
+                new List<MemberBinding>() {
+                    Expression.Bind(typeof(T).GetMember("UserId")[0], Expression.Constant(userId)),
+                    Expression.Bind(typeof(T).GetMember("Datetime")[0], Expression.Constant(date))
+                }
+            );
+            ParameterExpression param = Expression.Parameter(typeof(T), "w");
+            var tree = Expression.Lambda<Func<T, bool>>(testExpr, param);
             return tree;
         }
     }

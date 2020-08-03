@@ -27,7 +27,6 @@ namespace TodoApi.Controllers
         public IEnumerable<Workout> Get() => _workoutRepository.FindAll().Result;
 
         // GET: api/Workout/5
-        //[HttpGet("{userId:string}", Name = "Get")]
         [HttpGet("{userId}")]
         public IEnumerable<Workout> Get(string userId) => _workoutRepository.FindByUserId(userId).Result;
 
@@ -35,21 +34,21 @@ namespace TodoApi.Controllers
         [HttpGet("gettoday/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<Workout> GetToday(string userId)
+        public async Task<ActionResult<Workout>> GetToday(string userId)
         {
-            ConstantExpression dateExpr = Expression.Constant(DateTime.Today, typeof(DateTime));
-            ParameterExpression param = Expression.Parameter(typeof(Workout), "w");
-            var property = Expression.Property(param, "Datetime");
-            Expression finalExpression = Expression.Equal(property, dateExpr);
-            var tree = Expression.Lambda<Func<Workout, bool>>(finalExpression, param);
-            var check = _workoutRepository.FindOne(tree);
-            if (check != null)
+            try
             {
+                var tree = ExpressionUtils.GetByDate<Workout>(userId, DateTime.Now);
+                var check = await _workoutRepository.FindOneAsync(tree);
                 return Ok(check);
             }
-            else
+            catch (WorkoutValidationException workoutValidationEx) when (workoutValidationEx.InnerException is NotFoundUserException)
             {
-                return NotFound();
+                return NotFound(workoutValidationEx.InnerException.Message);
+            }
+            catch (WorkoutDIException diEx)
+            {
+                return Problem(diEx.Message);
             }
         }
 
@@ -60,16 +59,21 @@ namespace TodoApi.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Workout>> GetLastAsync(string userId)
         {
-            var tree = ExpressionUtils.GetLastOne<Workout>(userId, new Workout(), DateTime.Now);
-            var check = await _workoutRepository.FindOneAsync(tree);
-            if (check == null)
+            try
             {
-                return NotFound();
+                var tree = ExpressionUtils.GetByDate<Workout>(userId, DateTime.Now);
+                var check = await _workoutRepository.FindOneAsync(tree);
+                return Ok(check);
             }
-            return Ok(check);
+            catch (WorkoutValidationException workoutValidationEx) when (workoutValidationEx.InnerException is NotFoundUserException)
+            {
+                return NotFound(workoutValidationEx.InnerException.Message);
+            }
+            catch (WorkoutDIException diEx)
+            {
+                return Problem(diEx.Message);
+            }
         }
-
-
 
         [HttpGet("GetOnDate/{userId}/{date}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -78,8 +82,19 @@ namespace TodoApi.Controllers
         {
             try
             {
-                var workouts = _workoutRepository.FindByUserIdandDate(userId, date);
-                return Ok(workouts);
+                ConstantExpression dateExpr = Expression.Constant(date, typeof(DateTime));
+                ConstantExpression nameExpr = Expression.Constant(userId, typeof(string));
+
+                ParameterExpression param = Expression.Parameter(typeof(Workout), "w");
+                var property = Expression.Property(param, "Datetime");
+                var property2 = Expression.Property(param, "UserId");
+                
+                Expression finalExpression = Expression.Equal(property, dateExpr);
+                Expression finalExpression2 = Expression.Equal(property2, nameExpr);
+                var tree = Expression.Lambda<Func<Workout, bool>>(finalExpression, param);
+                //tree = 
+                var workout = _workoutRepository.FindOne(tree);
+                return Ok(workout);
             }
             catch(WorkoutValidationException workoutValidationEx) when (workoutValidationEx.InnerException is NotFoundUserException)
             {
@@ -108,17 +123,6 @@ namespace TodoApi.Controllers
 
             return products;
         }
-
-        //[HttpPost]
-        //[Consumes("application/json")]
-        //public IActionResult CreateProduct(Workout product)
-        //{
-        //    return null;
-        //}
-        //[HttpPost]
-        //[Consumes("application/x-www-form-urlencoded")]
-        //public IActionResult PostForm([FromForm] IEnumerable<int> values) => Ok(new { Consumes = "application/x-www-form-urlencoded", Values = values });
-
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]

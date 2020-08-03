@@ -18,9 +18,6 @@ namespace TodoApi.Datasource
             var db = new MongoClient(settings.Connection).GetDatabase(settings.DatabaseName);
             _collection = db.GetCollection<TDocument>(GetCollectionName(typeof(TDocument)));
 
-            // indexing specified field, in here index UserId field
-            //var indexModel = new CreateIndexModel<TDocument>(Builders<TDocument>.IndexKeys.Text(model => model.UserId));
-            //_collection.Indexes.CreateOne(indexModel);
         }
         private protected string GetCollectionName(Type documentType)
         {
