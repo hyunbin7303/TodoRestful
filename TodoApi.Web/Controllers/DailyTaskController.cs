@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TodoApi.Datasource;
 using TodoApi.Model;
-using TodoApi.Model.Chores;
 using TodoApi.Model.DailyTask;
 
 namespace TodoApi.Web.Controllers

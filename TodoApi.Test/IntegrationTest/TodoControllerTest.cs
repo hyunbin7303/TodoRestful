@@ -12,18 +12,23 @@ using Xunit;
 
 namespace TodoApi.Test
 {
+    //Integration tests ensure that an app's components function correctly at a level that
+    // includes the app's supporting infrastructure
+    // db, file system, network appliances, request-response pipeline.
+    //https://docs.microsoft.com/en-us/aspnet/core/test/integration-tests?view=aspnetcore-3.1#introduction-to-integration-tests 
+    //Read this if u need.
     [CollectionDefinition("Integration Tests")]
-    public class WorkoutControllerTest : IClassFixture<WebApplicationFactory<Startup>>
+    public class TodoControllerTest : IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly WebApplicationFactory<Startup> _factory;
-        public WorkoutControllerTest(WebApplicationFactory<Startup> fac)
+        public TodoControllerTest(WebApplicationFactory<Startup> fac)
         {
             _factory = fac;
         }
 
         [Theory]
-        [InlineData("/api/Workout/", "")]
-        [InlineData("/api/Workout/kevin123", "")]
+        [InlineData("/api/todo/", "")]
+        [InlineData("/api/todo/kevin123", "")]
         public async Task GetHttpRequest(string url, string expectedStatus)
         {
             // arrange

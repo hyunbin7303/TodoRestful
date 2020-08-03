@@ -5,16 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 using TodoApi.Controllers;
 using TodoApi.Datasource;
-using TodoApi.Model.Workout;
+using TodoApi.Model.Todo;
 using Xunit;
 
 namespace TodoApi.Test.DbTest
 {
-    public class WorkoutTest
+    public class TodoTest
     {
 
-        private readonly IMongoRepository<Workout> _workoutRepository;
-        public WorkoutTest(IMongoRepository<Workout> workoutRepository)
+        private readonly IMongoRepository<Todo> _workoutRepository;
+        public TodoTest(IMongoRepository<Todo> workoutRepository)
         {
             _workoutRepository = workoutRepository;
         }
@@ -22,7 +22,7 @@ namespace TodoApi.Test.DbTest
         public async Task IndexReturnsARedirectToIndexHomeWhenIdIsNull()
         {
             // Arrange
-            var controller = new WorkoutController(_workoutRepository);
+            var controller = new TodoController(_workoutRepository);
 
             // Act
             var result = controller.GetLastAsync("asd");

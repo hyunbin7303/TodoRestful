@@ -1,5 +1,5 @@
 ﻿
-namespace TodoApi.Model.Workout
+namespace TodoApi.Model.Todo
 {
     public class WorkoutTask
     {

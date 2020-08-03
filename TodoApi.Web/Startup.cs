@@ -13,9 +13,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using TodoApi.Datasource;
-using TodoApi.Model.Chores;
-using TodoApi.Model.DailyTask;
-using TodoApi.Model.Jobs;
 
 namespace TodoApi.Web
 {
