@@ -10,9 +10,9 @@ namespace TodoApi.Model.Todo
     {
         [StringLength(30)]
         public string Title { get; set; }
-        public WorkoutStatus Status { get; set; }
-        public TypeTodo TodoType { get; set; }
-        public IList<WorkoutTask> workoutTask { get; set; }
+        public TodoStatus Status { get; set; }
+        public TodoType TodoType { get; set; }
+        public IList<TodoTask> workoutTask { get; set; }
         
     }
 }

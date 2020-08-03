@@ -3,7 +3,7 @@ namespace TodoApi.Model.Todo
 {
 
     // Write down more if you need.
-    public enum TypeTodo
+    public enum TodoType
     {
         Aerobics,
         Athletics,
