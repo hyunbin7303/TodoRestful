@@ -62,6 +62,7 @@ namespace TodoApi.Controllers
             try
             {
                 var tree = ExpressionUtils.GetByDate<Workout>(userId, DateTime.Now);
+                // TODO Need to make a filter for getting the last one.
                 var check = await _workoutRepository.FindOneAsync(tree);
                 return Ok(check);
             }
@@ -78,22 +79,12 @@ namespace TodoApi.Controllers
         [HttpGet("GetOnDate/{userId}/{date}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<List<Workout>> GetOnDate(string userId, DateTime date)
+        public async Task<ActionResult<List<Workout>>> GetOnDateAsync(string userId, DateTime date)
         {
             try
             {
-                ConstantExpression dateExpr = Expression.Constant(date, typeof(DateTime));
-                ConstantExpression nameExpr = Expression.Constant(userId, typeof(string));
-
-                ParameterExpression param = Expression.Parameter(typeof(Workout), "w");
-                var property = Expression.Property(param, "Datetime");
-                var property2 = Expression.Property(param, "UserId");
-                
-                Expression finalExpression = Expression.Equal(property, dateExpr);
-                Expression finalExpression2 = Expression.Equal(property2, nameExpr);
-                var tree = Expression.Lambda<Func<Workout, bool>>(finalExpression, param);
-                //tree = 
-                var workout = _workoutRepository.FindOne(tree);
+                var tree = ExpressionUtils.GetByDate<Workout>(userId, date);
+                var workout = await _workoutRepository.FindOneAsync(tree);
                 return Ok(workout);
             }
             catch(WorkoutValidationException workoutValidationEx) when (workoutValidationEx.InnerException is NotFoundUserException)
