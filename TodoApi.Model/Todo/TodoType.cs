@@ -1,9 +1,9 @@
 ﻿
-namespace TodoApi.Model.Workout
+namespace TodoApi.Model.Todo
 {
 
     // Write down more if you need.
-    public enum TypeOfWorkout
+    public enum TodoType
     {
         Aerobics,
         Athletics,

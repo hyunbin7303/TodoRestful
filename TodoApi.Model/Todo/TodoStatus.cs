@@ -1,7 +1,7 @@
 ﻿
-namespace TodoApi.Model.Workout
+namespace TodoApi.Model.Todo
 {
-    public enum WorkoutStatus
+    public enum TodoStatus
     {
         Plan,
         Progress,

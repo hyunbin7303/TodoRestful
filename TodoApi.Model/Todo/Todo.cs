@@ -1,11 +1,18 @@
-﻿
-namespace TodoApi.Model
-{
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using TodoApi.Datasource;
 
-    // Not sure purpose of this method yet. Might develop later.
-    public class Todo
+namespace TodoApi.Model.Todo
+{
+    [BsonCollection("todo")]
+    public class Todo : Document 
     {
-        public int Id { get; set; }
+        [StringLength(30)]
         public string Title { get; set; }
+        public TodoStatus Status { get; set; }
+        public TodoType TodoType { get; set; }
+        public IList<TodoTask> workoutTask { get; set; }
+        
     }
 }

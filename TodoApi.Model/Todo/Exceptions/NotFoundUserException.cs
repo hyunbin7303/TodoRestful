@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace TodoApi.Model.Workout.Exceptions
+namespace TodoApi.Model.Todo.Exceptions
 {
     public class NotFoundUserException : Exception
     {

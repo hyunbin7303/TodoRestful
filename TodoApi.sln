@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoApi.Test", "TodoApi.Tes
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoApi.Analytics", "TodoApi.Analytics\TodoApi.Analytics.csproj", "{D68C7639-8CE3-46F3-B973-0A8B4B91B7B9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApi.Logging", "TodoApi.Logging\TodoApi.Logging.csproj", "{C37B835F-F29E-494B-BE69-3D98DA9C4C06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoApi.Logging", "TodoApi.Logging\TodoApi.Logging.csproj", "{C37B835F-F29E-494B-BE69-3D98DA9C4C06}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApi.Query.Interface", "TodoApi.Query.Interface\TodoApi.Query.Interface.csproj", "{97486E9E-8D44-4821-B84E-724B3D9EE4E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{C37B835F-F29E-494B-BE69-3D98DA9C4C06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C37B835F-F29E-494B-BE69-3D98DA9C4C06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C37B835F-F29E-494B-BE69-3D98DA9C4C06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97486E9E-8D44-4821-B84E-724B3D9EE4E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97486E9E-8D44-4821-B84E-724B3D9EE4E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97486E9E-8D44-4821-B84E-724B3D9EE4E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97486E9E-8D44-4821-B84E-724B3D9EE4E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

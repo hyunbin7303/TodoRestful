@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using TodoApi.Datasource;
 using System.Text;
-using TodoApi.Model.Chores;
 
 namespace TodoApi.Model.DailyTask
 {
