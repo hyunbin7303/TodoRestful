@@ -94,21 +94,27 @@ namespace TodoApi.Controllers
             {
                 return Problem(diEx.Message);
             }
-
         }
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Post(Todo todo)
+        public async Task<ActionResult<Todo>> Post(Todo todo)
         {
-            // Find specific user.
-            if (todo != null)
+            try
             {
-                _todoRepository.InsertOne(todo);
+                await _todoRepository.InsertOneAsync(todo);
                 return Ok(todo);
             }
-            else
+            catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
+            {
+                return NotFound(todoValidationEx.InnerException.Message);
+            }
+            catch (TodoDIException diEx)
+            {
+                return Problem(diEx.Message);
+            }
+            catch (Exception ex)
             {
                 return BadRequest();
             }
@@ -132,7 +138,5 @@ namespace TodoApi.Controllers
         {
             return Content("An API listing Todos of docs.asp.net.");
         }
-
-
     }
 }

@@ -1,12 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc.Testing;
 using Moq;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using TodoApi.Controllers;
 using TodoApi.Datasource;
+using TodoApi.Model.Todo;
 using TodoApi.Web;
 using Xunit;
 
@@ -40,7 +44,7 @@ namespace TodoApi.Test
             response.EnsureSuccessStatusCode();
             Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
 
-            var responseObj = JsonSerializer.Deserialize<ResponseType>(
+            var responseObj = System.Text.Json.JsonSerializer.Deserialize<ResponseType>(
                                 await response.Content.ReadAsStringAsync(),
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
             Assert.Equal(expectedStatus, responseObj?.Status);
@@ -59,6 +63,26 @@ namespace TodoApi.Test
             response.EnsureSuccessStatusCode(); // Status Code 200-299
             Assert.Equal("text/html; charset=utf-8",
                 response.Content.Headers.ContentType.ToString());
+        }
+
+        [Theory]
+        [InlineData("/api/todo/")]
+        public async Task Post_EndpointsReturnSuccessAndCorrectContentType(string url)
+        {
+            // Arrange
+            var client = _factory.CreateClient();
+            Todo sampleTodo = new Todo();
+            sampleTodo.Datetime = DateTime.Now;
+            sampleTodo.UserId = "Kevin12345";
+            var stringContent = new StringContent(JsonConvert.SerializeObject(sampleTodo), Encoding.UTF8, "application/json");
+            var response = await client.PostAsync(url, stringContent);
+            var value = await response.Content.ReadAsStringAsync();
+            var check = response.EnsureSuccessStatusCode();
+
+            //Assert
+            Assert.Equal(HttpStatusCode.OK, check.StatusCode);
+            Assert.Equal(HttpStatusCode.Redirect, check.StatusCode);
+        //    Assert.Equal("/", response.Headers.Location.OriginalString);
         }
 
         private class ResponseType
