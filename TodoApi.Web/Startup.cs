@@ -16,6 +16,7 @@ using TodoApi.Datasource;
 using TodoApi.Model.Chores;
 using TodoApi.Model.DailyTask;
 using TodoApi.Model.Jobs;
+using Serilog;
 
 namespace TodoApi.Web
 {
@@ -48,6 +49,8 @@ namespace TodoApi.Web
             }
 
             app.UseHttpsRedirection();
+
+            app.UseSerilogRequestLogging();
 
             app.UseRouting();
 
