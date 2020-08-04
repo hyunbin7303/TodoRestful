@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using Serilog;
+using Serilog.Core;
 using TodoApi.Analytics.ExpressionHelper;
 using TodoApi.Datasource;
 using TodoApi.Model.Todo;
@@ -23,11 +25,19 @@ namespace TodoApi.Controllers
             _todoRepository = todoRepository;
         }
         [HttpGet]
-        public IEnumerable<Todo> Get() => _todoRepository.FindAll().Result;
+        public IEnumerable<Todo> Get()
+        {
+            Log.Information("TodoController: Get");
+            return _todoRepository.FindAll().Result;
+        }
 
         // GET: api/Todo/5
         [HttpGet("{userId}")]
-        public IEnumerable<Todo> Get(string userId) => _todoRepository.FindByUserId(userId).Result;
+        public IEnumerable<Todo> Get(string userId)
+        {
+            Log.Information($"TodoController: Get {userId}");
+            return _todoRepository.FindByUserId(userId).Result;
+        }
 
 
         [HttpGet("gettoday/{userId}")]
