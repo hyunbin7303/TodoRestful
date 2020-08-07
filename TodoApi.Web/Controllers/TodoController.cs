@@ -12,6 +12,7 @@ using TodoApi.Analytics.ExpressionHelper;
 using TodoApi.Datasource;
 using TodoApi.Model.Todo;
 using TodoApi.Model.Todo.Exceptions;
+using TodoApi.Query.Interface;
 
 namespace TodoApi.Controllers
 {
@@ -33,20 +34,20 @@ namespace TodoApi.Controllers
 
         // GET: api/Todo/5
         [HttpGet("{userId}")]
-        public IEnumerable<Todo> Get(string userId)
+        public IEnumerable<TodoDTO> Get(string userId)
         {
             Log.Information($"TodoController: Get {userId}");
-            return _todoRepository.FindByUserId(userId).Result;
+            return _todoRepository.FindByUserId(userId).Result.ConvertTo();
         }
 
         [HttpGet("GetByUser/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<List<Todo>> GetByUser(string userId)
+        public ActionResult<List<TodoDTO>> GetByUser(string userId)
         {
             try
             {
-                var check = _todoRepository.FindByUserId(userId).Result;
+                var check = _todoRepository.FindByUserId(userId).Result.ConvertTo();
                 return Ok(check);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
@@ -63,13 +64,13 @@ namespace TodoApi.Controllers
         [HttpGet("gettoday/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Todo>> GetToday(string userId)
+        public async Task<ActionResult<TodoDTO>> GetToday(string userId)
         {
             try
             {
                 var tree = ExpressionUtils.GetByDate<Todo>(userId, DateTime.Now);
                 var check = await _todoRepository.FindOneAsync(tree);
-                return Ok(check);
+                return Ok(check.ConvertTo());
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
             {
@@ -86,14 +87,14 @@ namespace TodoApi.Controllers
         [HttpGet("GetLast/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Todo>> GetLastAsync(string userId)
+        public async Task<ActionResult<TodoDTO>> GetLastAsync(string userId)
         {
             try
             {
                 var tree = ExpressionUtils.GetByDate<Todo>(userId, DateTime.Now);
                 // TODO Need to make a filter for getting the last one.
                 var check = await _todoRepository.FindOneAsync(tree);
-                return Ok(check);
+                return Ok(check.ConvertTo());
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
             {
@@ -109,12 +110,12 @@ namespace TodoApi.Controllers
         [HttpGet("GetOnDate/{userId}/{date}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<List<Todo>> GetOnDate(string userId, DateTime date)
+        public ActionResult<List<TodoDTO>> GetOnDate(string userId, DateTime date)
         {
             try
             {
                 var check = _todoRepository.FindByUserId(userId).Result.ToList();
-                var getDate = check.Find(x => x.Datetime == date);
+                var getDate = check.Find(x => x.Datetime == date).ConvertTo();
                 return Ok(getDate);
             }
             catch(TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
