@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.Configuration;
+using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -32,6 +33,14 @@ namespace TodoApi.Query.Interface
 
             return source.Select(todo => iMapper.Map<TSource, TDestination>(todo));
         }
-        
+        public static TodoDTO ConvertTo(this Todo source)
+        {
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<Todo, TodoDTO>();
+            });
+            IMapper iMapper = config.CreateMapper();
+            return iMapper.Map<Todo, TodoDTO>(source);
+        }
+
     }
 }
