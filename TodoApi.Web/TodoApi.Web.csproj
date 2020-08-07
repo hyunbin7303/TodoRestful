@@ -18,7 +18,7 @@
     <ProjectReference Include="..\TodoApi.Analytics\TodoApi.Analytics.csproj" />
     <ProjectReference Include="..\TodoApi.Datasource\TodoApi.Datasource.csproj" />
     <ProjectReference Include="..\TodoApi.Model\TodoApi.Model.csproj" />
-    <ProjectReference Include="..\TodoApi.Query.Interface\TodoDTO.csproj" />
+    <ProjectReference Include="..\TodoApi.Query.Interface\TodoApi.Query.Interface.csproj" />
   </ItemGroup>
 
 
