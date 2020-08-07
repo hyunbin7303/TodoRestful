@@ -39,6 +39,26 @@ namespace TodoApi.Controllers
             return _todoRepository.FindByUserId(userId).Result;
         }
 
+        [HttpGet("GetByUser/{userId}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<List<Todo>> GetByUser(string userId)
+        {
+            try
+            {
+                var check = _todoRepository.FindByUserId(userId).Result;
+                return Ok(check);
+            }
+            catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
+            {
+                return NotFound(todoValidationEx.InnerException.Message);
+            }
+            catch (TodoDIException diEx)
+            {
+                return Problem(diEx.Message);
+            }
+        }
+
 
         [HttpGet("gettoday/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -85,16 +105,17 @@ namespace TodoApi.Controllers
             }
         }
 
+
         [HttpGet("GetOnDate/{userId}/{date}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<List<Todo>>> GetOnDateAsync(string userId, DateTime date)
+        public ActionResult<List<Todo>> GetOnDate(string userId, DateTime date)
         {
             try
             {
-                var tree = ExpressionUtils.GetByDate<Todo>(userId, date);
-                var todo = await _todoRepository.FindOneAsync(tree);
-                return Ok(todo);
+                var check = _todoRepository.FindByUserId(userId).Result.ToList();
+                var getDate = check.Find(x => x.Datetime == date);
+                return Ok(getDate);
             }
             catch(TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
             {

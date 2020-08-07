@@ -46,7 +46,6 @@ namespace TodoApi.Analytics.ExpressionHelper
             return queryable.Where(predicate);
         }
 
-        // Should add filter for username...
         public static Expression<Func<T, bool>> GetByDate<T>(string userId, DateTime? date)
         {
 
@@ -55,16 +54,15 @@ namespace TodoApi.Analytics.ExpressionHelper
             ConstantExpression userConstant = Expression.Constant(userId, typeof(string));
             Expression UserExpression = Expression.Equal(userProperty, userConstant);
 
-            ParameterExpression param = Expression.Parameter(typeof(T), "d");
-            var property = Expression.Property(param, "Datetime");
+            ParameterExpression paramDatetime = Expression.Parameter(typeof(T), "u");
+            var property = Expression.Property(paramDatetime, "Datetime");
             ConstantExpression DatetimeConstant = Expression.Constant(date, typeof(DateTime));
-            //Expression finalExpression = Expression.LessThanOrEqual(property, DatetimeConstant);
-            Expression DateExpression = Expression.Equal(property, DatetimeConstant);
+            Expression finalExpression = Expression.LessThanOrEqual(property, DatetimeConstant);
 
-
-            Expression body = Expression.And(UserExpression, DateExpression);
-            var tree = Expression.Lambda<Func<T, bool>>(body, param);
-            return tree;
+            var tree = Expression.Lambda<Func<T, bool>>(UserExpression, paramUser);
+            var tree2 = Expression.Lambda<Func<T, bool>>(finalExpression, paramDatetime);
+            var aaa = AndAlso(tree, tree2);
+            return aaa;
         }
         public static Expression<Func<T, bool>> GetByDateTest<T>(string userId, DateTime? date)
         {
@@ -75,9 +73,31 @@ namespace TodoApi.Analytics.ExpressionHelper
                     Expression.Bind(typeof(T).GetMember("Datetime")[0], Expression.Constant(date))
                 }
             );
+            var TestCondition = Expression.Constant(userId == "Kevin");
+            //var ifTrueBlock = WriteLineExpression("String is the same");
+            //ConditionalExpression ifThenExpr = Expression.IfThen(TestCondition, ifTrueBlock);
+
+            ConstantExpression DatetimeConstant = Expression.Constant(date, typeof(DateTime));
+            Expression finalExpression = Expression.LessThanOrEqual(testExpr, DatetimeConstant);
+
+
             ParameterExpression param = Expression.Parameter(typeof(T), "w");
-            var tree = Expression.Lambda<Func<T, bool>>(testExpr, param);
+            var tree = Expression.Lambda<Func<T, bool>>(finalExpression, param);
             return tree;
+        }
+        static Expression<Func<T, bool>> AndAlso<T>(this Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
+        {
+            // need to detect whether they use the same
+            // parameter instance; if not, they need fixing
+            ParameterExpression param = expr1.Parameters[0];
+            if (ReferenceEquals(param, expr2.Parameters[0]))
+            {
+                // simple version
+                return Expression.Lambda<Func<T, bool>>(
+                    Expression.AndAlso(expr1.Body, expr2.Body), param);
+            }
+            // otherwise, keep expr1 "as is" and invoke expr2
+            return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(expr1.Body,Expression.Invoke(expr2, param)), param);
         }
     }
 }
