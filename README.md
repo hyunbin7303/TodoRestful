@@ -13,7 +13,7 @@ This project provides API endpoints to operate CRUD functionality to manage a pe
 * Add daily tasks with due date
 * Add contact information and reminder for important phone calls 
 * Keep track of items you want to purchase
-* Maintain a daily or weekly routine by recording your workout session
+* Maintain a daily or weekly routine by recording your Todo session
 * Make a list of groceries to help you save time at the store, save a list for next time
 
 # Table of Contents: 
@@ -39,17 +39,6 @@ This project provides API endpoints to operate CRUD functionality to manage a pe
 
 This has been initiaited by a group of 3 developers. Your feedback in appreciated and encourage in how to improve. This service is limited to the available endpoints that we were able to think of and build. We welcome ideas to provide more options and features. 
 
-## Future Development 
- * [x] Create Application -
- * [x] Database
- * [ ] Connection
-* Traffic Routing
-* Expose Unified end point
-* API Composition
-* Caching.
-* Logging.
-Need to set up asap. Investigate Seq Log.
-
 # Credits: 
 > Include a section for credits in order to highlight and link to the authors of your project.
 
@@ -70,40 +59,3 @@ Need to set up asap. Investigate Seq Log.
 | `Result` | Show file differences that **haven't been** staged |
 
 
-## Table Schema
-
-### Daily Task
-| Name    | DataType       |
-|----------|:-------------:|
-|    Id    |  left-aligned  |
-|    Title      |    string |
-|    Description |   string |
-|ItemId    |     string      |
-|Due       |      Date      |
-|  Phone  |   Integer      |
-#### API Call
-
-### Home
-| Name    | DataType       |
-|----------|:-------------:|
-|    Id        |  string   |
-|    Title     |    string |
-|    Description |  string |
-|ItemId     |  string   |
-#### API Call
-
-### Workout
-| Name    | DataType       |
-|----------|:-------------:|
-|    Id    |   string     |
-|    Title      |    string |
-|    Description |   string |
-#### API Call
-
-### Study
-| Name    | DataType       |
-|----------|:-------------:|
-|    Id        |  string |
-|    Title      |    string |
-|    Description |   string |
-#### API Call
