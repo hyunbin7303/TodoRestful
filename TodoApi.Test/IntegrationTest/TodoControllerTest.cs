@@ -51,6 +51,28 @@ namespace TodoApi.Test
         }
 
         [Theory]
+        [InlineData("/api/todo/GetOnDate/Kevin1234/2020-08-08")]
+        [InlineData("/api/todo/GetOnDate/Kevin1234/2020-08-09")]
+        [InlineData("/api/todo/GetOnDate/Kevin1234/2020-08-10")]
+        public async Task Get_EndpointsGetOnDateTesting(string url)
+        {
+            // arrange
+            var client = _factory.CreateClient();
+            //Act
+            var response = await client.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            Assert.Equal("application/json; charset=utf-8", response.Content.Headers.ContentType.ToString());
+
+            var responseObj = System.Text.Json.JsonSerializer.Deserialize<ResponseType>(
+                                await response.Content.ReadAsStringAsync(),
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            //Assert.Equal(expectedStatus, responseObj?.Status);
+        }
+
+
+
+
+        [Theory]
         [InlineData("/")]
 
         public async Task Get_EndpointsReturnSuccessAndCorrectContentType(string url)
@@ -84,7 +106,6 @@ namespace TodoApi.Test
             Assert.Equal(HttpStatusCode.Redirect, check.StatusCode);
         //    Assert.Equal("/", response.Headers.Location.OriginalString);
         }
-
         private class ResponseType
         {
             public string Status { get; set; }

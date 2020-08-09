@@ -47,7 +47,7 @@ namespace TodoApi.Controllers
         {
             try
             {
-                var check = _todoRepository.FindByUserId(userId).Result.ConvertTo();
+                var check = _todoRepository.FindByUserIdAsync(userId).Result.ConvertTo();
                 return Ok(check);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
@@ -64,13 +64,13 @@ namespace TodoApi.Controllers
         [HttpGet("gettoday/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TodoDTO>> GetToday(string userId)
+        public ActionResult<TodoDTO> GetToday(string userId)
         {
             try
             {
-                var tree = ExpressionUtils.GetByDate<Todo>(userId, DateTime.Now);
-                var check = await _todoRepository.FindOneAsync(tree);
-                return Ok(check.ConvertTo());
+                var todos =  _todoRepository.FindByUserId(userId).Result.ToList();
+                var todoDTOs = todos.FindAll(t => t.Datetime == DateTime.Now).ConvertTo();
+                return Ok(todoDTOs);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
             {
@@ -87,14 +87,14 @@ namespace TodoApi.Controllers
         [HttpGet("GetLast/{userId}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<TodoDTO>> GetLastAsync(string userId)
+        public ActionResult<TodoDTO> GetLast(string userId)
         {
             try
             {
-                var tree = ExpressionUtils.GetByDate<Todo>(userId, DateTime.Now);
-                // TODO Need to make a filter for getting the last one.
-                var check = await _todoRepository.FindOneAsync(tree);
-                return Ok(check.ConvertTo());
+                // Get by user first.
+                var todos = _todoRepository.FindByUserIdAsync(userId).Result.ConvertTo();
+                var lastTodo = todos.OrderByDescending(date => date).First();
+                return Ok(lastTodo);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
             {
@@ -115,7 +115,9 @@ namespace TodoApi.Controllers
             try
             {
                 var check = _todoRepository.FindByUserId(userId).Result.ToList();
-                var getDate = check.Find(x => x.Datetime == date).ConvertTo();
+
+                DateTime ss = new DateTime(date.Year, date.Month, date.Day);
+                var getDate = check.Find(x => x.Datetime == ss).ConvertTo();
                 return Ok(getDate);
             }
             catch(TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
@@ -158,10 +160,13 @@ namespace TodoApi.Controllers
             _todoRepository.ReplaceOne(value);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{userId}")]
 
-        public void Delete(string id)
+        public void Delete(string userId, string id)
         {
+            // find user info.
+
+            // Delete specific todo request.
             _todoRepository.DeleteById(id);
         }
 

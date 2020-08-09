@@ -89,8 +89,20 @@ namespace TodoApi.Datasource
                return Task.FromResult<IList<TDocument>>(_collection.Find(filter).ToList());
             }
             return null;
-
         }
+        public Task<IList<TDocument>> FindByUserIdAsync(string userId)
+        {
+            return Task.Run(() =>
+            {
+                var filter = Builders<TDocument>.Filter.Eq(d => d.UserId, userId);
+                if (filter != null)
+                {
+                    return Task.FromResult<IList<TDocument>>(_collection.Find(filter).ToList());
+                }
+                return null;
+            });
+        }
+
         public Task<IList<TDocument>> FindByUserIdandDate(string userId, DateTime date)
         {
             var filter = Builders<TDocument>.Filter.All(d => d.UserId, userId) & Builders<TDocument>.Filter.All(d => d.Datetime.ToString(), date.ToString());

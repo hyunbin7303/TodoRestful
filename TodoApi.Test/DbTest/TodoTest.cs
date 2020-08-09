@@ -25,7 +25,7 @@ namespace TodoApi.Test.DbTest
             var controller = new TodoController(_workoutRepository);
 
             // Act
-            var result = controller.GetLastAsync("asd");
+            var result = controller.GetLast("asd");
 
             // Assert
             var redirectToActionResult =
