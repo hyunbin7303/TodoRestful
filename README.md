@@ -49,13 +49,4 @@ This has been initiaited by a group of 3 developers. Your feedback in appreciate
 
 
 
- *THE FOLLOWING TO BE ADDED TO WIKI* 
-## Planning
-| Date | Description |
-| --- | --- |
-| First testing | List all *new or modified* files |
-| Second testing | List all *new or modified* files |
-| 2020-08-01 | hahah |
-| `Result` | Show file differences that **haven't been** staged |
-
 
