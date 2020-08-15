@@ -51,7 +51,7 @@ namespace TodoApi.Test
         }
 
         [Theory]
-        [InlineData("/api/todo/GetOnDate/Kevin1234/2020-08-08")]
+        [InlineData("/api/todo/GetOnDate/Kevin123/2020-08-08")]
         [InlineData("/api/todo/GetOnDate/Kevin1234/2020-08-09")]
         [InlineData("/api/todo/GetOnDate/Kevin1234/2020-08-10")]
         public async Task Get_EndpointsGetOnDateTesting(string url)

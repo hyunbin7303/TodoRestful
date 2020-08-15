@@ -14,7 +14,6 @@ namespace TodoApi.Query.Interface
         public TodoStatus Status { get; set; }
         public TodoType TodoType { get; set; }
         public IList<TodoTask> workoutTask { get; set; }
-        public DateTime CreatedAt { get; set; }
         public DateTime Datetime { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
