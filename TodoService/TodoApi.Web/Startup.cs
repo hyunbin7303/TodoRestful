@@ -15,6 +15,7 @@ using Microsoft.Extensions.Options;
 using TodoApi.Datasource;
 using TodoApi.Model.DailyTask;
 using Serilog;
+using IdentityServer4;
 using Serilog.Configuration;
 
 namespace TodoApi.Web
@@ -36,7 +37,8 @@ namespace TodoApi.Web
             services.AddSingleton<IMongoSettings>(serviceProvider =>
                 serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
             services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
-            services.AddControllers();
+            services.AddControllers();         
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -53,6 +55,7 @@ namespace TodoApi.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             //https://docs.microsoft.com/en-us/aspnet/core/fundamentals/routing?view=aspnetcore-3.1

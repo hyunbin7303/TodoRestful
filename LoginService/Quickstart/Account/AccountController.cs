@@ -44,6 +44,7 @@ namespace IdentityServerHost.Quickstart.UI
         {
             // if the TestUserStore is not in DI, then we'll just use the global users collection
             // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
+            
             _users = users ?? new TestUserStore(TestUsers.Users);
 
             _interaction = interaction;
@@ -58,6 +59,7 @@ namespace IdentityServerHost.Quickstart.UI
         [HttpGet]
         public async Task<IActionResult> Login(string returnUrl)
         {
+            Console.WriteLine($"IDENTITY SERVER returnUrl: {returnUrl}");
             // build a model so we know what to show on the login page
             var vm = await BuildLoginViewModelAsync(returnUrl);
 
