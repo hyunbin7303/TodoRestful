@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using System.Linq;
 using System.Reflection;
 
@@ -34,19 +35,25 @@ namespace IdentityServer
             {
                 // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
                 options.EmitStaticAudienceClaim = true;
-                options.Authentication.CookieAuthenticationScheme = IdentityServer4.IdentityServerConstants.DefaultCookieAuthenticationScheme;
             })
-                .AddConfigurationStore(options =>
-                {
-                    options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
-                        sql => sql.MigrationsAssembly(migrationsAssembly));
-                })
-                .AddOperationalStore(options =>
-                {
-                    options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
-                        sql => sql.MigrationsAssembly(migrationsAssembly));
-                });
+                //.AddConfigurationStore(options =>
+                //{
+                //    options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
+                //        sql => sql.MigrationsAssembly(migrationsAssembly));
+                //})
+                //.AddOperationalStore(options =>
+                //{
+                //    options.ConfigureDbContext = b => b.UseSqlServer(connectionString,
+                //        sql => sql.MigrationsAssembly(migrationsAssembly));
+                //})
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryClients(Config.Clients)
+                .AddInMemoryApiScopes(Config.ApiScopes)
+                .AddInMemoryIdentityResources(Config.IdentityResources);
+                
 
+            services.AddAuthentication(IdentityServer4.IdentityServerConstants.DefaultCookieAuthenticationScheme);
+                
             // not recommended for production - you need to store your key material somewhere secure
             builder.AddDeveloperSigningCredential();
         }

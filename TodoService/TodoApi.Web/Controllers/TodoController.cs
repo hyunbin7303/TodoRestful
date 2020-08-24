@@ -35,6 +35,13 @@ namespace TodoApi.Controllers
             return _todoRepository.FindAll().Result;
         }
 
+        [HttpGet("success")]
+        public string Success()
+        {
+            Log.Information("TodoController: Successful Login");
+            return "Successfully Logged in";
+        }
+
         // GET: api/Todo/5
         [HttpGet("{userId}")]
         public IEnumerable<TodoDTO> Get(string userId, [FromQuery]bool sortByDate = false)
