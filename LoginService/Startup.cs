@@ -27,12 +27,6 @@ namespace IdentityServer
         {
             _configuration = configuration;
         }
-        public IWebHostEnvironment Environment { get; }
-
-        public Startup(IWebHostEnvironment environment)
-        {
-            Environment = environment;
-        }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -127,9 +121,9 @@ namespace IdentityServer
 
         }
 
-        public void Configure(IApplicationBuilder app)
+        public void Configure(IApplicationBuilder app,IWebHostEnvironment env)
         {
-            if (Environment.IsDevelopment())
+            if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
@@ -139,7 +133,7 @@ namespace IdentityServer
             app.UseStaticFiles();
             app.UseRouting();
 
-            app.UseIdentityServer();
+            //app.UseIdentityServer();
 
             // uncomment, if you want to add MVC
             app.UseAuthorization();
