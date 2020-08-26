@@ -148,7 +148,7 @@ namespace IdentityServer
                 endpoints.MapDefaultControllerRoute();
             });
         }
-        private void InitializeDatabase(IApplicationBuilder app)
+       /* private void InitializeDatabase(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
@@ -183,6 +183,6 @@ namespace IdentityServer
                     context.SaveChanges();
                 }
             }
-        }
+        }*/
     }
 }
