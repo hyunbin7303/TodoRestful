@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using IdentityServer.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace IdentityServer
 {
-    public class AppDbContext:IdentityDbContext
+    public class AppDbContext:IdentityDbContext<AppUser,AppRole,string>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)

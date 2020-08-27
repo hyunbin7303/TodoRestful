@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using IdentityServer.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -70,7 +71,7 @@ namespace IdentityServer
                 config.UseSqlServer(connectionString);
             });
 
-            services.AddIdentity<IdentityUser,IdentityRole>(config=> 
+            services.AddIdentity<AppUser,AppRole>(config=> 
             {
                 config.Password.RequiredLength = 4;
                 config.Password.RequireDigit = false;
