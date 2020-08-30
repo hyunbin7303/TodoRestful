@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TodoApi.Datasource;
@@ -21,6 +22,7 @@ namespace TodoApi.Web.Controllers
             _repository = repository;
         }
 
+        [Authorize]
         [HttpGet]
         public IEnumerable<DailyTask> Get()
         {

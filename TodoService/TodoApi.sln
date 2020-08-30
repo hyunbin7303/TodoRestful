@@ -17,8 +17,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoApi.Logging", "TodoApi.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TodoApi.Query.Interface", "TodoApi.Query.Interface\TodoApi.Query.Interface.csproj", "{97486E9E-8D44-4821-B84E-724B3D9EE4E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity", "Identity\Identity.csproj", "{0F073FB9-DBEA-4354-A401-F9726AFFCDDA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "..\LoginService\IdentityServer.csproj", "{C4C5D3BB-266A-42E8-BEC1-1D1410D1125C}"
 EndProject
 Global
@@ -55,10 +53,6 @@ Global
 		{97486E9E-8D44-4821-B84E-724B3D9EE4E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{97486E9E-8D44-4821-B84E-724B3D9EE4E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{97486E9E-8D44-4821-B84E-724B3D9EE4E3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0F073FB9-DBEA-4354-A401-F9726AFFCDDA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0F073FB9-DBEA-4354-A401-F9726AFFCDDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0F073FB9-DBEA-4354-A401-F9726AFFCDDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0F073FB9-DBEA-4354-A401-F9726AFFCDDA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C4C5D3BB-266A-42E8-BEC1-1D1410D1125C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C4C5D3BB-266A-42E8-BEC1-1D1410D1125C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4C5D3BB-266A-42E8-BEC1-1D1410D1125C}.Release|Any CPU.ActiveCfg = Release|Any CPU
