@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.30413.136
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IdentityServer", "IdentityServer.csproj", "{23C83A44-4290-40FB-AA1D-F25994E79D94}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestApi", "..\TestApi\TestApi.csproj", "{379BD353-DD5B-4FED-B5B5-225030356932}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{23C83A44-4290-40FB-AA1D-F25994E79D94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23C83A44-4290-40FB-AA1D-F25994E79D94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23C83A44-4290-40FB-AA1D-F25994E79D94}.Release|Any CPU.Build.0 = Release|Any CPU
-		{379BD353-DD5B-4FED-B5B5-225030356932}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{379BD353-DD5B-4FED-B5B5-225030356932}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{379BD353-DD5B-4FED-B5B5-225030356932}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{379BD353-DD5B-4FED-B5B5-225030356932}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
