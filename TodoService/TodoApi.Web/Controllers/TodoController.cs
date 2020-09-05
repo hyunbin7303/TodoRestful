@@ -29,7 +29,6 @@ namespace TodoApi.Controllers
         {
             _todoRepository = todoRepository;
         }
-
         // Going to be deleted. Or Only allow for Admin Claims.
         [HttpGet("GetAll")]
         public IEnumerable<Todo> GetAll()
@@ -38,18 +37,17 @@ namespace TodoApi.Controllers
             return _todoRepository.FindAll().Result;
         }
 
-        [HttpGet("success")]
-        public string Success()
-        {
-            Log.Information("TodoController: Successful Login");
-            return "Successfully Logged in";
-        }
+
+        // Need to test.
+        // Oneday need to change all query to one interface.
+
 
         [HttpGet]
-        public ActionResult<IEnumerable<TodoDTO>> Get([FromQuery]bool sortByDate = false)
+        public ActionResult<IEnumerable<TodoDTO>> Get([FromQuery]bool sortByDate = false, [FromQuery]TodoType todoType = TodoType.All, [FromQuery]DateTime? date = null)
         {
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+            var userTodo = _todoRepository.FindByUserIdAsync(userId).Result.ConvertTo();
             Log.Information($"TodoController: Get {userId}");
             try
             {
@@ -58,6 +56,8 @@ namespace TodoApi.Controllers
                 {
                     getUserInfo = getUserInfo.OrderByDescending(d => d.Datetime);
                 }
+                userTodo = userTodo.Where(t => t.TodoType == todoType);
+                
                 return Ok(getUserInfo);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
@@ -73,41 +73,6 @@ namespace TodoApi.Controllers
                 return Problem(diEx.Message);
             }
         }
-
-        [HttpGet("GetByTypes")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<List<TodoDTO>> GetByTypes([FromQuery]bool sortByDate = false, [FromQuery]TodoType todoType=TodoType.Others)
-        {
-            try
-            {
-                var claimsIdentity = this.User.Identity as ClaimsIdentity;
-                var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
-                var userTodo = _todoRepository.FindByUserIdAsync(userId).Result.ConvertTo();
-                if(sortByDate)
-                {
-                    userTodo = userTodo.OrderByDescending(d => d.Datetime);
-                }
-                if(todoType != TodoType.Others)
-                {
-                    userTodo = userTodo.Where(t => t.TodoType == todoType);
-                }
-                return Ok(userTodo);
-            }
-            catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
-            {
-                return NotFound(todoValidationEx.InnerException.Message);
-            }
-            catch(TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is RecordNotFoundException)
-            {
-                return NotFound(todoValidationEx.InnerException.Message);
-            }
-            catch (TodoDIException diEx)
-            {
-                return Problem(diEx.Message);
-            }
-        }
-
         /* Passing Parameter with headers
             Request and Response Body
             Request Authorization
@@ -124,7 +89,7 @@ namespace TodoApi.Controllers
             {
                 var claimsIdentity = this.User.Identity as ClaimsIdentity;
                 var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
-                var users = _todoRepository.FindByUserId(userId).Result.ToList(); // What if there are like 1000 todos? 
+                var users = _todoRepository.FindByUserId(userId).Result.ToList(); // What if there are like 1000 todos? is it really effective way?
                 DateTime ss = new DateTime(date.Year, date.Month, date.Day);
                 var getDate = users.Find(x => x.Datetime == ss).ConvertTo();
                 return Ok(getDate);
@@ -146,10 +111,14 @@ namespace TodoApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Todo>> Post(Todo todo)
+        public async Task<ActionResult<Todo>> Post([FromBody]Todo todo)
         {
+            if (todo == null) return BadRequest();
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             try
             {
+                todo.UserId = userId;//TODO Encrypt user Id.
                 await _todoRepository.InsertOneAsync(todo);
                 return Ok(todo);
             }
@@ -171,12 +140,12 @@ namespace TodoApi.Controllers
         //Sending content in a form is not very common, but it is the best solution if you want to upload a file. Let’s have a look at the example:
         //When sending a request we need to set Content-Type to application/x-www-form-urlencoded and it the Body part, we need to choose a file:
         // Check here: https://www.michalbialecki.com/2020/01/10/net-core-pass-parameters-to-actions/
-        [HttpPost]
-        public IActionResult SaveFile([FromForm] string fileName, [FromForm] IFormFile file)
-        {
-            Console.WriteLine($"Got a file with name: {fileName} and size: {file.Length}");
-            return new AcceptedResult();
-        }
+        //[HttpPost]
+        //public IActionResult SaveFile([FromForm] string fileName, [FromForm] IFormFile file)
+        //{
+        //    Console.WriteLine($"Got a file with name: {fileName} and size: {file.Length}");
+        //    return new AcceptedResult();
+        //}
 
 
         //Use PUT when you can update a resource completely through a specific resource. 

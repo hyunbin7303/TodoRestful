@@ -12,11 +12,6 @@ namespace TodoApi.Model.Todo
         public string Title { get; set; }
         public TodoStatus Status { get; set; }
         public TodoType TodoType { get; set; }
-        public IList<TodoTask> TodoTask { get; set; }
-        public Todo()
-        {
-            TodoTask = new List<TodoTask>();
-        }
-        
+        public IList<TodoTask> TodoTask { get; set; } = new List<TodoTask>();
     }
 }

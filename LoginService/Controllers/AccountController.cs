@@ -40,7 +40,7 @@ namespace IdentityServer.Controllers
                 return Ok(new
                 {
                     token = jwt,
-                });
+                }); 
             }
 
             return Unauthorized();
