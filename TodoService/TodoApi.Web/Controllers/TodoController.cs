@@ -36,12 +36,7 @@ namespace TodoApi.Controllers
             Log.Information("TodoController: Get");
             return _todoRepository.FindAll().Result;
         }
-
-
-        // Need to test.
-        // Oneday need to change all query to one interface.
-
-
+        
         [HttpGet]
         public ActionResult<IEnumerable<TodoDTO>> Get([FromQuery]bool sortByDate = false, [FromQuery]TodoType todoType = TodoType.All, [FromQuery]DateTime? date = null)
         {
@@ -51,14 +46,13 @@ namespace TodoApi.Controllers
             Log.Information($"TodoController: Get {userId}");
             try
             {
-                var getUserInfo = _todoRepository.FindByUserId(userId).Result.ConvertTo();
+                var users = _todoRepository.FindByUserId(userId).Result.ToList();
+                if ( date !=null)
+                    users = users.FindAll(x => x.Datetime == new DateTime(date.Value.Year, date.Value.Month, date.Value.Day));
                 if (sortByDate)
-                {
-                    getUserInfo = getUserInfo.OrderByDescending(d => d.Datetime);
-                }
-                userTodo = userTodo.Where(t => t.TodoType == todoType);
-                
-                return Ok(getUserInfo);
+                    users = users.OrderByDescending(x => x.Datetime).ToList();
+                var UserTodoDtos=users.ConvertTo();
+                return Ok(UserTodoDtos);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
             {
@@ -73,41 +67,45 @@ namespace TodoApi.Controllers
                 return Problem(diEx.Message);
             }
         }
-        /* Passing Parameter with headers
-            Request and Response Body
-            Request Authorization
-            Response Caching 
-            Response Cookies
-         */
-        //https://www.infoworld.com/article/3004496/how-to-work-with-actionresults-in-web-api.html
-        [HttpGet("GetOnDate/{date}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<List<TodoDTO>> GetOnDate(DateTime date)
+        [HttpGet("/todo-completed")]
+        public ActionResult<IEnumerable<TodoDTO>> GetTodoCompleted()
         {
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             try
             {
-                var claimsIdentity = this.User.Identity as ClaimsIdentity;
-                var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
-                var users = _todoRepository.FindByUserId(userId).Result.ToList(); // What if there are like 1000 todos? is it really effective way?
-                DateTime ss = new DateTime(date.Year, date.Month, date.Day);
-                var getDate = users.Find(x => x.Datetime == ss).ConvertTo();
-                return Ok(getDate);
+                var users = _todoRepository.FindByUserId(userId).Result.ToList();
+                var completedTodos = users.FindAll(x => x.Status == TodoStatus.Completed).ConvertTo().ToList();
+                return completedTodos;
             }
-            catch(TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
+            catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
             {
                 return NotFound(todoValidationEx.InnerException.Message);
             }
-            catch(TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is RecordNotFoundException)
+            catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is RecordNotFoundException)
             {
                 return NotFound(todoValidationEx.InnerException.Message);
             }
-            catch(TodoDIException diEx)
+            catch (TodoDIException diEx)
             {
                 return Problem(diEx.Message);
             }
         }
 
+        // Getting Header info.
+        [HttpGet("/TestingHeader")]
+        public ActionResult<IEnumerable<TodoDTO>> GetHeaderTester()
+        {
+            /* Passing Parameter with headers
+       Request and Response Body
+       Request Authorization
+       Response Caching 
+       Response Cookies
+    */
+            return null;
+        }
+   
+        //https://www.infoworld.com/article/3004496/how-to-work-with-actionresults-in-web-api.html
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -146,7 +144,6 @@ namespace TodoApi.Controllers
         //    Console.WriteLine($"Got a file with name: {fileName} and size: {file.Length}");
         //    return new AcceptedResult();
         //}
-
 
         //Use PUT when you can update a resource completely through a specific resource. 
         //As soon as you know the new resource location, you can use PUT again to do updates to the blue stapler article
