@@ -1,12 +1,23 @@
 ﻿
+using System.ComponentModel;
+
 namespace TodoApi.Model.Todo
 {
-    public enum TodoStatus
+    public enum TodoStatus : byte 
     {
-        Plan,
-        Progress,
-        Completed,
-        Postpone,
+        [Description("Plan")]
+        Plan =1,
 
+        [Description("Progress")]
+        Progress = 2,
+
+        [Description("Completed")]
+        Completed= 3,
+
+        [Description("Postpone")]
+        Postpone= 4,
+
+        [Description("Stopped")]
+        Stopped= 5
     }
 }

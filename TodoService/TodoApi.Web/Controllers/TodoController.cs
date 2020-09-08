@@ -37,8 +37,12 @@ namespace TodoApi.Controllers
             return _todoRepository.FindAll().Result;
         }
         
+
         [HttpGet]
-        public ActionResult<IEnumerable<TodoDTO>> Get([FromQuery]bool sortByDate = false, [FromQuery]TodoType todoType = TodoType.All, [FromQuery]DateTime? date = null)
+        //[ProducesResponseType(typeof(QueryResultResource<TodoDTO>), 200)]
+        //public ActionResult<IEnumerable<TodoDTO>> Get([FromQuery]bool sortByDate = false, [FromQuery]TodoType todoType = TodoType.All, [FromQuery]DateTime? date = null)
+        public ActionResult<IList<TodoDTO>> Get([FromQuery]GetTodoQuery query)
+
         {
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
@@ -47,10 +51,15 @@ namespace TodoApi.Controllers
             try
             {
                 var users = _todoRepository.FindByUserId(userId).Result.ToList();
-                if ( date !=null)
-                    users = users.FindAll(x => x.Datetime == new DateTime(date.Value.Year, date.Value.Month, date.Value.Day));
-                if (sortByDate)
+                if (query.Date != null)
+                    users = users.FindAll(x => x.Datetime == new DateTime(query.Date.Value.Year, query.Date.Value.Month, query.Date.Value.Day));
+                if (query.SortByDate)
                     users = users.OrderByDescending(x => x.Datetime).ToList();
+                if(query.TodoStatus!= null)
+                {
+                    users = users.FindAll(x => x.Status == query.TodoStatus);
+                }
+
                 var UserTodoDtos=users.ConvertTo();
                 return Ok(UserTodoDtos);
             }
@@ -104,8 +113,12 @@ namespace TodoApi.Controllers
     */
             return null;
         }
-   
+
+
+
+
         //https://www.infoworld.com/article/3004496/how-to-work-with-actionresults-in-web-api.html
+        //https://code-maze.com/action-filters-aspnetcore/
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -117,6 +130,15 @@ namespace TodoApi.Controllers
             try
             {
                 todo.UserId = userId;//TODO Encrypt user Id.
+                // How to store subtask?
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name1", Description = "SubTask Testting1", Progress = TodoStatus.Plan });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name2", Description = "SubTask Testting2", Progress = TodoStatus.Plan });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name3", Description = "SubTask Testting3", Progress = TodoStatus.Completed });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name4", Description = "SubTask Testting3", Progress = TodoStatus.Completed });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name5", Description = "SubTask Testting3", Progress = TodoStatus.Completed });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = TodoStatus.Progress });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = TodoStatus.Postpone });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = TodoStatus.Stopped });
                 await _todoRepository.InsertOneAsync(todo);
                 return Ok(todo);
             }
@@ -138,20 +160,44 @@ namespace TodoApi.Controllers
         //Sending content in a form is not very common, but it is the best solution if you want to upload a file. Let’s have a look at the example:
         //When sending a request we need to set Content-Type to application/x-www-form-urlencoded and it the Body part, we need to choose a file:
         // Check here: https://www.michalbialecki.com/2020/01/10/net-core-pass-parameters-to-actions/
-        //[HttpPost]
-        //public IActionResult SaveFile([FromForm] string fileName, [FromForm] IFormFile file)
-        //{
-        //    Console.WriteLine($"Got a file with name: {fileName} and size: {file.Length}");
-        //    return new AcceptedResult();
-        //}
-
+        [HttpPost("SaveFiles")]
+        public IActionResult SaveFile([FromForm] string fileName, [FromForm] IFormFile file)
+        {
+            //Save files for Todo? Such as json file?
+            Console.WriteLine($"Got a file with name: {fileName} and size: {file.Length}");
+            return new AcceptedResult();
+        }
         //Use PUT when you can update a resource completely through a specific resource. 
         //As soon as you know the new resource location, you can use PUT again to do updates to the blue stapler article
         [HttpPut("{id}")]
-        public void Put(string UserId, [FromBody] Todo value)
+        public ActionResult<Task<TodoDTO>> Put(string id, [FromBody]Todo todo)
         {
-            _todoRepository.ReplaceOne(value);
+            if(id != todo.Id.ToString())
+            {
+                return BadRequest();
+            }
+            try
+            {
+                _todoRepository.ReplaceOne(todo);
+            }
+            catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
+            {
+                return NotFound(todoValidationEx.InnerException.Message);
+            }
+            catch (TodoDIException diEx)
+            {
+                return Problem(diEx.Message);
+            }
+            catch (RecordUpdateConcurrencyException rcEx)
+            {
+                return BadRequest();
+            }
+            return NoContent();
         }
+
+
+        //https://medium.com/net-core/how-to-build-a-restful-api-with-asp-net-core-fb7dd8d3e5e3
+
 
         [HttpDelete]
         public void Delete(string id)
