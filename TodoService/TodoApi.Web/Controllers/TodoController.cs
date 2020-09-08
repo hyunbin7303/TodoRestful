@@ -24,6 +24,8 @@ namespace TodoApi.Controllers
     [Authorize]
     public class TodoController : ControllerBase
     {
+
+        // Can we have Services... rather than calling IMongoRepository directly?
         private readonly IMongoRepository<Todo> _todoRepository;
         public TodoController(IMongoRepository<Todo> todoRepository)
         {
