@@ -3,19 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using Serilog;
-using Serilog.Core;
 using TodoApi.Analytics.ExpressionHelper;
 using TodoApi.Datasource;
 using TodoApi.Model.Todo;
 using TodoApi.Model.Todo.Exceptions;
 using TodoApi.Query.Interface;
+using TodoApi.Web.Services;
 
 namespace TodoApi.Controllers
 {
@@ -24,45 +23,35 @@ namespace TodoApi.Controllers
     [Authorize]
     public class TodoController : ControllerBase
     {
-
+        //https://github.com/HamidMosalla/RestfulApiBestPracticesAspNetCore/tree/master/RestfulApiBestPracticesAspNetCore
+        //https://medium.com/@zarkopafilis/asp-net-core-2-2-3-rest-api-28-resource-filtering-67fa61462c31
+        //https://github.com/Elfocrash/Youtube.AspNetCoreTutorial/blob/master/Tweetbook/Services/IPostService.cs
         // Can we have Services... rather than calling IMongoRepository directly?
         private readonly IMongoRepository<Todo> _todoRepository;
-        public TodoController(IMongoRepository<Todo> todoRepository)
+        private readonly ITodoService _todoService;
+        public TodoController(IMongoRepository<Todo> todoRepository, ITodoService todoService)
         {
-            _todoRepository = todoRepository;
+            _todoRepository = todoRepository ?? throw new ArgumentException(nameof(todoRepository));
+            _todoService = todoService ?? throw new ArgumentException(nameof(todoService)); 
         }
-        // Going to be deleted. Or Only allow for Admin Claims.
+        
         [HttpGet("GetAll")]
         public IEnumerable<Todo> GetAll()
         {
             Log.Information("TodoController: Get");
             return _todoRepository.FindAll().Result;
         }
-        
 
         [HttpGet]
         //[ProducesResponseType(typeof(QueryResultResource<TodoDTO>), 200)]
-        //public ActionResult<IEnumerable<TodoDTO>> Get([FromQuery]bool sortByDate = false, [FromQuery]TodoType todoType = TodoType.All, [FromQuery]DateTime? date = null)
         public ActionResult<IList<TodoDTO>> Get([FromQuery]GetTodoQuery query)
-
         {
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
-            var userTodo = _todoRepository.FindByUserIdAsync(userId).Result.ConvertTo();
-            Log.Information($"TodoController: Get {userId}");
             try
             {
-                var users = _todoRepository.FindByUserId(userId).Result.ToList();
-                if (query.Date != null)
-                    users = users.FindAll(x => x.Datetime == new DateTime(query.Date.Value.Year, query.Date.Value.Month, query.Date.Value.Day));
-                if (query.SortByDate)
-                    users = users.OrderByDescending(x => x.Datetime).ToList();
-                if(query.TodoStatus!= null)
-                {
-                    users = users.FindAll(x => x.Status == query.TodoStatus);
-                }
-
-                var UserTodoDtos=users.ConvertTo();
+                var test = _todoService.ListAsync(userId, query).Result;// Testing
+                var UserTodoDtos= test.ConvertTo();
                 return Ok(UserTodoDtos);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
@@ -78,6 +67,19 @@ namespace TodoApi.Controllers
                 return Problem(diEx.Message);
             }
         }
+
+        [HttpGet("Todo")]
+        public IActionResult GetTodo(Guid todoId)
+        {
+            Expression<Func<Todo, bool>> todoExpr = null;
+            var getTodo = _todoRepository.FindOne(todoExpr);
+            if(getTodo == null)
+            {
+                return NotFound();
+            }
+            return Ok(getTodo);
+        }
+
         [HttpGet("/todo-completed")]
         public ActionResult<IEnumerable<TodoDTO>> GetTodoCompleted()
         {
@@ -105,14 +107,14 @@ namespace TodoApi.Controllers
 
         // Getting Header info.
         [HttpGet("/TestingHeader")]
-        public ActionResult<IEnumerable<TodoDTO>> GetHeaderTester()
+        public ActionResult<IEnumerable<TodoDTO>> GetHeaderTester([FromHeader]string _header)
         {
             /* Passing Parameter with headers
-       Request and Response Body
-       Request Authorization
-       Response Caching 
-       Response Cookies
-    */
+               Request and Response Body
+               Request Authorization
+               Response Caching 
+               Response Cookies
+            */
             return null;
         }
 
@@ -197,6 +199,8 @@ namespace TodoApi.Controllers
             return NoContent();
         }
 
+        [HttpPut("Subtask/{id}")]
+        //public ActionResult<Task<TodoDTO>> updateSubtask(string id)
 
         //https://medium.com/net-core/how-to-build-a-restful-api-with-asp-net-core-fb7dd8d3e5e3
 

@@ -23,8 +23,6 @@ namespace TodoApi.Test.DbTest
         public async Task IndexReturnsARedirectToIndexHomeWhenIdIsNull()
         {
             // Arrange
-            var controller = new TodoController(_workoutRepository);
-
             // Act
             //var result = controller.GetLast("asd");
             //ExpressionUtils.GetByDateTest("asd", DateTime.Now);

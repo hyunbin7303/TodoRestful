@@ -20,6 +20,7 @@ using Serilog.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using TodoApi.Web.Services;
 
 namespace TodoApi.Web
 {
@@ -40,6 +41,9 @@ namespace TodoApi.Web
             services.AddSingleton<IMongoSettings>(serviceProvider =>
                 serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
             services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
+            
+            services.AddScoped<ITodoService, TodoService>();
+
             services.AddControllers();
 
             services.AddAuthentication(config =>
