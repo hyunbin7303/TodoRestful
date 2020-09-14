@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Security.Claims;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using Newtonsoft.Json;
 using Serilog;
 using TodoApi.Analytics.ExpressionHelper;
 using TodoApi.Datasource;
@@ -165,10 +167,26 @@ namespace TodoApi.Controllers
         //When sending a request we need to set Content-Type to application/x-www-form-urlencoded and it the Body part, we need to choose a file:
         // Check here: https://www.michalbialecki.com/2020/01/10/net-core-pass-parameters-to-actions/
         [HttpPost("SaveFiles")]
+        [AllowAnonymous]
         public IActionResult SaveFile([FromForm] string fileName, [FromForm] IFormFile file)
         {
+            string content = String.Empty;
+            try
+            {
+                using (var reader = new StreamReader(file.OpenReadStream()))
+                {
+                    content = reader.ReadToEndAsync().Result;
+                }
+                var todo = JsonConvert.DeserializeObject<List<Todo>>(content);
+            }catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return new BadRequestResult();
+            }
+
             //Save files for Todo? Such as json file?
             Console.WriteLine($"Got a file with name: {fileName} and size: {file.Length}");
+
             return new AcceptedResult();
         }
         //Use PUT when you can update a resource completely through a specific resource. 
@@ -213,6 +231,7 @@ namespace TodoApi.Controllers
             _todoRepository.DeleteById(id);
         }
         [HttpGet("About")]
+        [AllowAnonymous]
         public ContentResult About()
         {
             return Content("An API listing Todos of docs.asp.net.");

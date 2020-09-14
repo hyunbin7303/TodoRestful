@@ -70,7 +70,7 @@ namespace TodoApi.Web
                             return Task.CompletedTask;
                         }
                     };
-
+                    
                     config.TokenValidationParameters = new TokenValidationParameters()
                     {
                         ValidIssuer = Constants.Issuer,
@@ -107,7 +107,6 @@ namespace TodoApi.Web
             //https://docs.microsoft.com/en-us/aspnet/core/fundamentals/routing?view=aspnetcore-3.1
             app.UseEndpoints(endpoints =>
             {
-
                 endpoints.MapGet("/", async context => 
                 {
                     await context.Response.WriteAsync("Hello World");
