@@ -177,7 +177,11 @@ namespace TodoApi.Controllers
                 {
                     content = reader.ReadToEndAsync().Result;
                 }
-                var todo = JsonConvert.DeserializeObject<List<Todo>>(content);
+                var todoObj = JsonConvert.DeserializeObject<List<Todo>>(content);
+
+                //convert todoObj to IDocument, then insert
+                
+                //_todoRepository.InsertMany();
             }catch(Exception e)
             {
                 Console.WriteLine(e.Message);
