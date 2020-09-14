@@ -12,4 +12,8 @@
     <ProjectReference Include="..\TodoApi.Model\TodoApi.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\" />
+  </ItemGroup>
+
 </Project>
