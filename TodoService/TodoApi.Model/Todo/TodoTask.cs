@@ -5,6 +5,6 @@ namespace TodoApi.Model.Todo
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        public TodoStatus Progress { get; set; }
+        public string Progress { get; set; }
     }
 }

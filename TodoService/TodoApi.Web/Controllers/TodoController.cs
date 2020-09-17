@@ -90,7 +90,7 @@ namespace TodoApi.Controllers
             try
             {
                 var users = _todoRepository.FindByUserId(userId).Result.ToList();
-                var completedTodos = users.FindAll(x => x.Status == TodoStatus.Completed).ConvertTo().ToList();
+                var completedTodos = users.FindAll(x => x.Status == Enum.GetName(typeof(TodoStatus),TodoStatus.Completed)).ConvertTo().ToList();
                 return completedTodos;
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
@@ -137,14 +137,14 @@ namespace TodoApi.Controllers
             {
                 todo.UserId = userId;//TODO Encrypt user Id.
                 // How to store subtask?
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name1", Description = "SubTask Testting1", Progress = TodoStatus.Plan });
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name2", Description = "SubTask Testting2", Progress = TodoStatus.Plan });
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name3", Description = "SubTask Testting3", Progress = TodoStatus.Completed });
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name4", Description = "SubTask Testting3", Progress = TodoStatus.Completed });
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name5", Description = "SubTask Testting3", Progress = TodoStatus.Completed });
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = TodoStatus.Progress });
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = TodoStatus.Postpone });
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = TodoStatus.Stopped });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name1", Description = "SubTask Testting1", Progress = Enum.GetName(typeof(TodoStatus),TodoStatus.Plan) });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name2", Description = "SubTask Testting2", Progress = Enum.GetName(typeof(TodoStatus), TodoStatus.Plan) });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name3", Description = "SubTask Testting3", Progress = Enum.GetName(typeof(TodoStatus), TodoStatus.Completed) });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name4", Description = "SubTask Testting3", Progress = Enum.GetName(typeof(TodoStatus), TodoStatus.Completed) });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name5", Description = "SubTask Testting3", Progress = Enum.GetName(typeof(TodoStatus), TodoStatus.Completed) });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = Enum.GetName(typeof(TodoStatus), TodoStatus.Postpone) });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = Enum.GetName(typeof(TodoStatus), TodoStatus.Postpone) });
+                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = Enum.GetName(typeof(TodoStatus), TodoStatus.Stopped) });
                 await _todoRepository.InsertOneAsync(todo);
                 return Ok(todo);
             }

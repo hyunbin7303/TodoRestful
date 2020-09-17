@@ -8,8 +8,8 @@ namespace TodoApi.Query.Interface
     public class GetTodoQuery
     {
         public bool SortByDate { get; set; }
-        public TodoType TodoType { get; set; }
-        public TodoStatus TodoStatus { get; set; } 
+        public string TodoType { get; set; }
+        public string TodoStatus { get; set; } 
         public DateTime? Date { get; set; } 
     }
 }
