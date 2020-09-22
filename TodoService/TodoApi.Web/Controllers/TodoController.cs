@@ -43,7 +43,6 @@ namespace TodoApi.Controllers
         }
 
         [HttpGet]
-        //[ProducesResponseType(typeof(QueryResultResource<TodoDTO>), 200)]
         public ActionResult<IList<TodoDTO>> Get([FromQuery]GetTodoQuery query)
         {
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
@@ -77,7 +76,7 @@ namespace TodoApi.Controllers
             {
                 return NotFound();
             }
-            return Ok(getTodo);
+            return Ok(getTodo); 
         }
 
         [HttpGet("/todo-completed")]
@@ -143,7 +142,7 @@ namespace TodoApi.Controllers
                 todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = TodoStatus.Progress });
                 todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = TodoStatus.Postpone });
                 todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = TodoStatus.Stopped });
-                await _todoRepository.InsertOneAsync(todo);
+                var test = _todoService.SaveAsync(todo);
                 return Ok(todo);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
@@ -174,15 +173,15 @@ namespace TodoApi.Controllers
         //Use PUT when you can update a resource completely through a specific resource. 
         //As soon as you know the new resource location, you can use PUT again to do updates to the blue stapler article
         [HttpPut("{id}")]
-        public ActionResult<Task<TodoDTO>> Put(string id, [FromBody]Todo todo)
+        public ActionResult<Task<TodoDTO>> Put(string TodoId, [FromBody]Todo todo)
         {
-            if(id != todo.Id.ToString())
+            if(TodoId != todo.Id.ToString())
             {
                 return BadRequest();
             }
             try
             {
-                _todoRepository.ReplaceOne(todo);
+                _todoService.UpdateAsync(TodoId, todo);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
             {

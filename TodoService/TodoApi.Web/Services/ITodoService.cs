@@ -10,7 +10,7 @@ namespace TodoApi.Web.Services
         Task<IEnumerable<TodoDTO>> ListAsync(string userId, GetTodoQuery query);
         Task<TodoDTO> GetOne(string todoId);
         Task<TodoDTO> SaveAsync(Todo todo);
-        Task<TodoDTO> UpdateAsync(int id, Todo todo);
+        Task<TodoDTO> UpdateAsync(string id, Todo todo);
         Task<TodoDTO> DeleteAsync(int id);
     }
 }

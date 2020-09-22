@@ -20,4 +20,10 @@ namespace TodoApi.Model.Todo
         [Description("Stopped")]
         Stopped= 5
     }
+
+    public static class SampleTodoStatus
+    {
+        public static string Plan = "Plan";
+    }
+
 }

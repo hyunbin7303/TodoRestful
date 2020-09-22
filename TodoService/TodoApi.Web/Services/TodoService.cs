@@ -35,18 +35,41 @@ namespace TodoApi.Web.Services
             {
                 userTodos = userTodos.FindAll(x => x.Status == query.TodoStatus);
             }
-
             bool check = query.TodoStatus != null ? true :  false;
-
             return Task.FromResult(userTodos.ConvertTo());
         }
-        public Task<TodoDTO> SaveAsync(Todo todo)
+        public async Task<TodoDTO> SaveAsync(Todo todo)
         {
-            throw new NotImplementedException();
+            var check =  await _todoRepository.InsertOneAsync(todo);
+            return check;
         }
-        public Task<TodoDTO> UpdateAsync(int id, Todo todo)
+        public Task<TodoDTO> UpdateAsync(string TodoId, Todo todo)
         {
-            throw new NotImplementedException();
+            var existingProduct = _todoRepository.FindByIdAsync(TodoId);
+            if (existingProduct == null)
+                return new ProductResponse("Product not found.");
+
+            _todoRepository.ReplaceOne(todo);
+
+            //var existingCategory = await _categoryRepository.FindByIdAsync(product.CategoryId);
+            //if (existingCategory == null)
+            //    return new ProductResponse("Invalid category.");
+            //existingProduct.Name = product.Name;
+            //existingProduct.UnitOfMeasurement = product.UnitOfMeasurement;
+            //existingProduct.QuantityInPackage = product.QuantityInPackage;
+            //existingProduct.CategoryId = product.CategoryId;
+            //try
+            //{
+            //    _productRepository.Update(existingProduct);
+            //    await _unitOfWork.CompleteAsync();
+
+            //    return new ProductResponse(existingProduct);
+            //}
+            //catch (Exception ex)
+            //{
+            //    // Do some logging stuff
+            //    return new ProductResponse($"An error occurred when updating the product: {ex.Message}");
+            //}
         }
     }
 }

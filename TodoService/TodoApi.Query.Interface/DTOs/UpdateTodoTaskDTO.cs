@@ -4,7 +4,7 @@ using System.Text;
 
 namespace TodoApi.Query.Interface
 {
-    public class UpdateTodoTaskDTO
+    public class UpdateSubTodoTaskDTO
     {
 
     }
