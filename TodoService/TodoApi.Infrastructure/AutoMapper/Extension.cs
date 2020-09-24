@@ -10,8 +10,9 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using TodoApi.Model.Todo;
+using TodoApi.Query.Interface;
 
-namespace TodoApi.Query.Interface
+namespace TodoApi.Infrastructure.AutoMapper
 {
     public static class Extension
     {
