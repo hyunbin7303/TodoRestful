@@ -3,11 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
-
   <ItemGroup>
-    <Compile Remove="AutoMapper\**" />
-    <EmbeddedResource Remove="AutoMapper\**" />
-    <None Remove="AutoMapper\**" />
+    <PackageReference Include="AutoMapper" Version="10.0.0" />
+    <ProjectReference Include="..\TodoApi.Model\TodoApi.Model.csproj" />
+    <ProjectReference Include="..\TodoApi.Query.Interface\TodoApi.Query.Interface.csproj" />
   </ItemGroup>
+
 
 </Project>
