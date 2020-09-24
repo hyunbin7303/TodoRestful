@@ -7,6 +7,7 @@ namespace TodoApi.Query.Interface
 {
     public class GetTodoQuery
     {
+        public string UserId { get; set; }
         public bool SortByDate { get; set; }
         public TodoType TodoType { get; set; }
         public TodoStatus TodoStatus { get; set; } 

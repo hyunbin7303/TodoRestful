@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -24,6 +25,27 @@ namespace TodoApi.Web.Services
         {
             throw new NotImplementedException();
         }
+
+        public async Task<List<Todo>> GetTodosAsync(GetTodoQuery filter = null, PaginationFilter paginationFilter = null)
+        {
+            var queryable = _todoRepository.AsQueryable();
+            if(paginationFilter == null)
+            {
+                var check = await queryable.Include(x => x.Tag).ToListAsync();
+                return check;
+            }
+            queryable = AddFiltersOnQuery(filter, queryable);
+            var skip = (paginationFilter.PageNumber - 1) * paginationFilter.PageSize;
+            return await queryable.Include(x => x.Tag).Skip(skip).Take(paginationFilter.PageSize).ToListAsync();
+        }
+        private static IQueryable<Todo> AddFiltersOnQuery(GetTodoQuery filter, IQueryable<Todo> queryable)
+        {
+            if (!string.IsNullOrEmpty(filter?.UserId))
+            {
+                queryable = queryable.Where(x => x.UserId == filter.UserId);
+            }
+            return queryable;
+        }
         public Task<IEnumerable<TodoDTO>> ListAsync(string userId, GetTodoQuery query)
         {
             var userTodos = _todoRepository.FindByUserId(userId).Result.ToList();
@@ -47,10 +69,13 @@ namespace TodoApi.Web.Services
         {
             var existingProduct = _todoRepository.FindByIdAsync(TodoId);
             if (existingProduct == null)
-                return new ProductResponse("Product not found.");
+            {
+                //return new ProductResponse("Product not found.");
+                return null;
+            }
 
             _todoRepository.ReplaceOne(todo);
-
+            return null;
             //var existingCategory = await _categoryRepository.FindByIdAsync(product.CategoryId);
             //if (existingCategory == null)
             //    return new ProductResponse("Invalid category.");

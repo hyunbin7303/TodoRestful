@@ -125,23 +125,14 @@ namespace TodoApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Todo>> Post([FromBody]Todo todo)
+        public async Task<ActionResult<Todo>> Post([FromBody]CreateTodoDTO todoDTO)
         {
-            if (todo == null) return BadRequest();
+            if (todoDTO == null) return BadRequest();
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             try
             {
-                todo.UserId = userId;//TODO Encrypt user Id.
-                // How to store subtask?
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name1", Description = "SubTask Testting1", Progress = TodoStatus.Plan });
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name2", Description = "SubTask Testting2", Progress = TodoStatus.Plan });
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name3", Description = "SubTask Testting3", Progress = TodoStatus.Completed });
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name4", Description = "SubTask Testting3", Progress = TodoStatus.Completed });
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name5", Description = "SubTask Testting3", Progress = TodoStatus.Completed });
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = TodoStatus.Progress });
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = TodoStatus.Postpone });
-                todo.TodoTask.Add(new TodoTask { Name = "SubTask Name6", Description = "SubTask Testting4", Progress = TodoStatus.Stopped });
+                todoDTO.UserId = userId;//TODO Encrypt user Id.
                 var test = _todoService.SaveAsync(todo);
                 return Ok(todo);
             }
@@ -152,10 +143,6 @@ namespace TodoApi.Controllers
             catch (TodoDIException diEx)
             {
                 return Problem(diEx.Message);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest();
             }
         }
 

@@ -39,5 +39,8 @@ namespace TodoApi.Datasource
         Task DeleteByIdAsync(string id);
         void DeleteMany(Expression<Func<TDocument, bool>> filterExpression);
         Task DeleteManyAsync(Expression<Func<TDocument, bool>> filterExpression);
+
+        IEnumerable<TDocument> AllIncluding(params Expression<Func<TDocument, object>>[] includeProperties);
+
     }
 }

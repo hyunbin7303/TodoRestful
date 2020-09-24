@@ -10,6 +10,8 @@ namespace TodoApi.Model.Todo
     {
         [StringLength(30)]
         public string Title { get; set; }
+        [StringLength(30)]
+        public string Tag { get; set; }
         public TodoStatus Status { get; set; }
         public TodoType TodoType { get; set; }
         public IList<TodoTask> TodoTask { get; set; } = new List<TodoTask>();

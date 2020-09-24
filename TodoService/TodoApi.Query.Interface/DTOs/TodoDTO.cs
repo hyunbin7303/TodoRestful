@@ -11,6 +11,7 @@ namespace TodoApi.Query.Interface
         public string Goal { get; set; }
         public string Description { get; set; }
         public string Title { get; set; }
+        public string Tag { get; set; }
         public TodoStatus Status { get; set; }
         public TodoType TodoType { get; set; }
         public IList<TodoTask> TodoTask { get; set; } = new List<TodoTask>();
