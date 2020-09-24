@@ -17,6 +17,7 @@ using TodoApi.Model.Todo;
 using TodoApi.Model.Todo.Exceptions;
 using TodoApi.Query.Interface;
 using TodoApi.Web.Services;
+using TodoApi.Infrastructure.AutoMapper;
 
 namespace TodoApi.Controllers
 {
