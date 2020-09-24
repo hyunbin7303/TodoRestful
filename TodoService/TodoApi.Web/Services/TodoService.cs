@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TodoApi.Datasource;
 using TodoApi.Model.Todo;
 using TodoApi.Query.Interface;
+using TodoApi.Infrastructure.AutoMapper;
 
 namespace TodoApi.Web.Services
 {
