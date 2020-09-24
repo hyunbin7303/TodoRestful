@@ -7,9 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 using Serilog;
-using TodoApi.Analytics.ExpressionHelper;
 using TodoApi.Datasource;
 using TodoApi.Model.Todo;
 using TodoApi.Model.Todo.Exceptions;
@@ -45,11 +43,9 @@ namespace TodoApi.Controllers
         [HttpGet]
         public ActionResult<IList<TodoDTO>> Get([FromQuery]GetTodoQuery query)
         {
-            var claimsIdentity = this.User.Identity as ClaimsIdentity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             try
             {
-                var test = _todoService.ListAsync(userId, query).Result;// Testing
+                var test = _todoService.ListAsync(GetUserId(), query).Result;// Testing
                 var UserTodoDtos= test.ConvertTo();
                 return Ok(UserTodoDtos);
             }
@@ -82,11 +78,9 @@ namespace TodoApi.Controllers
         [HttpGet("/todo-completed")]
         public ActionResult<IEnumerable<TodoDTO>> GetTodoCompleted()
         {
-            var claimsIdentity = this.User.Identity as ClaimsIdentity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             try
             {
-                var users = _todoRepository.FindByUserId(userId).Result.ToList();
+                var users = _todoRepository.FindByUserId(GetUserId()).Result.ToList();
                 var completedTodos = users.FindAll(x => x.Status == TodoStatus.Completed).ConvertTo().ToList();
                 return completedTodos;
             }
@@ -125,16 +119,14 @@ namespace TodoApi.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Todo>> Post([FromBody]CreateTodoDTO todoDTO)
+        public async Task<ActionResult<TodoDTO>> Post([FromBody]CreateTodoDTO todoDTO)
         {
             if (todoDTO == null) return BadRequest();
-            var claimsIdentity = this.User.Identity as ClaimsIdentity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             try
             {
-                todoDTO.UserId = userId;//TODO Encrypt user Id.
-                var test = _todoService.SaveAsync(todo);
-                return Ok(todo);
+                todoDTO.UserId = GetUserId();//TODO Encrypt user Id.
+                var test = _todoService.SaveAsync(todoDTO);
+                return Ok(todoDTO);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
             {
@@ -187,21 +179,22 @@ namespace TodoApi.Controllers
 
         [HttpPut("Subtask/{id}")]
         //public ActionResult<Task<TodoDTO>> updateSubtask(string id)
-
         //https://medium.com/net-core/how-to-build-a-restful-api-with-asp-net-core-fb7dd8d3e5e3
-
 
         [HttpDelete]
         public void Delete(string id)
         {
-            // find user info.
-            // Delete specific todo request.
             _todoRepository.DeleteById(id);
         }
         [HttpGet("About")]
         public ContentResult About()
         {
             return Content("An API listing Todos of docs.asp.net.");
+        }
+        private string GetUserId()
+        {
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            return claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
         }
     }
 }
