@@ -7,13 +7,13 @@ namespace TodoApi.Web.Services
 {
     public interface ITodoService
     {
+        Task<IEnumerable<TodoDTO>> ListAll();
         Task<IEnumerable<TodoDTO>> ListAsync(string userId, GetTodoQuery query);
-        Task<List<Todo>> GetTodosAsync(GetTodoQuery filter = null, PaginationFilter paginationFilter= null); // How we can use PaginationFilter?
-        //Do we have to change it to  ToDoDTO to return it?
-
+        Task<List<TodoDTO>> GetTodosAsync(GetTodoQuery filter = null, PaginationFilter paginationFilter= null); // How we can use PaginationFilter?
         Task<TodoDTO> GetOne(string todoId);
-        Task<TodoDTO> SaveAsync(Todo todo);
+        Task<TodoDTO> SaveAsync(CreateTodoDTO todo);
         Task<TodoDTO> UpdateAsync(string id, Todo todo);
+        Task<TodoDTO> UpdateSubTodoAsync(UpdateSubTodoTaskDTO subTodo);
         Task<TodoDTO> DeleteAsync(int id);
     }
 }

@@ -168,5 +168,15 @@ namespace TodoApi.Datasource
             return Task.FromResult<IList<TDocument>>(_collection.Find(filter).ToList());
         }
 
+        public IEnumerable<TDocument> AllIncluding(params Expression<Func<TDocument, object>>[] includeProperties)
+        {
+            //IQueryable<TDocument> query = _context.Set<TDocument>();
+            //foreach (var includeProperty in includeProperties)
+            //{
+            //    query = query.Include(includeProperty);
+            //}
+            //return query.AsEnumerable();
+            return null;
+        }
     }
 }

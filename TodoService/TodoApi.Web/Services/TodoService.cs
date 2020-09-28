@@ -61,10 +61,11 @@ namespace TodoApi.Web.Services
             bool check = query.TodoStatus != null ? true :  false;
             return Task.FromResult(userTodos.ConvertTo());
         }
-        public async Task<TodoDTO> SaveAsync(Todo todo)
+        public async Task<TodoDTO> SaveAsync(CreateTodoDTO todo)
         {
-            var check =  await _todoRepository.InsertOneAsync(todo);
-            return check;
+            //var check =  await _todoRepository.InsertOneAsync(todo);
+            //return check;
+            return null; // Convert to DTO.
         }
         public Task<TodoDTO> UpdateAsync(string TodoId, Todo todo)
         {
@@ -96,6 +97,22 @@ namespace TodoApi.Web.Services
             //    // Do some logging stuff
             //    return new ProductResponse($"An error occurred when updating the product: {ex.Message}");
             //}
+        }
+
+        Task<List<TodoDTO>> ITodoService.GetTodosAsync(GetTodoQuery filter, PaginationFilter paginationFilter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TodoDTO> UpdateSubTodoAsync(UpdateSubTodoTaskDTO subTodo)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<TodoDTO>> ListAll()
+        {
+            var todoDTOs = _todoRepository.FindAll().Result;
+            return null;
         }
     }
 }

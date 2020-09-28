@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using TodoApi.Datasource;
+using TodoApi.Infrastructure.AutoMapper;
 using TodoApi.Model.Todo;
 using TodoApi.Model.Todo.Exceptions;
 using TodoApi.Query.Interface;
@@ -24,7 +25,6 @@ namespace TodoApi.Controllers
         //https://github.com/HamidMosalla/RestfulApiBestPracticesAspNetCore/tree/master/RestfulApiBestPracticesAspNetCore
         //https://medium.com/@zarkopafilis/asp-net-core-2-2-3-rest-api-28-resource-filtering-67fa61462c31
         //https://github.com/Elfocrash/Youtube.AspNetCoreTutorial/blob/master/Tweetbook/Services/IPostService.cs
-        // Can we have Services... rather than calling IMongoRepository directly?
         private readonly IMongoRepository<Todo> _todoRepository;
         private readonly ITodoService _todoService;
         public TodoController(IMongoRepository<Todo> todoRepository, ITodoService todoService)
@@ -45,8 +45,8 @@ namespace TodoApi.Controllers
         {
             try
             {
-                var test = _todoService.ListAsync(GetUserId(), query).Result;// Testing
-                var UserTodoDtos= test.ConvertTo();
+                var todos = _todoService.ListAsync(GetUserId(), query).Result;// Testing
+                var UserTodoDtos= todos.ConvertTo();
                 return Ok(UserTodoDtos);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
@@ -110,10 +110,6 @@ namespace TodoApi.Controllers
             */
             return null;
         }
-
-
-
-
         //https://www.infoworld.com/article/3004496/how-to-work-with-actionresults-in-web-api.html
         //https://code-maze.com/action-filters-aspnetcore/
         [HttpPost]
@@ -124,7 +120,7 @@ namespace TodoApi.Controllers
             if (todoDTO == null) return BadRequest();
             try
             {
-                todoDTO.UserId = GetUserId();//TODO Encrypt user Id.
+                todoDTO.UserId = GetUserId();//TODO: Encrypt user Id.
                 var test = _todoService.SaveAsync(todoDTO);
                 return Ok(todoDTO);
             }
