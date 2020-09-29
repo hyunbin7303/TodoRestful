@@ -37,7 +37,7 @@ namespace TodoApi.Controllers
         public IEnumerable<TodoDTO> GetAll()
         {
             Log.Information("TodoController: Get");
-            return _todoService.FindAll();
+            return _todoService.ListAll().Result;
         }
 
         [HttpGet]

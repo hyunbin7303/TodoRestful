@@ -9,6 +9,7 @@ using TodoApi.Model.Todo;
 using TodoApi.Query.Interface;
 using TodoApi.Infrastructure.Extensions;
 using AutoMapper;
+using System.Linq.Expressions;
 
 namespace TodoApi.Web.Services
 {
@@ -32,17 +33,18 @@ namespace TodoApi.Web.Services
             throw new NotImplementedException();
         }
 
-        public async Task<List<Todo>> GetTodosAsync(GetTodoQuery filter = null, PaginationFilter paginationFilter = null)
+        public async Task<List<TodoDTO>> GetTodosAsync(GetTodoQuery filter = null, PaginationFilter paginationFilter = null)
         {
             var queryable = _todoRepository.AsQueryable();
             if(paginationFilter == null)
             {
                 var check = await queryable.Include(x => x.Tag).ToListAsync();
-                return check;
+                return check.ConvertTo().ToList();
             }
             queryable = AddFiltersOnQuery(filter, queryable);
             var skip = (paginationFilter.PageNumber - 1) * paginationFilter.PageSize;
-            return await queryable.Include(x => x.Tag).Skip(skip).Take(paginationFilter.PageSize).ToListAsync();
+            var listTodo = await queryable.Include(x => x.Tag).Skip(skip).Take(paginationFilter.PageSize).ToListAsync();
+            return listTodo.ConvertTo().ToList();
         }
         private static IQueryable<Todo> AddFiltersOnQuery(GetTodoQuery filter, IQueryable<Todo> queryable)
         {
@@ -66,11 +68,11 @@ namespace TodoApi.Web.Services
             bool check = query.TodoStatus != null ? true :  false;
             return Task.FromResult(userTodos.ConvertTo());
         }
-        public async Task<TodoDTO> SaveAsync(CreateTodoDTO todo)
+        public async Task<bool> SaveAsync(CreateTodoDTO createTodoDTO)
         {
-            var _todo = todo.ConvertTo();
-            var check =  await _todoRepository.InsertOneAsync(todo);
-            return check;
+            var mappingTest = _mapper.Map<CreateTodoDTO, Todo>(createTodoDTO);
+            var check = _todoRepository.InsertOneAsync(mappingTest);
+            return check.IsCompleted ? true : false;
         }
         public Task<TodoDTO> UpdateAsync(string TodoId, Todo todo)
         {
@@ -103,12 +105,6 @@ namespace TodoApi.Web.Services
             //    return new ProductResponse($"An error occurred when updating the product: {ex.Message}");
             //}
         }
-
-        Task<List<TodoDTO>> ITodoService.GetTodosAsync(GetTodoQuery filter, PaginationFilter paginationFilter)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<TodoDTO> UpdateSubTodoAsync(UpdateSubTodoTaskDTO subTodo)
         {
             throw new NotImplementedException();
@@ -116,8 +112,8 @@ namespace TodoApi.Web.Services
 
         public Task<IEnumerable<TodoDTO>> ListAll()
         {
-            var todoDTOs = _todoRepository.FindAll().Result;
-            return null;
+            var todoDTOs = _todoRepository.FindAll().Result.ConvertTo();
+            return Task.FromResult(todoDTOs);
         }
     }
 }
