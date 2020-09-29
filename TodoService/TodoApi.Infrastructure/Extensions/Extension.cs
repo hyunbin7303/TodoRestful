@@ -12,7 +12,7 @@ using System.Text;
 using TodoApi.Model.Todo;
 using TodoApi.Query.Interface;
 
-namespace TodoApi.Infrastructure.AutoMapper
+namespace TodoApi.Infrastructure.Extensions
 {
     public static class Extension
     {
