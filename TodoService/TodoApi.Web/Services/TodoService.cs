@@ -8,6 +8,7 @@ using TodoApi.Datasource;
 using TodoApi.Model.Todo;
 using TodoApi.Query.Interface;
 using TodoApi.Infrastructure.AutoMapper;
+using System.Linq.Expressions;
 
 namespace TodoApi.Web.Services
 {
@@ -24,6 +25,8 @@ namespace TodoApi.Web.Services
         }
         public Task<TodoDTO> GetOne(string todoId)
         {
+            Expression<Func<Todo, bool>> todoExpr = null;
+            var getTodo = _todoRepository.FindOne(todoExpr).ConvertTo();
             throw new NotImplementedException();
         }
 
@@ -63,9 +66,9 @@ namespace TodoApi.Web.Services
         }
         public async Task<TodoDTO> SaveAsync(CreateTodoDTO todo)
         {
-            //var check =  await _todoRepository.InsertOneAsync(todo);
-            //return check;
-            return null; // Convert to DTO.
+            var _todo = todo.ConvertTo();
+            var check =  await _todoRepository.InsertOneAsync(todo);
+            return check;
         }
         public Task<TodoDTO> UpdateAsync(string TodoId, Todo todo)
         {

@@ -34,10 +34,10 @@ namespace TodoApi.Controllers
         }
         
         [HttpGet("GetAll")]
-        public IEnumerable<Todo> GetAll()
+        public IEnumerable<TodoDTO> GetAll()
         {
             Log.Information("TodoController: Get");
-            return _todoRepository.FindAll().Result;
+            return _todoService.FindAll();
         }
 
         [HttpGet]
@@ -46,8 +46,7 @@ namespace TodoApi.Controllers
             try
             {
                 var todos = _todoService.ListAsync(GetUserId(), query).Result;// Testing
-                var UserTodoDtos= todos.ConvertTo();
-                return Ok(UserTodoDtos);
+                return Ok(todos);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
             {
@@ -67,37 +66,13 @@ namespace TodoApi.Controllers
         public IActionResult GetTodo(Guid todoId)
         {
             Expression<Func<Todo, bool>> todoExpr = null;
-            var getTodo = _todoRepository.FindOne(todoExpr);
+            var getTodo = _todoRepository.FindOne(todoExpr).ConvertTo();
             if(getTodo == null)
             {
                 return NotFound();
             }
             return Ok(getTodo); 
         }
-
-        [HttpGet("/todo-completed")]
-        public ActionResult<IEnumerable<TodoDTO>> GetTodoCompleted()
-        {
-            try
-            {
-                var users = _todoRepository.FindByUserId(GetUserId()).Result.ToList();
-                var completedTodos = users.FindAll(x => x.Status == TodoStatus.Completed).ConvertTo().ToList();
-                return completedTodos;
-            }
-            catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
-            {
-                return NotFound(todoValidationEx.InnerException.Message);
-            }
-            catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is RecordNotFoundException)
-            {
-                return NotFound(todoValidationEx.InnerException.Message);
-            }
-            catch (TodoDIException diEx)
-            {
-                return Problem(diEx.Message);
-            }
-        }
-
         // Getting Header info.
         [HttpGet("/TestingHeader")]
         public ActionResult<IEnumerable<TodoDTO>> GetHeaderTester([FromHeader]string _header)
