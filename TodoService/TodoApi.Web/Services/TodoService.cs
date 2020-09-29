@@ -7,17 +7,19 @@ using System.Threading.Tasks;
 using TodoApi.Datasource;
 using TodoApi.Model.Todo;
 using TodoApi.Query.Interface;
-using TodoApi.Infrastructure.AutoMapper;
-using System.Linq.Expressions;
+using TodoApi.Infrastructure.Extensions;
+using AutoMapper;
 
 namespace TodoApi.Web.Services
 {
     public class TodoService : ITodoService
     {
         private readonly IMongoRepository<Todo> _todoRepository;
-        public TodoService(IMongoRepository<Todo> todoRepository)
+        private readonly IMapper _mapper;
+        public TodoService(IMongoRepository<Todo> todoRepository, IMapper mapper)
         {
             _todoRepository = todoRepository ?? throw new ArgumentException(nameof(todoRepository));
+            _mapper = mapper;
         }
         public Task<TodoDTO> DeleteAsync(int id)
         {
