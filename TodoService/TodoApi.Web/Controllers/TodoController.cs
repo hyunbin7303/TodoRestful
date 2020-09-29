@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using TodoApi.Datasource;
-using TodoApi.Infrastructure.AutoMapper;
+using TodoApi.Infrastructure.Extensions;
 using TodoApi.Model.Todo;
 using TodoApi.Model.Todo.Exceptions;
 using TodoApi.Query.Interface;

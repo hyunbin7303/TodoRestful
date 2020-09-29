@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using TodoApi.Web.Services;
+using AutoMapper;
 
 namespace TodoApi.Web
 {
@@ -85,6 +86,7 @@ namespace TodoApi.Web
                 });
 
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
