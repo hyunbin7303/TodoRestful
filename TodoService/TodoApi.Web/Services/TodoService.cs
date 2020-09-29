@@ -32,7 +32,6 @@ namespace TodoApi.Web.Services
             var getTodo = _todoRepository.FindOne(todoExpr).ConvertTo();
             throw new NotImplementedException();
         }
-
         public async Task<List<TodoDTO>> GetTodosAsync(GetTodoQuery filter = null, PaginationFilter paginationFilter = null)
         {
             var queryable = _todoRepository.AsQueryable();
@@ -109,7 +108,6 @@ namespace TodoApi.Web.Services
         {
             throw new NotImplementedException();
         }
-
         public Task<IEnumerable<TodoDTO>> ListAll()
         {
             var todoDTOs = _todoRepository.FindAll().Result.ConvertTo();
