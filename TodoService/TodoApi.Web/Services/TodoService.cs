@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using TodoApi.Datasource;
 using TodoApi.Model.Todo;
@@ -22,11 +21,7 @@ namespace TodoApi.Web.Services
             _todoRepository = todoRepository ?? throw new ArgumentException(nameof(todoRepository));
             _mapper = mapper;
         }
-        public Task<bool> DeleteAsync(string todoId)
-        {
-            var check= _todoRepository.DeleteByIdAsync(todoId).IsCompleted;
-            return Task.FromResult(check);
-        }
+     
         public Task<TodoDTO> GetOne(string todoId)
         {
             Expression<Func<Todo, bool>> todoExpr = null;
@@ -83,7 +78,6 @@ namespace TodoApi.Web.Services
                 //return new ProductResponse("Product not found.");
                 return null;
             }
-
             _todoRepository.ReplaceOne(todo);
             return null;
             //var existingCategory = await _categoryRepository.FindByIdAsync(product.CategoryId);
@@ -115,5 +109,44 @@ namespace TodoApi.Web.Services
             var todoDTOs = _todoRepository.FindAll().Result.ConvertTo();
             return Task.FromResult(todoDTOs);
         }
+        public Task<bool> DeleteAsync(string todoId)
+        {
+            var check = _todoRepository.DeleteByIdAsync(todoId).IsCompleted;
+            return Task.FromResult(check);
+        }
+        public Task<bool> DeleteOneAsync(string todo)
+        {
+            Expression<Func<Todo, bool>> expr = null;
+            _todoRepository.DeleteOneAsync(expr);
+            return Task.FromResult(true);
+        }
+
+
+        private async Task AddNewTags(CreateTodoDTO createTodoDTO)
+        {
+            foreach(var tag in createTodoDTO.Tags)
+            {
+                // Finding Tags in Repository?....
+                // How can I find Tags in MongoDB?
+                // Need to run Query(Index) Later.
+            }
+            /*
+             *             foreach (var tag in post.Tags)
+            {
+                var existingTag =
+                    await _dataContext.Tags.SingleOrDefaultAsync(x =>
+                        x.Name == tag.TagName);
+                if (existingTag != null)
+                    continue;
+
+                await _dataContext.Tags.AddAsync(new Tag
+                    {Name = tag.TagName, CreatedOn = DateTime.UtcNow, CreatorId = post.UserId});
+            }
+             * 
+             * 
+             */
+
+        }
+
     }
 }

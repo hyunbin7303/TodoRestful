@@ -16,6 +16,7 @@ namespace TodoApi.Query.Interface
         public TodoStatus Status { get; set; }
         public TodoType TodoType { get; set; }
         public IList<TodoTask> TodoTask { get; set; } = new List<TodoTask>();
+        public IList<string> Tags { get; set; } = new List<string>();
         public DateTime Datetime { get; set; }
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }

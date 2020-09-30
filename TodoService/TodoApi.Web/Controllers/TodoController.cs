@@ -130,12 +130,19 @@ namespace TodoApi.Controllers
         //public ActionResult<Task<TodoDTO>> updateSubtask(string id)
         //https://medium.com/net-core/how-to-build-a-restful-api-with-asp-net-core-fb7dd8d3e5e3
 
-
         [HttpDelete]
-        public void Delete(string id)
+        public async Task<ActionResult<bool>> Delete(string TodoId)
         {
-            _todoService.DeleteAsync(id);
+            try
+            {
+                var check = await _todoService.DeleteAsync(TodoId);
+                return Task.FromResult(check).Result;
+            }catch(Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Error Deleting Data.");
+            }
         }
+
         [HttpGet("About")]
         public ContentResult About()
         {
