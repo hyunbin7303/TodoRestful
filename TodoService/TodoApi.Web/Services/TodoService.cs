@@ -22,9 +22,10 @@ namespace TodoApi.Web.Services
             _todoRepository = todoRepository ?? throw new ArgumentException(nameof(todoRepository));
             _mapper = mapper;
         }
-        public Task<TodoDTO> DeleteAsync(int id)
+        public Task<bool> DeleteAsync(string todoId)
         {
-            throw new NotImplementedException();
+            var check= _todoRepository.DeleteByIdAsync(todoId).IsCompleted;
+            return Task.FromResult(check);
         }
         public Task<TodoDTO> GetOne(string todoId)
         {
@@ -53,6 +54,7 @@ namespace TodoApi.Web.Services
             }
             return queryable;
         }
+
         public Task<IEnumerable<TodoDTO>> ListAsync(string userId, GetTodoQuery query)
         {
             var userTodos = _todoRepository.FindByUserId(userId).Result.ToList();
@@ -67,11 +69,11 @@ namespace TodoApi.Web.Services
             bool check = query.TodoStatus != null ? true :  false;
             return Task.FromResult(userTodos.ConvertTo());
         }
-        public async Task<bool> SaveAsync(CreateTodoDTO createTodoDTO)
+        public Task<bool> SaveAsync(CreateTodoDTO createTodoDTO)
         {
             var mappingTest = _mapper.Map<CreateTodoDTO, Todo>(createTodoDTO);
             var check = _todoRepository.InsertOneAsync(mappingTest);
-            return check.IsCompleted ? true : false;
+            return Task.FromResult(check.IsCompleted);
         }
         public Task<TodoDTO> UpdateAsync(string TodoId, Todo todo)
         {

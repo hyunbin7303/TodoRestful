@@ -24,22 +24,17 @@ namespace TodoApi.Controllers
     {
         //https://github.com/HamidMosalla/RestfulApiBestPracticesAspNetCore/tree/master/RestfulApiBestPracticesAspNetCore
         //https://medium.com/@zarkopafilis/asp-net-core-2-2-3-rest-api-28-resource-filtering-67fa61462c31
-        //https://github.com/Elfocrash/Youtube.AspNetCoreTutorial/blob/master/Tweetbook/Services/IPostService.cs
-        private readonly IMongoRepository<Todo> _todoRepository;
         private readonly ITodoService _todoService;
         public TodoController(IMongoRepository<Todo> todoRepository, ITodoService todoService)
         {
-            _todoRepository = todoRepository ?? throw new ArgumentException(nameof(todoRepository));
             _todoService = todoService ?? throw new ArgumentException(nameof(todoService)); 
         }
         
         [HttpGet("GetAll")]
         public IEnumerable<TodoDTO> GetAll()
         {
-            Log.Information("TodoController: Get");
             return _todoService.ListAll().Result;
         }
-
         [HttpGet]
         public ActionResult<IList<TodoDTO>> Get([FromQuery]GetTodoQuery query)
         {
@@ -63,34 +58,20 @@ namespace TodoApi.Controllers
         }
 
         [HttpGet("Todo")]
-        public IActionResult GetTodo(Guid todoId)
+        public ActionResult<TodoDTO> GetTodo(string todoId)
         {
-            Expression<Func<Todo, bool>> todoExpr = null;
-            var getTodo = _todoRepository.FindOne(todoExpr).ConvertTo();
+            var getTodo = _todoService.GetOne(todoId);
             if(getTodo == null)
             {
                 return NotFound();
             }
             return Ok(getTodo); 
         }
-        // Getting Header info.
-        [HttpGet("/TestingHeader")]
-        public ActionResult<IEnumerable<TodoDTO>> GetHeaderTester([FromHeader]string _header)
-        {
-            /* Passing Parameter with headers
-               Request and Response Body
-               Request Authorization
-               Response Caching 
-               Response Cookies
-            */
-            return null;
-        }
-        //https://www.infoworld.com/article/3004496/how-to-work-with-actionresults-in-web-api.html
-        //https://code-maze.com/action-filters-aspnetcore/
+      
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<TodoDTO>> Post([FromBody]CreateTodoDTO todoDTO)
+        public ActionResult<TodoDTO> Post([FromBody] CreateTodoDTO todoDTO)
         {
             if (todoDTO == null) return BadRequest();
             try
@@ -109,9 +90,6 @@ namespace TodoApi.Controllers
             }
         }
 
-
-        //Sending content in a form is not very common, but it is the best solution if you want to upload a file. Let’s have a look at the example:
-        //When sending a request we need to set Content-Type to application/x-www-form-urlencoded and it the Body part, we need to choose a file:
         // Check here: https://www.michalbialecki.com/2020/01/10/net-core-pass-parameters-to-actions/
         [HttpPost("SaveFiles")]
         public IActionResult SaveFile([FromForm] string fileName, [FromForm] IFormFile file)
@@ -152,10 +130,11 @@ namespace TodoApi.Controllers
         //public ActionResult<Task<TodoDTO>> updateSubtask(string id)
         //https://medium.com/net-core/how-to-build-a-restful-api-with-asp-net-core-fb7dd8d3e5e3
 
+
         [HttpDelete]
         public void Delete(string id)
         {
-            _todoRepository.DeleteById(id);
+            _todoService.DeleteAsync(id);
         }
         [HttpGet("About")]
         public ContentResult About()
