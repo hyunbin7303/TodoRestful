@@ -40,7 +40,7 @@ namespace TodoApi.Controllers
         {
             try
             {
-                var todos = _todoService.ListAsync(GetUserId(), query).Result;// Testing
+                var todos = _todoService.ListTodoAsync(GetUserId(), query).Result;// Testing
                 return Ok(todos);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)

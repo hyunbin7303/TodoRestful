@@ -12,11 +12,9 @@ namespace TodoApi.Web.Services
         Task<List<TodoDTO>> GetTodosAsync(GetTodoQuery filter = null, PaginationFilter paginationFilter= null); // How we can use PaginationFilter?
         Task<TodoDTO> GetOne(string todoId);
         Task<bool> SaveAsync(CreateTodoDTO todo);
-        Task<TodoDTO> UpdateAsync(string id, Todo todo);
-        Task<TodoDTO> UpdateSubTodoAsync(UpdateSubTodoTaskDTO subTodo);
+        Task<bool> UpdateAsync(string Todoid, Todo todo);
+        Task<TodoDTO> UpdateSubTodoAsync(string TodoId, UpdateSubTodoTaskDTO subTodo);
         Task<bool> DeleteAsync(string todoId);
-
-
         //Task<List<Tag>> GetAllTagAsync();
     }
 }

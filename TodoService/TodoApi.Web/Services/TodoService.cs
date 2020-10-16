@@ -69,39 +69,29 @@ namespace TodoApi.Web.Services
             var check = _todoRepository.InsertOneAsync(mappingTest);
             return Task.FromResult(check.IsCompleted);
         }
-        public Task<TodoDTO> UpdateAsync(string TodoId, Todo todo)
+        public Task<bool> UpdateAsync(string TodoId, Todo todo)
         {
-            var existingProduct = _todoRepository.FindByIdAsync(TodoId);
-            if (existingProduct == null)
-            {
+            var existingTodo = _todoRepository.FindByIdAsync(TodoId);
+            if (existingTodo == null){
                 //return new ProductResponse("Product not found.");
-                return null;
+                return Task.FromResult(false);
             }
-            _todoRepository.ReplaceOne(todo);
-            return null;
-            //var existingCategory = await _categoryRepository.FindByIdAsync(product.CategoryId);
-            //if (existingCategory == null)
-            //    return new ProductResponse("Invalid category.");
-            //existingProduct.Name = product.Name;
-            //existingProduct.UnitOfMeasurement = product.UnitOfMeasurement;
-            //existingProduct.QuantityInPackage = product.QuantityInPackage;
-            //existingProduct.CategoryId = product.CategoryId;
-            //try
-            //{
-            //    _productRepository.Update(existingProduct);
-            //    await _unitOfWork.CompleteAsync();
-
-            //    return new ProductResponse(existingProduct);
-            //}
-            //catch (Exception ex)
-            //{
-            //    // Do some logging stuff
-            //    return new ProductResponse($"An error occurred when updating the product: {ex.Message}");
-            //}
+            try
+            {
+                _todoRepository.ReplaceOne(todo);
+                // await _unitOfWork.CompleteAsync();
+                return Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                // do some loggign stuff.
+                //    return new ProductResponse($"An error occurred when updating the product: {ex.Message}");
+                return Task.FromResult(false);
+            }
         }
-        public Task<TodoDTO> UpdateSubTodoAsync(UpdateSubTodoTaskDTO subTodo)
+        public Task<TodoDTO> UpdateSubTodoAsync(string TodoId, UpdateSubTodoTaskDTO subTodo)
         {
-            //var getObj = _todoRepository.Find
+            var existingTodo = _todoRepository.FindByIdAsync(TodoId);
             return null;
         }
         public Task<IEnumerable<TodoDTO>> ListAll()
