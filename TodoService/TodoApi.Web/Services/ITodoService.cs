@@ -8,7 +8,7 @@ namespace TodoApi.Web.Services
     public interface ITodoService
     {
         Task<IEnumerable<TodoDTO>> ListAll();
-        Task<IEnumerable<TodoDTO>> ListAsync(string userId, GetTodoQuery query);
+        Task<IEnumerable<TodoDTO>> ListTodoAsync(string userId, GetTodoQuery query);
         Task<List<TodoDTO>> GetTodosAsync(GetTodoQuery filter = null, PaginationFilter paginationFilter= null); // How we can use PaginationFilter?
         Task<TodoDTO> GetOne(string todoId);
         Task<bool> SaveAsync(CreateTodoDTO todo);

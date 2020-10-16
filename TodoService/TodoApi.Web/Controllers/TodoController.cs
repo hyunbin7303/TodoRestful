@@ -23,7 +23,7 @@ namespace TodoApi.Controllers
     public class TodoController : ControllerBase
     {
         //https://github.com/HamidMosalla/RestfulApiBestPracticesAspNetCore/tree/master/RestfulApiBestPracticesAspNetCore
-        //https://medium.com/@zarkopafilis/asp-net-core-2-2-3-rest-api-28-resource-filtering-67fa61462c31
+        // 
         private readonly ITodoService _todoService;
         public TodoController(IMongoRepository<Todo> todoRepository, ITodoService todoService)
         {
@@ -73,7 +73,7 @@ namespace TodoApi.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<TodoDTO> Post([FromBody] CreateTodoDTO todoDTO)
         {
-            if (todoDTO == null) return BadRequest();
+            if (todoDTO == null) return BadRequest(); // Can we Throw TodoValidationException?
             try
             {
                 todoDTO.UserId = GetUserId();//TODO: Encrypt user Id.

@@ -24,9 +24,9 @@ namespace TodoApi.Web.Services
      
         public Task<TodoDTO> GetOne(string todoId)
         {
-            Expression<Func<Todo, bool>> todoExpr = null;
+            Expression<Func<Todo, bool>> todoExpr = x => x.Id.ToString() == todoId;
             var getTodo = _todoRepository.FindOne(todoExpr).ConvertTo();
-            throw new NotImplementedException();
+            return Task.FromResult<TodoDTO>(getTodo);
         }
         public async Task<List<TodoDTO>> GetTodosAsync(GetTodoQuery filter = null, PaginationFilter paginationFilter = null)
         {
@@ -49,8 +49,7 @@ namespace TodoApi.Web.Services
             }
             return queryable;
         }
-
-        public Task<IEnumerable<TodoDTO>> ListAsync(string userId, GetTodoQuery query)
+        public Task<IEnumerable<TodoDTO>> ListTodoAsync(string userId, GetTodoQuery query)
         {
             var userTodos = _todoRepository.FindByUserId(userId).Result.ToList();
             if (query.Date != null)
@@ -102,7 +101,8 @@ namespace TodoApi.Web.Services
         }
         public Task<TodoDTO> UpdateSubTodoAsync(UpdateSubTodoTaskDTO subTodo)
         {
-            throw new NotImplementedException();
+            //var getObj = _todoRepository.Find
+            return null;
         }
         public Task<IEnumerable<TodoDTO>> ListAll()
         {
@@ -116,7 +116,7 @@ namespace TodoApi.Web.Services
         }
         public Task<bool> DeleteOneAsync(string todo)
         {
-            Expression<Func<Todo, bool>> expr = null;
+            Expression<Func<Todo, bool>> expr = null; // Should not call Expression in here.
             _todoRepository.DeleteOneAsync(expr);
             return Task.FromResult(true);
         }
