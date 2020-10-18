@@ -91,8 +91,23 @@ namespace TodoApi.Web.Services
         }
         public Task<TodoDTO> UpdateSubTodoAsync(string TodoId, UpdateSubTodoTaskDTO subTodo)
         {
-            var existingTodo = _todoRepository.FindByIdAsync(TodoId);
-            return null;
+            var existingTodo = _todoRepository.FindByIdAsync(TodoId).Result;
+            var findSubTodo = existingTodo.TodoTask.ToList().Find(x => x.TodoTaskId == subTodo.TodoTaskId);
+            if(findSubTodo == null)
+            {
+                return null;
+            }
+            try
+            {
+                //There is no Replace method for replacing.
+                //_todoRepository.ReplaceOne()
+                return null;
+            }
+            catch (Exception)
+            {
+                // Do some logging stuff.
+                return null;
+            }
         }
         public Task<IEnumerable<TodoDTO>> ListAll()
         {
