@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <style type="text/css">
+        body {
+            font-family: Consolas
+        }
+
+        section {
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+        }
+
+        .flex-container {
+            border: 10px solid gray;
+            height: auto;
+            margin:auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #b3cae5 12%, #dbdde4 46%, #e4e3e4 70%, #f7ddbb 94%, #efcab2 100%);
+        }
+
+        .flex-item {
+            text-align: center;
+        }
+
+        .group-item {
+            display: table;
+            margin: 10px
+        }
+
+            .group-item label {
+                display: block;
+                text-align: left;
+            }
+
+            .group-item input {
+                display: table-cell;
+            }
+    </style>
+    <title>login</title>
+
+</head>
+<body>
+    <section>
+
+        <div class="flex-container">
+            <div class="flex-item">
+                <div class="group-item">
+                    <label for="Username">User name/User ID</label>
+                    <input id="Username" name="Username" />
+                </div>
+                <div class="group-item">
+                    <label for="Password">Password</label>
+                    <input type="password" id="Password" name="Password" />
+                </div>
+                <button onclick="login()">Get JWT</button>
+            </div>
+            <div class="flex-item">
+                <textarea rows="4" cols="50" id="result"> </textarea>
+            </div>
+        </div>
+    </section>
+
+
+    <script type="text/javascript">
+        async function login() {
+            const url = "/account/login";
+            var username = document.getElementById('Username').value;
+            var password = document.getElementById('Password').value;
+            console.log(username, password)
+            await fetch(url, {
+                method: 'POST',
+                redirect: 'error',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ "Username": username, "Password": password })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("result").innerHTML = data.token;
+                    document.getElementById('Username').value = "";
+                    document.getElementById('Password').value = "";
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>
