@@ -21,9 +21,15 @@ namespace TodoApi.Model.Todo
         Stopped= 5
     }
 
+    
     public static class SampleTodoStatus
     {
         public static string Plan = "Plan";
+        public static string Start = "Start";
+        public static string Progress = "Progress";
+        public static string Completed = "Completed";
+        public static string Postpone = "Postpone";
+        public static string Stopped = "Stopped";
     }
 
 }

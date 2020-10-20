@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using TodoApi.Model.Todo;
 
-namespace TodoApi.Query.Interface
+namespace TodoApi.Query.Interface.DTOs
 {
-
-    // Currently it looks same with TodoDTO, but we will see.
-    public class CreateTodoDTO
+    public class UpdateTodoDTO
     {
         public string UserId { get; set; }
         public string Goal { get; set; }

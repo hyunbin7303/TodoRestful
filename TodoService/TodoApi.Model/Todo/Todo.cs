@@ -15,5 +15,6 @@ namespace TodoApi.Model.Todo
         public TodoStatus Status { get; set; }
         public TodoType TodoType { get; set; }
         public IList<TodoTask> TodoTask { get; set; } = new List<TodoTask>();
+        public IList<string> Tags { get; set; } = new List<string>();
     }
 }

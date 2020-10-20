@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using TodoApi.Datasource;
 using TodoApi.Model.Todo;
 using TodoApi.Query.Interface;
 using TodoApi.Infrastructure.Extensions;
 using AutoMapper;
+using System.Linq.Expressions;
 
 namespace TodoApi.Web.Services
 {
@@ -21,26 +21,25 @@ namespace TodoApi.Web.Services
             _todoRepository = todoRepository ?? throw new ArgumentException(nameof(todoRepository));
             _mapper = mapper;
         }
-        public Task<TodoDTO> DeleteAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+     
         public Task<TodoDTO> GetOne(string todoId)
         {
-            throw new NotImplementedException();
+            Expression<Func<Todo, bool>> todoExpr = x => x.Id.ToString() == todoId;
+            var getTodo = _todoRepository.FindOne(todoExpr).ConvertTo();
+            return Task.FromResult<TodoDTO>(getTodo);
         }
-
-        public async Task<List<Todo>> GetTodosAsync(GetTodoQuery filter = null, PaginationFilter paginationFilter = null)
+        public async Task<List<TodoDTO>> GetTodosAsync(GetTodoQuery filter = null, PaginationFilter paginationFilter = null)
         {
             var queryable = _todoRepository.AsQueryable();
             if(paginationFilter == null)
             {
                 var check = await queryable.Include(x => x.Tag).ToListAsync();
-                return check;
+                return check.ConvertTo().ToList();
             }
             queryable = AddFiltersOnQuery(filter, queryable);
             var skip = (paginationFilter.PageNumber - 1) * paginationFilter.PageSize;
-            return await queryable.Include(x => x.Tag).Skip(skip).Take(paginationFilter.PageSize).ToListAsync();
+            var listTodo = await queryable.Include(x => x.Tag).Skip(skip).Take(paginationFilter.PageSize).ToListAsync();
+            return listTodo.ConvertTo().ToList();
         }
         private static IQueryable<Todo> AddFiltersOnQuery(GetTodoQuery filter, IQueryable<Todo> queryable)
         {
@@ -50,7 +49,7 @@ namespace TodoApi.Web.Services
             }
             return queryable;
         }
-        public Task<IEnumerable<TodoDTO>> ListAsync(string userId, GetTodoQuery query)
+        public Task<IEnumerable<TodoDTO>> ListTodoAsync(string userId, GetTodoQuery query)
         {
             var userTodos = _todoRepository.FindByUserId(userId).Result.ToList();
             if (query.Date != null)
@@ -64,58 +63,95 @@ namespace TodoApi.Web.Services
             bool check = query.TodoStatus != null ? true :  false;
             return Task.FromResult(userTodos.ConvertTo());
         }
-        public async Task<TodoDTO> SaveAsync(CreateTodoDTO todo)
+        public Task<bool> SaveAsync(CreateTodoDTO createTodoDTO)
         {
-            //var check =  await _todoRepository.InsertOneAsync(todo);
-            //return check;
-            return null; // Convert to DTO.
+            var mappingTest = _mapper.Map<CreateTodoDTO, Todo>(createTodoDTO);
+            var check = _todoRepository.InsertOneAsync(mappingTest);
+            return Task.FromResult(check.IsCompleted);
         }
-        public Task<TodoDTO> UpdateAsync(string TodoId, Todo todo)
+        public Task<bool> UpdateAsync(string TodoId, Todo todo)
         {
-            var existingProduct = _todoRepository.FindByIdAsync(TodoId);
-            if (existingProduct == null)
-            {
+            var existingTodo = _todoRepository.FindByIdAsync(TodoId);
+            if (existingTodo == null){
                 //return new ProductResponse("Product not found.");
+                return Task.FromResult(false);
+            }
+            try
+            {
+                _todoRepository.ReplaceOne(todo);
+                // await _unitOfWork.CompleteAsync();
+                return Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                // do some loggign stuff.
+                //    return new ProductResponse($"An error occurred when updating the product: {ex.Message}");
+                return Task.FromResult(false);
+            }
+        }
+        public Task<TodoDTO> UpdateSubTodoAsync(string TodoId, UpdateSubTodoTaskDTO subTodo)
+        {
+            var existingTodo = _todoRepository.FindByIdAsync(TodoId).Result;
+            var findSubTodo = existingTodo.TodoTask.ToList().Find(x => x.TodoTaskId == subTodo.TodoTaskId);
+            if(findSubTodo == null)
+            {
                 return null;
             }
-
-            _todoRepository.ReplaceOne(todo);
-            return null;
-            //var existingCategory = await _categoryRepository.FindByIdAsync(product.CategoryId);
-            //if (existingCategory == null)
-            //    return new ProductResponse("Invalid category.");
-            //existingProduct.Name = product.Name;
-            //existingProduct.UnitOfMeasurement = product.UnitOfMeasurement;
-            //existingProduct.QuantityInPackage = product.QuantityInPackage;
-            //existingProduct.CategoryId = product.CategoryId;
-            //try
-            //{
-            //    _productRepository.Update(existingProduct);
-            //    await _unitOfWork.CompleteAsync();
-
-            //    return new ProductResponse(existingProduct);
-            //}
-            //catch (Exception ex)
-            //{
-            //    // Do some logging stuff
-            //    return new ProductResponse($"An error occurred when updating the product: {ex.Message}");
-            //}
+            try
+            {
+                //There is no Replace method for replacing.
+                //_todoRepository.ReplaceOne()
+                return null;
+            }
+            catch (Exception)
+            {
+                // Do some logging stuff.
+                return null;
+            }
         }
-
-        Task<List<TodoDTO>> ITodoService.GetTodosAsync(GetTodoQuery filter, PaginationFilter paginationFilter)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TodoDTO> UpdateSubTodoAsync(UpdateSubTodoTaskDTO subTodo)
-        {
-            throw new NotImplementedException();
-        }
-
         public Task<IEnumerable<TodoDTO>> ListAll()
         {
-            var todoDTOs = _todoRepository.FindAll().Result;
-            return null;
+            var todoDTOs = _todoRepository.FindAll().Result.ConvertTo();
+            return Task.FromResult(todoDTOs);
         }
+        public Task<bool> DeleteAsync(string todoId)
+        {
+            var check = _todoRepository.DeleteByIdAsync(todoId).IsCompleted;
+            return Task.FromResult(check);
+        }
+        public Task<bool> DeleteOneAsync(string todo)
+        {
+            Expression<Func<Todo, bool>> expr = null; // Should not call Expression in here.
+            _todoRepository.DeleteOneAsync(expr);
+            return Task.FromResult(true);
+        }
+
+
+        private async Task AddNewTags(CreateTodoDTO createTodoDTO)
+        {
+            foreach(var tag in createTodoDTO.Tags)
+            {
+                // Finding Tags in Repository?....
+                // How can I find Tags in MongoDB?
+                // Need to run Query(Index) Later.
+            }
+            /*
+             *             foreach (var tag in post.Tags)
+            {
+                var existingTag =
+                    await _dataContext.Tags.SingleOrDefaultAsync(x =>
+                        x.Name == tag.TagName);
+                if (existingTag != null)
+                    continue;
+
+                await _dataContext.Tags.AddAsync(new Tag
+                    {Name = tag.TagName, CreatedOn = DateTime.UtcNow, CreatorId = post.UserId});
+            }
+             * 
+             * 
+             */
+
+        }
+
     }
 }
