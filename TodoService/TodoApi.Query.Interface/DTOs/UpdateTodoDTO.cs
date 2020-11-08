@@ -6,6 +6,7 @@ namespace TodoApi.Query.Interface.DTOs
 {
     public class UpdateTodoDTO
     {
+        public string TodoId { get; set; }
         public string UserId { get; set; }
         public string Goal { get; set; }
         public string Description { get; set; }

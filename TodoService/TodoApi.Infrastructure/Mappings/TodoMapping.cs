@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TodoApi.Model.Todo;
-using TodoApi.Query.Interface;
+using TodoApi.Query.Interface.DTOs;
 
 namespace TodoApi.Infrastructure.Mappings
 {

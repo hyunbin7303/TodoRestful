@@ -1,7 +1,7 @@
 ﻿using System;
 using TodoApi.Model.Todo;
 
-namespace TodoApi.Query.Interface
+namespace TodoApi.Query.Interface.DTOs
 {
     public class UpdateSubTodoTaskDTO
     {

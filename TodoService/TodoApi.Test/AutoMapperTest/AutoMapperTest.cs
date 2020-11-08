@@ -13,6 +13,7 @@ namespace TodoApi.Test.AutoMapperTest
 {
     using AutoMapper;
     using TodoApi.Infrastructure.Mappings;
+    using TodoApi.Query.Interface.DTOs;
 
     public class AutoMapperTest : IClassFixture<WebApplicationFactory<Startup>>
     {

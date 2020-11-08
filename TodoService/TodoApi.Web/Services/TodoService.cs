@@ -9,6 +9,7 @@ using TodoApi.Query.Interface;
 using TodoApi.Infrastructure.Extensions;
 using AutoMapper;
 using System.Linq.Expressions;
+using TodoApi.Query.Interface.DTOs;
 
 namespace TodoApi.Web.Services
 {
@@ -69,7 +70,7 @@ namespace TodoApi.Web.Services
             var check = _todoRepository.InsertOneAsync(mappingTest);
             return Task.FromResult(check.IsCompleted);
         }
-        public Task<bool> UpdateAsync(string TodoId, Todo todo)
+        public Task<bool> UpdateAsync(string TodoId, UpdateTodoDTO todo)
         {
             var existingTodo = _todoRepository.FindByIdAsync(TodoId);
             if (existingTodo == null){
@@ -78,7 +79,9 @@ namespace TodoApi.Web.Services
             }
             try
             {
-                _todoRepository.ReplaceOne(todo);
+
+                var mappingTest = _mapper.Map<UpdateTodoDTO, Todo>(todo);
+                _todoRepository.ReplaceOne(mappingTest);
                 // await _unitOfWork.CompleteAsync();
                 return Task.FromResult(true);
             }

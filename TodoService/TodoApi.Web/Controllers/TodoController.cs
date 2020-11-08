@@ -13,6 +13,7 @@ using TodoApi.Infrastructure.Extensions;
 using TodoApi.Model.Todo;
 using TodoApi.Model.Todo.Exceptions;
 using TodoApi.Query.Interface;
+using TodoApi.Query.Interface.DTOs;
 using TodoApi.Web.Services;
 
 namespace TodoApi.Controllers
@@ -23,7 +24,6 @@ namespace TodoApi.Controllers
     public class TodoController : ControllerBase
     {
         //https://github.com/HamidMosalla/RestfulApiBestPracticesAspNetCore/tree/master/RestfulApiBestPracticesAspNetCore
-        // 
         private readonly ITodoService _todoService;
         public TodoController(IMongoRepository<Todo> todoRepository, ITodoService todoService)
         {
@@ -101,9 +101,9 @@ namespace TodoApi.Controllers
         //Use PUT when you can update a resource completely through a specific resource. 
         //As soon as you know the new resource location, you can use PUT again to do updates to the blue stapler article
         [HttpPut("{id}")]
-        public ActionResult<Task<TodoDTO>> Put(string TodoId, [FromBody]Todo todo)
+        public ActionResult<Task<TodoDTO>> Put(string TodoId, [FromBody]UpdateTodoDTO todo)
         {
-            if(TodoId != todo.Id.ToString())
+            if(TodoId != todo.TodoId.ToString())
             {
                 return BadRequest();
             }

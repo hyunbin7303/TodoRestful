@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using TodoApi.Model.Todo;
 
-namespace TodoApi.Query.Interface
+namespace TodoApi.Query.Interface.DTOs
 {
     public class TodoDTO
     {

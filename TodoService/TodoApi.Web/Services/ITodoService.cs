@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TodoApi.Model.Todo;
 using TodoApi.Query.Interface;
+using TodoApi.Query.Interface.DTOs;
 
 namespace TodoApi.Web.Services
 {
@@ -12,7 +13,7 @@ namespace TodoApi.Web.Services
         Task<List<TodoDTO>> GetTodosAsync(GetTodoQuery filter = null, PaginationFilter paginationFilter= null); // How we can use PaginationFilter?
         Task<TodoDTO> GetOne(string todoId);
         Task<bool> SaveAsync(CreateTodoDTO todo);
-        Task<bool> UpdateAsync(string Todoid, Todo todo);
+        Task<bool> UpdateAsync(string Todoid, UpdateTodoDTO todo);
         Task<TodoDTO> UpdateSubTodoAsync(string TodoId, UpdateSubTodoTaskDTO subTodo);
         Task<bool> DeleteAsync(string todoId);
         //Task<List<Tag>> GetAllTagAsync();

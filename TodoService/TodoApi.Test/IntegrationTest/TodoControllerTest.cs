@@ -1,16 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc.Testing;
+﻿using IdentityModel.Client;
+using Microsoft.AspNetCore.Mvc.Testing;
 using Moq;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using TodoApi.Controllers;
-using TodoApi.Datasource;
-using TodoApi.Model.Todo;
+using TodoApi.Query.Interface.DTOs;
 using TodoApi.Web;
 using Xunit;
 
@@ -39,14 +37,15 @@ namespace TodoApi.Test
         {
             // Arrange
             var client = _factory.CreateClient();
-            Todo sampleTodo = new Todo();
-            sampleTodo.Datetime = DateTime.Now;
-            sampleTodo.UserId = "hyunbin7303";
-
-
-
+            CreateTodoDTO sampleTodo = new CreateTodoDTO
+            {
+                Datetime = DateTime.Now,
+                UserId = "hyunbin7303",
+            };
             var stringContent = new StringContent(JsonConvert.SerializeObject(sampleTodo), Encoding.UTF8, "application/json");
             var response = await client.PostAsync(url, stringContent);
+            
+            
             var value = await response.Content.ReadAsStringAsync();
             var check = response.EnsureSuccessStatusCode();
 
@@ -56,6 +55,15 @@ namespace TodoApi.Test
         }
 
 
+        protected static HttpContent ConvertToHttpContent<T>(T data)
+        {
+            var jsonQuery = JsonConvert.SerializeObject(data);
+            HttpContent httpContent = new StringContent(jsonQuery, Encoding.UTF8);
+            httpContent.Headers.Remove("content-type");
+            httpContent.Headers.Add("content-type", "application/json; charset=utf-8");
+
+            return httpContent;
+        }
 
 
 

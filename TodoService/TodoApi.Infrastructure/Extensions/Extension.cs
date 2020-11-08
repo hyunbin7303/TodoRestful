@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using TodoApi.Model.Todo;
 using TodoApi.Query.Interface;
+using TodoApi.Query.Interface.DTOs;
 
 namespace TodoApi.Infrastructure.Extensions
 {
