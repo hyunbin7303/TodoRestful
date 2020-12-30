@@ -22,18 +22,6 @@ namespace TodoApi.Test.DbTest
         [Fact]
         public async Task IndexReturnsARedirectToIndexHomeWhenIdIsNull()
         {
-            // Arrange
-            // Act
-            //var result = controller.GetLast("asd");
-            //ExpressionUtils.GetByDateTest("asd", DateTime.Now);
-            //// Assert
-            //var redirectToActionResult =
-            //    Assert.IsType<RedirectToActionResult>(result);
-            //Assert.Equal("Home", redirectToActionResult.ControllerName);
-            //Assert.Equal("Index", redirectToActionResult.ActionName);
         }
-
-
-
     }
 }

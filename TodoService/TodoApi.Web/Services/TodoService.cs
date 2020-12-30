@@ -10,6 +10,7 @@ using TodoApi.Infrastructure.Extensions;
 using AutoMapper;
 using System.Linq.Expressions;
 using TodoApi.Query.Interface.DTOs;
+using MongoDB.Bson;
 
 namespace TodoApi.Web.Services
 {
@@ -70,26 +71,27 @@ namespace TodoApi.Web.Services
             var check = _todoRepository.InsertOneAsync(mappingTest);
             return Task.FromResult(check.IsCompleted);
         }
-        public Task<bool> UpdateAsync(string TodoId, UpdateTodoDTO todo)
+        public async Task<bool> UpdateAsync(string TodoId, UpdateTodoDTO todo)
         {
-            var existingTodo = _todoRepository.FindByIdAsync(TodoId);
+            var existingTodo = _todoRepository.FindById(TodoId);
             if (existingTodo == null){
                 //return new ProductResponse("Product not found.");
-                return Task.FromResult(false);
+                return await Task.FromResult(false);
             }
             try
             {
-
                 var mappingTest = _mapper.Map<UpdateTodoDTO, Todo>(todo);
-                _todoRepository.ReplaceOne(mappingTest);
+                mappingTest.Id = ObjectId.Parse(TodoId);
+                var check= _todoRepository.ReplaceOneAsync(mappingTest);
+                
                 // await _unitOfWork.CompleteAsync();
-                return Task.FromResult(true);
+                return await Task.FromResult(true);
             }
             catch (Exception ex)
             {
                 // do some loggign stuff.
                 //    return new ProductResponse($"An error occurred when updating the product: {ex.Message}");
-                return Task.FromResult(false);
+                return await Task.FromResult(false);
             }
         }
         public Task<TodoDTO> UpdateSubTodoAsync(string TodoId, UpdateSubTodoTaskDTO subTodo)

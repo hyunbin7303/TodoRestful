@@ -100,13 +100,9 @@ namespace TodoApi.Controllers
         }
         //Use PUT when you can update a resource completely through a specific resource. 
         //As soon as you know the new resource location, you can use PUT again to do updates to the blue stapler article
-        [HttpPut("{id}")]
-        public ActionResult<Task<TodoDTO>> Put(string TodoId, [FromBody]UpdateTodoDTO todo)
+        [HttpPut]
+        public ActionResult<Task<TodoDTO>> Put([FromQuery] string TodoId, [FromBody]UpdateTodoDTO todo)
         {
-            if(TodoId != todo.TodoId.ToString())
-            {
-                return BadRequest();
-            }
             try
             {
                 _todoService.UpdateAsync(TodoId, todo);
@@ -119,16 +115,16 @@ namespace TodoApi.Controllers
             {
                 return Problem(diEx.Message);
             }
-            catch (RecordUpdateConcurrencyException rcEx)
-            {
-                return BadRequest();
-            }
             return NoContent();
         }
 
-        [HttpPut("Subtask/{id}")]
-        //public ActionResult<Task<TodoDTO>> updateSubtask(string id)
+
         //https://medium.com/net-core/how-to-build-a-restful-api-with-asp-net-core-fb7dd8d3e5e3
+        [HttpPut("Subtask/{id}")]
+        public ActionResult<Task<TodoDTO>> UpdateSubtask(string id)
+        {
+            return null;
+        }
 
         [HttpDelete]
         public async Task<ActionResult<bool>> Delete(string TodoId)

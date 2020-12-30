@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 using TodoApi.Model.Todo;
 
@@ -10,6 +11,7 @@ namespace TodoApi.Query.Interface.DTOs
     public class CreateTodoDTO
     {
         public string UserId { get; set; }
+        [Required(ErrorMessage = "Goal is required")]
         public string Goal { get; set; }
         public string Description { get; set; }
         public string Title { get; set; }
