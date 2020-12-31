@@ -8,5 +8,6 @@ namespace TodoApi.Datasource
     {
         string DatabaseName { get; set; }
         string Connection { get; set; }
+        bool UseTLS { get; set; }
     }
 }

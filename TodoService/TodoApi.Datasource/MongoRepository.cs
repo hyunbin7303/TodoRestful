@@ -15,9 +15,9 @@ namespace TodoApi.Datasource
         private readonly IMongoCollection<TDocument> _collection;
         public MongoRepository(IMongoSettings settings)
         {
-            var db = new MongoClient(settings.Connection).GetDatabase(settings.DatabaseName);
+            var client = new MongoClient(settings.Connection);
+            var db = client.GetDatabase(settings.DatabaseName);
             _collection = db.GetCollection<TDocument>(GetCollectionName(typeof(TDocument)));
-
         }
         private protected string GetCollectionName(Type documentType)
         {
@@ -81,6 +81,15 @@ namespace TodoApi.Datasource
             var filter = Builders<TDocument>.Filter.Eq(d => d.Id, objectId);
             return _collection.Find(filter).SingleOrDefault();
         }
+        public Task<TDocument> FindByIdAsync(string id)
+        {
+            return Task.Run(() =>
+            {
+                var objectId = new ObjectId(id);
+                var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
+                return _collection.Find(filter).SingleOrDefaultAsync();
+            });
+        }
         public Task<IList<TDocument>> FindByUserId(string userId)
         {
             var filter = Builders<TDocument>.Filter.Eq(d => d.UserId, userId);
@@ -112,15 +121,7 @@ namespace TodoApi.Datasource
             }
             return null;
         }
-        public Task<TDocument> FindByIdAsync(string id)
-        {
-            return Task.Run(() =>
-            {
-                var objectId = new ObjectId(id);
-                var filter = Builders<TDocument>.Filter.Eq(doc => doc.Id, objectId);
-                return _collection.Find(filter).SingleOrDefaultAsync();
-            });
-        }
+
 
         public TDocument FindOne(Expression<Func<TDocument, bool>> filterExpression)
         {
