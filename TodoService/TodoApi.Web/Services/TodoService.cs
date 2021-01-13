@@ -44,6 +44,9 @@ namespace TodoApi.Web.Services
         }
         public Task<IEnumerable<TodoDTO>> ListTodoAsync(string userId, GetTodoQuery query)
         {
+            if (userId == null)
+                return null;
+
             var userTodos = _todoRepository.FindByUserId(userId).Result.ToList();
             if (query.Date != null)
                 userTodos = userTodos.FindAll(x => x.Datetime == new DateTime(query.Date.Value.Year, query.Date.Value.Month, query.Date.Value.Day));

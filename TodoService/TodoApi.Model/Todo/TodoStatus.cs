@@ -18,10 +18,13 @@ namespace TodoApi.Model.Todo
         Postpone= 4,
 
         [Description("Stopped")]
-        Stopped= 5
+        Stopped= 5,
+
+        [Description("Unknown")]
+        Unknown = 6
+
     }
 
-    
     public static class SampleTodoStatus
     {
         public static string Plan = "Plan";

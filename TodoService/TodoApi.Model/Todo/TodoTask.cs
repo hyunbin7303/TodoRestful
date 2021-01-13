@@ -1,9 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
+
 namespace TodoApi.Model.Todo
 {
     public class TodoTask
     {
+        [Required]
         public string TodoTaskId { get; set; }
+        [Required]
+        [StringLength(60, MinimumLength = 2)]
         public string Name { get; set; }
         public string Description { get; set; }
         public double Score { get; set; }

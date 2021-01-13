@@ -20,7 +20,7 @@ namespace TodoApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class TodoController : ControllerBase
     {
         //https://github.com/HamidMosalla/RestfulApiBestPracticesAspNetCore/tree/master/RestfulApiBestPracticesAspNetCore
@@ -40,7 +40,7 @@ namespace TodoApi.Controllers
         {
             try
             {
-                var todos = _todoService.ListTodoAsync(GetUserId(), query).Result;// Testing
+                var todos = _todoService.ListTodoAsync(GetUserId(), query)?.Result;// Testing
                 return Ok(todos);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
@@ -119,12 +119,35 @@ namespace TodoApi.Controllers
         }
 
 
-        //https://medium.com/net-core/how-to-build-a-restful-api-with-asp-net-core-fb7dd8d3e5e3
-        [HttpPut("Subtask/{id}")]
-        public ActionResult<Task<TodoDTO>> UpdateSubtask(string id)
+        [HttpPut("Subtask")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public ActionResult<Task<UpdateSubTodoTaskDTO>> UpdateSubtask([FromQuery]string TodoId, [FromBody]UpdateSubTodoTaskDTO subTodoTaskDTO)
         {
-            return null;
+            try
+            {
+                _todoService.UpdateSubTodoAsync(TodoId, subTodoTaskDTO);
+            }
+            catch(TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
+            {
+                return NotFound(todoValidationEx.InnerException.Message);
+            }
+            return NoContent();
         }
+
+        [HttpPut("AddSubtask")]
+        public ActionResult<Task<UpdateSubTodoTaskDTO>> UpdateSubtask([FromQuery] string TodoId, [FromBody] UpdateSubTodoTaskDTO subTodoTaskDTO)
+        {
+            try
+            {
+                _todoService.UpdateSubTodoAsync(TodoId, subTodoTaskDTO);
+            }
+            catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
+            {
+                return NotFound(todoValidationEx.InnerException.Message);
+            }
+            return NoContent();
+        }
+
 
         [HttpDelete]
         public async Task<ActionResult<bool>> Delete(string TodoId)

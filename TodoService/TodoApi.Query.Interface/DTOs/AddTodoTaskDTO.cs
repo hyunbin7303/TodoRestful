@@ -3,7 +3,7 @@ using TodoApi.Model.Todo;
 
 namespace TodoApi.Query.Interface.DTOs
 {
-    public class AddTodoTaskDTO
+    public class UpdateSubTodoTaskDTO
     {
         public string TodoTaskId { get; }
         public string Name { get; set; }
@@ -12,6 +12,5 @@ namespace TodoApi.Query.Interface.DTOs
         public DateTime? StartTime { get; set; } = new DateTime();
         public DateTime? EndTime { get; set; } = new DateTime();
         public TodoStatus Progress { get; set; }
-        public DateTime? TodoTaskCreated { get; set; } = DateTime.Now;
     }
 }

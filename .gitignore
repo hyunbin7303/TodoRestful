@@ -351,3 +351,5 @@ MigrationBackup/
 
 # vscode setting file
 .vscode
+TodoService/TodoApi.Web/Startup.cs
+TodoService/TodoApi.Web/Startup.cs

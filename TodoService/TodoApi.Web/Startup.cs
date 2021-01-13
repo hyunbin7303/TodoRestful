@@ -47,46 +47,46 @@ namespace TodoApi.Web
 
             services.AddControllers();
 
-            services.AddAuthentication(config =>
-            {
-                config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                config.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer("Bearer", config =>
-                {
-                    // provide token validation parameters
-                    var secretBytes = Encoding.UTF8.GetBytes(Constants.Secret);
-                    var key = new SymmetricSecurityKey(secretBytes);
+            //services.AddAuthentication(config =>
+            //{
+            //    config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    config.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            //})
+            //    .AddJwtBearer("Bearer", config =>
+            //    {
+            //        // provide token validation parameters
+            //        var secretBytes = Encoding.UTF8.GetBytes(Constants.Secret);
+            //        var key = new SymmetricSecurityKey(secretBytes);
 
-                    //token sent with parameter
-                    config.Events = new JwtBearerEvents()
-                    {
-                        OnMessageReceived = context =>
-                        {
-                            if (context.Request.Query.ContainsKey("access_token"))
-                            {
-                                context.Token = context.Request.Query["access_token"];
-                            }
-                            return Task.CompletedTask;
-                        }
-                    };
-                    
-                    config.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        ValidIssuer = Constants.Issuer,
-                        ValidAudience = Constants.Audiance,
-                        ValidateIssuer = true,
-                        ValidateAudience = true,
+            //        //token sent with parameter
+            //        config.Events = new JwtBearerEvents()
+            //        {
+            //            OnMessageReceived = context =>
+            //            {
+            //                if (context.Request.Query.ContainsKey("access_token"))
+            //                {
+            //                    context.Token = context.Request.Query["access_token"];
+            //                }
+            //                return Task.CompletedTask;
+            //            }
+            //        };
 
-                        IssuerSigningKey = key
-                    };
+            //        config.TokenValidationParameters = new TokenValidationParameters()
+            //        {
+            //            ValidIssuer = Constants.Issuer,
+            //            ValidAudience = Constants.Audiance,
+            //            ValidateIssuer = true,
+            //            ValidateAudience = true,
 
-                    config.SaveToken = true;
-                });
+            //            IssuerSigningKey = key
+            //        };
+
+            //        config.SaveToken = true;
+            //    });
 
 
-            //services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddAutoMapper(typeof(Infrastructure.Mappings.TodoMapping).Assembly);
         }
 
