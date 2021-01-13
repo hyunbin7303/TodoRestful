@@ -14,7 +14,8 @@ namespace TodoApi.Web.Services
         Task<TodoDTO> GetOne(string todoId);
         Task<bool> SaveAsync(CreateTodoDTO todo);
         Task<UpdateTodoDTO> UpdateAsync(string Todoid, UpdateTodoDTO todo);
-        Task<TodoDTO> UpdateSubTodoAsync(string TodoId, UpdateSubTodoTaskDTO subTodo);
+        Task<TodoDTO> UpdateSubTodoAsync(string TodoId, UpdateTodoTaskDTO subTodo);
+        Task<TodoDTO> CreateTodoTaskAsync(string TodoId, CreateTodoTaskDTO subTodo);
         Task<bool> DeleteAsync(string todoId);
         //Task<List<Tag>> GetAllTagAsync();
     }

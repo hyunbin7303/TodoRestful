@@ -10,6 +10,7 @@ namespace TodoApi.Query.Interface.DTOs
     // Currently it looks same with TodoDTO, but we will see.
     public class CreateTodoDTO
     {
+        [Required]
         public string UserId { get; set; }
         [Required(ErrorMessage = "Goal is required")]
         public string Goal { get; set; }

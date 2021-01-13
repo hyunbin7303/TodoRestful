@@ -11,7 +11,7 @@ namespace TodoApi.Infrastructure.Mappings
             CreateMap<Todo, TodoDTO>().ReverseMap();
             CreateMap<Todo, CreateTodoDTO>().ReverseMap();
             CreateMap<Todo, UpdateTodoDTO>().ReverseMap();
-            CreateMap<Todo, UpdateSubTodoTaskDTO>().ReverseMap();
+            CreateMap<Todo, UpdateTodoTaskDTO>().ReverseMap();
         }
     }
 }

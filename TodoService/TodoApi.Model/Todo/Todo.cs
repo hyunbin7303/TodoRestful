@@ -8,6 +8,7 @@ namespace TodoApi.Model.Todo
     [BsonCollection("todo")]
     public class Todo : Document 
     {
+        public string TodoId { get; set; }
         [StringLength(30)]
         public string Title { get; set; }
         [StringLength(30)]

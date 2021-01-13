@@ -18,7 +18,7 @@ namespace TodoApi.Test.AutoMapperTest
     public class AutoMapperTest : IClassFixture<WebApplicationFactory<Startup>>
     {
         private readonly WebApplicationFactory<Startup> _factory;
-        private readonly IMapper _mapper;
+        //private readonly IMapper _mapper;
 
         public AutoMapperTest(WebApplicationFactory<Startup> fac)
         {

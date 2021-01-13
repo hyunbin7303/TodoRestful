@@ -21,7 +21,7 @@ namespace TodoApi.Web.Services
         public TodoService(IMongoRepository<Todo> todoRepository, IMapper mapper)
         {
             _todoRepository = todoRepository ?? throw new ArgumentException(nameof(todoRepository));
-            _mapper = mapper;
+            _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
         public Task<TodoDTO> GetOne(string todoId)
         {
@@ -56,7 +56,6 @@ namespace TodoApi.Web.Services
             {
                 userTodos = userTodos.FindAll(x => x.Status == query.TodoStatus);
             }
-            bool check = query.TodoStatus != null ? true :  false;
             return Task.FromResult(userTodos.ConvertTo());
         }
         public Task<bool> SaveAsync(CreateTodoDTO createTodoDTO)
@@ -84,7 +83,7 @@ namespace TodoApi.Web.Services
                 return await Task.FromResult(todo);
             }
         }
-        public Task<TodoDTO> UpdateSubTodoAsync(string TodoId, UpdateSubTodoTaskDTO subTodo)
+        public Task<TodoDTO> UpdateSubTodoAsync(string TodoId, UpdateTodoTaskDTO subTodo)
         {
             var existingTodo = _todoRepository.FindByIdAsync(TodoId).Result;
             var findSubTodo = existingTodo.TodoTask.ToList().Find(x => x.TodoTaskId == subTodo.TodoTaskId);
@@ -128,9 +127,16 @@ namespace TodoApi.Web.Services
             }
             return queryable;
         }
+        public Task<TodoDTO> CreateTodoTaskAsync(string TodoId, CreateTodoTaskDTO subTodo)
+        {
+            Expression<Func<Todo, bool>> todoExpr = x => x.Id.ToString() == TodoId;
+            var todo = _todoRepository.FindOne(todoExpr).ConvertTo();
+            return Task.FromResult(todo);
+        }
+        // Update new Tags method.
         private async Task AddNewTags(CreateTodoDTO createTodoDTO)
         {
-            foreach(var tag in createTodoDTO.Tags)
+            foreach (var tag in createTodoDTO.Tags)
             {
                 // Finding Tags in Repository?....
                 // How can I find Tags in MongoDB?

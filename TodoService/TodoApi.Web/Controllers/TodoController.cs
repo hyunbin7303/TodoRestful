@@ -56,15 +56,12 @@ namespace TodoApi.Controllers
                 return Problem(diEx.Message);
             }
         }
-
         [HttpGet("Todo")]
         public ActionResult<TodoDTO> GetTodo(string todoId)
         {
             var getTodo = _todoService.GetOne(todoId);
             if(getTodo == null)
-            {
                 return NotFound();
-            }
             return Ok(getTodo); 
         }
       
@@ -89,17 +86,15 @@ namespace TodoApi.Controllers
                 return Problem(diEx.Message);
             }
         }
-
-        // Check here: https://www.michalbialecki.com/2020/01/10/net-core-pass-parameters-to-actions/
         [HttpPost("SaveFiles")]
         public IActionResult SaveFile([FromForm] string fileName, [FromForm] IFormFile file)
         {
             //Save files for Todo? Such as json file?
+            // Check here: https://www.michalbialecki.com/2020/01/10/net-core-pass-parameters-to-actions/
             Console.WriteLine($"Got a file with name: {fileName} and size: {file.Length}");
             return new AcceptedResult();
         }
-        //Use PUT when you can update a resource completely through a specific resource. 
-        //As soon as you know the new resource location, you can use PUT again to do updates to the blue stapler article
+        
         [HttpPut]
         public ActionResult<Task<TodoDTO>> Put([FromQuery] string TodoId, [FromBody]UpdateTodoDTO todo)
         {
@@ -117,11 +112,9 @@ namespace TodoApi.Controllers
             }
             return NoContent();
         }
-
-
-        [HttpPut("Subtask")]
+        [HttpPut("UpdateTodoTask")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public ActionResult<Task<UpdateSubTodoTaskDTO>> UpdateSubtask([FromQuery]string TodoId, [FromBody]UpdateSubTodoTaskDTO subTodoTaskDTO)
+        public ActionResult<Task<UpdateTodoTaskDTO>> UpdateTodoTask([FromQuery]string TodoId, [FromBody] UpdateTodoTaskDTO subTodoTaskDTO)
         {
             try
             {
@@ -133,13 +126,12 @@ namespace TodoApi.Controllers
             }
             return NoContent();
         }
-
-        [HttpPut("AddSubtask")]
-        public ActionResult<Task<UpdateSubTodoTaskDTO>> UpdateSubtask([FromQuery] string TodoId, [FromBody] UpdateSubTodoTaskDTO subTodoTaskDTO)
+        [HttpPut("CreateTodoTask")]
+        public ActionResult<Task<CreateTodoTaskDTO>> CreateTodoTask([FromQuery] string TodoId, [FromBody]CreateTodoTaskDTO createTodoTaskDTO)
         {
             try
             {
-                _todoService.UpdateSubTodoAsync(TodoId, subTodoTaskDTO);
+                _todoService.CreateTodoTaskAsync(TodoId, createTodoTaskDTO);
             }
             catch (TodoValidationException todoValidationEx) when (todoValidationEx.InnerException is NotFoundUserException)
             {
@@ -147,7 +139,6 @@ namespace TodoApi.Controllers
             }
             return NoContent();
         }
-
 
         [HttpDelete]
         public async Task<ActionResult<bool>> Delete(string TodoId)

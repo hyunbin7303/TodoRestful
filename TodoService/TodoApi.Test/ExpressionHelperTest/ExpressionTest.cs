@@ -9,10 +9,10 @@ namespace TodoApi.Test.ExpressionHelperTest
 {
     public class ExpressionTest
     {
-        public ExpressionTest()
-        {
 
-            // sample data.
+        [Fact]
+        public void expr_test()
+        {
             Todo todo0 = new Todo() { UserId = "Kevin123", Datetime = DateTime.Now };
             Todo todo1 = new Todo() { UserId = "Kevin123", Datetime = new DateTime(2020, 8, 2) };
             Todo todo2 = new Todo() { UserId = "1234", Datetime = new DateTime(2020, 7, 4) };

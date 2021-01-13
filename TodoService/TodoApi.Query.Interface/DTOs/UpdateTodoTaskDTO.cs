@@ -3,7 +3,7 @@ using TodoApi.Model.Todo;
 
 namespace TodoApi.Query.Interface.DTOs
 {
-    public class AddTodoTaskDTO
+    public class UpdateTodoTaskDTO
     {
         public string TodoTaskId { get; }
         public string Name { get; set; }
