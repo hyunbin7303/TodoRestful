@@ -11,6 +11,7 @@ using AutoMapper;
 using System.Linq.Expressions;
 using TodoApi.Query.Interface.DTOs;
 using MongoDB.Bson;
+using MongoDB.Driver;
 
 namespace TodoApi.Web.Services
 {
@@ -18,14 +19,18 @@ namespace TodoApi.Web.Services
     {
         private readonly IMongoRepository<Todo> _todoRepository;
         private readonly IMapper _mapper;
-        public TodoService(IMongoRepository<Todo> todoRepository, IMapper mapper)
+        private readonly IMongoCollection<Todo> _todoCollection;
+
+        public TodoService(IMongoRepository<Todo> todoRepository, IMongoCollection<Todo> todoCollection, IMapper mapper)
         {
-            _todoRepository = todoRepository ?? throw new ArgumentException(nameof(todoRepository));
+            _todoRepository = todoRepository ?? throw new ArgumentException(nameof(todoRepository)); // Can we remove?
+            _todoCollection = todoCollection ?? throw new ArgumentException(nameof(todoCollection));
             _mapper = mapper ?? throw new ArgumentException(nameof(mapper));
         }
         public Task<TodoDTO> GetOne(string todoId)
         {
-            Expression<Func<Todo, bool>> todoExpr = x => x.Id.ToString() == todoId;
+            ObjectId id = new ObjectId(todoId);
+            Expression<Func<Todo, bool>> todoExpr = x => x.Id == id;
             var getTodo = _todoRepository.FindOne(todoExpr).ConvertTo();
             return Task.FromResult<TodoDTO>(getTodo);
         }
@@ -47,7 +52,8 @@ namespace TodoApi.Web.Services
             if (userId == null)
                 return null;
 
-            var userTodos = _todoRepository.FindByUserId(userId).Result.ToList();
+            Expression<Func<Todo, bool>> predicate = x => x.UserId == userId;
+            var userTodos = _todoCollection.Find(predicate).ToList();
             if (query.Date != null)
                 userTodos = userTodos.FindAll(x => x.Datetime == new DateTime(query.Date.Value.Year, query.Date.Value.Month, query.Date.Value.Day));
             if (query.SortByDate)
@@ -133,7 +139,6 @@ namespace TodoApi.Web.Services
             var todo = _todoRepository.FindOne(todoExpr).ConvertTo();
             return Task.FromResult(todo);
         }
-        // Update new Tags method.
         private async Task AddNewTags(CreateTodoDTO createTodoDTO)
         {
             foreach (var tag in createTodoDTO.Tags)
@@ -159,6 +164,5 @@ namespace TodoApi.Web.Services
              */
 
         }
-
     }
 }

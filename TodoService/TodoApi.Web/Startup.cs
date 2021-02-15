@@ -41,7 +41,7 @@ namespace TodoApi.Web
             services.Configure<MongoDbSettings>(section);
             services.AddSingleton<IMongoSettings>(serviceProvider =>
                 serviceProvider.GetRequiredService<IOptions<MongoDbSettings>>().Value);
-            services.AddScoped(typeof(IMongoRepository<>), typeof(MongoRepository<>));
+            services.AddScoped(typeof(IMongoRepository<>), typeof(TodoRepository<>));
             
             services.AddScoped<ITodoService, TodoService>();
 

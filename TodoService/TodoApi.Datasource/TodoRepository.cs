@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 namespace TodoApi.Datasource
 {
     //source :https://gist.github.com/marekzyla/392a551ce0f45d5a653ea6872e7e0f86
-    public class MongoRepository<TDocument> : IMongoRepository<TDocument> where TDocument : IDocument
+    public class TodoRepository<TDocument> : IMongoRepository<TDocument> where TDocument : IDocument
     {
         private readonly IMongoCollection<TDocument> _collection;
-        public MongoRepository(IMongoSettings settings)
+        public TodoRepository(IMongoSettings settings)
         {
             var client = new MongoClient(settings.Connection);
             var db = client.GetDatabase(settings.DatabaseName);
@@ -36,8 +36,7 @@ namespace TodoApi.Datasource
             var filter = Builders<TDocument>.Filter.Eq(d => d.Id, objId);
             _collection.FindOneAndDelete(filter);
         }
-
-        public Task DeleteByIdAsync(string id)
+        public virtual Task DeleteByIdAsync(string id)
         {
             return Task.Run(() =>
             {
@@ -46,32 +45,27 @@ namespace TodoApi.Datasource
                 _collection.FindOneAndDeleteAsync(filter);
             });
         }
-
-        public void DeleteMany(Expression<Func<TDocument, bool>> filterExpression)
+        public virtual void DeleteMany(Expression<Func<TDocument, bool>> filterExpression)
         {
             _collection.DeleteMany(filterExpression);
         }
-
-        public Task DeleteManyAsync(Expression<Func<TDocument, bool>> filterExpression)
+        public virtual Task DeleteManyAsync(Expression<Func<TDocument, bool>> filterExpression)
         {
             return Task.Run(() => _collection.FindOneAndDeleteAsync(filterExpression));
         }
-
-        public void DeleteOne(Expression<Func<TDocument, bool>> filterExpression)
+        public virtual void DeleteOne(Expression<Func<TDocument, bool>> filterExpression)
         {
             _collection.FindOneAndDelete(filterExpression);
         }
-
-        public Task DeleteOneAsync(Expression<Func<TDocument, bool>> filterExpression)
+        public virtual Task DeleteOneAsync(Expression<Func<TDocument, bool>> filterExpression)
         {
             return Task.Run(() => _collection.FindOneAndDeleteAsync(filterExpression));
         }
-
-        public IEnumerable<TDocument> FilterBy(Expression<Func<TDocument, bool>> filterExpression)
+        public virtual IEnumerable<TDocument> FilterBy(Expression<Func<TDocument, bool>> filterExpression)
         {
             return _collection.Find(filterExpression).ToEnumerable();
         }
-        public IEnumerable<TProjected> FilterBy<TProjected>(Expression<Func<TDocument, bool>> filterExpression, Expression<Func<TDocument, TProjected>> projectionExpression)
+        public virtual IEnumerable<TProjected> FilterBy<TProjected>(Expression<Func<TDocument, bool>> filterExpression, Expression<Func<TDocument, TProjected>> projectionExpression)
         {
             return _collection.Find(filterExpression).Project(projectionExpression).ToEnumerable();
         }
@@ -90,39 +84,6 @@ namespace TodoApi.Datasource
                 return _collection.Find(filter).SingleOrDefaultAsync();
             });
         }
-        public Task<IList<TDocument>> FindByUserId(string userId)
-        {
-            var filter = Builders<TDocument>.Filter.Eq(d => d.UserId, userId);
-            if(filter!=null)
-            {
-               return Task.FromResult<IList<TDocument>>(_collection.Find(filter).ToList());
-            }
-            return null;
-        }
-        public Task<IList<TDocument>> FindByUserIdAsync(string userId)
-        {
-            return Task.Run(() =>
-            {
-                var filter = Builders<TDocument>.Filter.Eq(d => d.UserId, userId);
-                if (filter != null)
-                {
-                    return Task.FromResult<IList<TDocument>>(_collection.Find(filter).ToList());
-                }
-                return null;
-            });
-        }
-
-        public Task<IList<TDocument>> FindByUserIdandDate(string userId, DateTime date)
-        {
-            var filter = Builders<TDocument>.Filter.All(d => d.UserId, userId) & Builders<TDocument>.Filter.All(d => d.Datetime.ToString(), date.ToString());
-            if(filter!= null)
-            {
-                return Task.FromResult<IList<TDocument>>(_collection.Find(filter).ToList());
-            }
-            return null;
-        }
-
-
         public TDocument FindOne(Expression<Func<TDocument, bool>> filterExpression)
         {
             return _collection.Find(filterExpression).FirstOrDefault();

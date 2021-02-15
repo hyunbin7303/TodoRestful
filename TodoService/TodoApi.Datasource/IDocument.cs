@@ -9,7 +9,6 @@ namespace TodoApi.Datasource
         [BsonId]
         [BsonRepresentation(BsonType.String)]
         ObjectId Id { get; set; }
-        string UserId { get; set; }
         DateTime Datetime { get; set; }
         DateTime CreatedAt { get; }
     }

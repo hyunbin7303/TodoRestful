@@ -19,9 +19,6 @@ namespace TodoApi.Test.DbTest
         {
             _workoutRepository = workoutRepository;
         }
-        [Fact]
-        public async Task IndexReturnsARedirectToIndexHomeWhenIdIsNull()
-        {
-        }
+
     }
 }
